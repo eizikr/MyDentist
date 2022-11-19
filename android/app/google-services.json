@@ -1,71 +1,42 @@
 {
   "project_info": {
-    "project_number": "638102056069",
-    "project_id": "clinicapp-32a06",
-    "storage_bucket": "clinicapp-32a06.appspot.com"
+    "project_number": "774974768492",
+    "firebase_url": "https://my-dentist-ea5d0-default-rtdb.firebaseio.com",
+    "project_id": "my-dentist-ea5d0",
+    "storage_bucket": "my-dentist-ea5d0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:638102056069:android:bbe648d0ec5e22cb544dec",
-        "android_client_info": {
-          "package_name": "com.example.clinic"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "638102056069-458e7bktsph3ncfqu9mldinhcjci22hf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.clinic",
-            "certificate_hash": "ec7d2d308ec7afc4d222df6687997d2fed34dec5"
-          }
-        },
-        {
-          "client_id": "638102056069-k1llqp0kkpp6mkon6u9ro88hagltc24u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC8zVYyNSRJ_tPBJOjVtMBrQ5cCv9PA9Fs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "638102056069-k1llqp0kkpp6mkon6u9ro88hagltc24u.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:638102056069:android:7e2fd064925c6d9c544dec",
+        "mobilesdk_app_id": "1:774974768492:android:274aa16badc6bc9b12df49",
         "android_client_info": {
           "package_name": "com.example.my_dentist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "638102056069-k1llqp0kkpp6mkon6u9ro88hagltc24u.apps.googleusercontent.com",
+          "client_id": "774974768492-8gf4jn1g9e20rnuna51qomngchc9uthv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8zVYyNSRJ_tPBJOjVtMBrQ5cCv9PA9Fs"
+          "current_key": "AIzaSyDeoh13NFGCNe22HTkxFZ6TlRxOVcJ8dgY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "638102056069-k1llqp0kkpp6mkon6u9ro88hagltc24u.apps.googleusercontent.com",
+              "client_id": "774974768492-8gf4jn1g9e20rnuna51qomngchc9uthv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "774974768492-lpb0iasg2a9dq49l6pcgfhv6kp6ba5tl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.firstApp"
+              }
             }
           ]
         }

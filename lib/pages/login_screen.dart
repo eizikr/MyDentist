@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../auth.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -10,81 +13,85 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? errorMessage = '';
-  bool isLogin = true;
+  bool isLoginState = true;
+  late String pass;
+  late String email;
+  final formKey = GlobalKey<FormState>();
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Future<void> signInWithEmailAndPassword() async {
-    try {
-      await Auth().signInWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+  String signInError(String errorCode) {
+    switch (errorCode) {
+      case "user-not-found":
+        {
+          return "Wrong email!";
+        }
+      case "wrong-password":
+        {
+          return "Wrong password!";
+        }
+      case "invalid-email":
+        {
+          return "Invalid email!";
+        }
+      default:
+        {
+          return "General error!";
+        }
     }
   }
 
-  Future<void> createUserWithEmailAndPassword() async {
+  Future<void> signIn() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text,
-      );
+      if (formKey.currentState!.validate()) {
+        await Auth().signIn(
+          email: email,
+          password: pass,
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+      //print(e.code.toString());
+      Fluttertoast.showToast(
+        msg: signInError(e.code.toString()),
+        gravity: ToastGravity.TOP,
+        fontSize: 16.0,
+        webShowClose: true,
+        backgroundColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+        webPosition: "center",
+        webBgColor: "red",
+        timeInSecForIosWeb: 5,
+      );
     }
   }
 
-  Widget _title() {
-    return Text(isLogin ? 'Doctor Login' : 'Doctor Register');
-  }
-
-  Widget _entryField(
-    String title,
-    TextEditingController controller,
-    IconData icon,
-  ) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: title,
-        prefixIcon: Icon(
-          icon,
-          color: Colors.grey,
-        ),
-      ),
-    );
-  }
-
-  Widget _errorMessage() {
-    return Text(
-      errorMessage == '' ? '' : 'Sorry, $errorMessage',
-      style: const TextStyle(
-        color: Colors.red,
-      ),
-    );
-  }
+  // Future<void> signUp() async {
+  //   try {
+  //     await Auth().signUp(
+  //       email: _controllerEmail.text,
+  //       password: _controllerPassword.text,
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       print("Auth (sign up)  problem: " + e.toString());
+  //     });
+  //   }
+  // }
 
   Widget _submitButton() {
-    return Container(
-        width: double.infinity,
+    return SizedBox(
+        width: 365.0,
         child: RawMaterialButton(
-          fillColor: Colors.cyan,
+          fillColor: Colors.lightBlue[200],
           elevation: 0.0,
           padding: const EdgeInsets.symmetric(vertical: 20.0),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-          onPressed: isLogin
-              ? signInWithEmailAndPassword
-              : createUserWithEmailAndPassword,
-          child: Text(isLogin ? 'Login' : 'Register'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          onPressed: signIn,
+          child: const Text('Login'),
+          // child: Text(isLoginState ? 'Login' : 'Register'),
         ));
   }
 
@@ -92,41 +99,150 @@ class _LoginPageState extends State<LoginPage> {
     return TextButton(
       onPressed: () {
         setState(() {
-          isLogin = !isLogin;
+          isLoginState = !isLoginState;
         });
       },
-      child: Text(isLogin ? 'Register instead' : 'Login instead'),
+      child: Text(
+        'Register Now',
+        style: TextStyle(
+          color: Colors.lightBlue[400],
+        ),
+      ),
+      // child: Text(isLoginState ? 'Register instead' : 'Login instead'),
+    );
+  }
+
+  Widget _entryField(
+    String title,
+    TextEditingController controller,
+    IconData icon,
+  ) {
+    return TextFormField(
+      // controller: controller,
+      onChanged: (inputValue) {
+        title == 'email' ? email = inputValue : pass = inputValue;
+      },
+      decoration: InputDecoration(
+        labelText: title,
+        prefixIcon: Icon(
+          icon,
+          color: Colors.grey,
+        ),
+      ),
+      validator: (val) {
+        if (val == null || val.isEmpty) {
+          return "$title cannot be empty";
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _title(),
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _entryField(
-              'email',
-              _controllerEmail,
-              Icons.email,
+      body: SafeArea(
+        child: Center(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.medical_services,
+                  size: 100,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'My Dentist',
+                  style: GoogleFonts.caveat(
+                    fontSize: 75,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Hey Doctor, Welcome Back!',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(height: 50),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlue[50],
+                      border: Border.all(color: Colors.white10),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: _entryField(
+                        'email',
+                        _controllerEmail,
+                        Icons.email_outlined,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlue[50],
+                      border: Border.all(color: Colors.white10),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: _entryField(
+                        'password',
+                        _controllerPassword,
+                        Icons.lock_outline,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _submitButton(),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: Container(
+                //     padding: const EdgeInsets.all(20),
+                //     decoration: BoxDecoration(
+                //       color: Colors.blue[200],
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //     child: const Center(
+                //       child: Text(
+                //         "Sign In",
+                //         style: TextStyle(color: Colors.white),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Dont have a user?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    _loginOrRegisterButton(),
+                  ],
+                ),
+              ],
             ),
-            _entryField(
-              'password',
-              _controllerPassword,
-              Icons.lock,
-            ),
-            _errorMessage(),
-            _submitButton(),
-            _loginOrRegisterButton(),
-          ],
+          ),
         ),
       ),
     );

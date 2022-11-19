@@ -44,42 +44,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAKuJyKp5pYzonD_pZJuTtnOn8-kxyuUL4',
-    appId: '1:638102056069:web:7e48fa0602c0c6f3544dec',
-    messagingSenderId: '638102056069',
-    projectId: 'clinicapp-32a06',
-    authDomain: 'clinicapp-32a06.firebaseapp.com',
-    storageBucket: 'clinicapp-32a06.appspot.com',
-    measurementId: 'G-JFMQRJNPMH',
+    apiKey: 'AIzaSyAbiKRjQkLnfBAIagJyE04phrC0zEF4Uo8',
+    appId: '1:774974768492:web:933986448da6de3712df49',
+    messagingSenderId: '774974768492',
+    projectId: 'my-dentist-ea5d0',
+    authDomain: 'my-dentist-ea5d0.firebaseapp.com',
+    databaseURL: 'https://my-dentist-ea5d0-default-rtdb.firebaseio.com',
+    storageBucket: 'my-dentist-ea5d0.appspot.com',
+    measurementId: 'G-JYVGFYPPPZ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC8zVYyNSRJ_tPBJOjVtMBrQ5cCv9PA9Fs',
-    appId: '1:638102056069:android:7e2fd064925c6d9c544dec',
-    messagingSenderId: '638102056069',
-    projectId: 'clinicapp-32a06',
-    storageBucket: 'clinicapp-32a06.appspot.com',
+    apiKey: 'AIzaSyDeoh13NFGCNe22HTkxFZ6TlRxOVcJ8dgY',
+    appId: '1:774974768492:android:274aa16badc6bc9b12df49',
+    messagingSenderId: '774974768492',
+    projectId: 'my-dentist-ea5d0',
+    databaseURL: 'https://my-dentist-ea5d0-default-rtdb.firebaseio.com',
+    storageBucket: 'my-dentist-ea5d0.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCDS1W0eJ0d7IxM7yQn4cEUXHwqc2gLq5s',
-    appId: '1:638102056069:ios:53475720aff6df35544dec',
-    messagingSenderId: '638102056069',
-    projectId: 'clinicapp-32a06',
-    storageBucket: 'clinicapp-32a06.appspot.com',
-    androidClientId: '638102056069-458e7bktsph3ncfqu9mldinhcjci22hf.apps.googleusercontent.com',
-    iosClientId: '638102056069-mkf5d57408adjbfj7676u28li4bdag8t.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAccgrzLtbgn9VKgA5RhnNjzfKPSZpMr5s',
+    appId: '1:774974768492:ios:8699d409a6caaab612df49',
+    messagingSenderId: '774974768492',
+    projectId: 'my-dentist-ea5d0',
+    databaseURL: 'https://my-dentist-ea5d0-default-rtdb.firebaseio.com',
+    storageBucket: 'my-dentist-ea5d0.appspot.com',
+    androidClientId: '774974768492-hd7pqsivgf3fetv996q452o4b4rgknbf.apps.googleusercontent.com',
+    iosClientId: '774974768492-t2fqd56clqkk680c0arme3c5hu2mt2h7.apps.googleusercontent.com',
     iosBundleId: 'com.example.myDentist',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCDS1W0eJ0d7IxM7yQn4cEUXHwqc2gLq5s',
-    appId: '1:638102056069:ios:53475720aff6df35544dec',
-    messagingSenderId: '638102056069',
-    projectId: 'clinicapp-32a06',
-    storageBucket: 'clinicapp-32a06.appspot.com',
-    androidClientId: '638102056069-458e7bktsph3ncfqu9mldinhcjci22hf.apps.googleusercontent.com',
-    iosClientId: '638102056069-mkf5d57408adjbfj7676u28li4bdag8t.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAccgrzLtbgn9VKgA5RhnNjzfKPSZpMr5s',
+    appId: '1:774974768492:ios:8699d409a6caaab612df49',
+    messagingSenderId: '774974768492',
+    projectId: 'my-dentist-ea5d0',
+    databaseURL: 'https://my-dentist-ea5d0-default-rtdb.firebaseio.com',
+    storageBucket: 'my-dentist-ea5d0.appspot.com',
+    androidClientId: '774974768492-hd7pqsivgf3fetv996q452o4b4rgknbf.apps.googleusercontent.com',
+    iosClientId: '774974768492-t2fqd56clqkk680c0arme3c5hu2mt2h7.apps.googleusercontent.com',
     iosBundleId: 'com.example.myDentist',
   );
 }
