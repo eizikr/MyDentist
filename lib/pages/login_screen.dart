@@ -66,49 +66,63 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Future<void> signUp() async {
-  //   try {
-  //     await Auth().signUp(
-  //       email: _controllerEmail.text,
-  //       password: _controllerPassword.text,
-  //     );
-  //   } on FirebaseAuthException catch (e) {
-  //     setState(() {
-  //       print("Auth (sign up)  problem: " + e.toString());
-  //     });
-  //   }
-  // }
-
-  Widget _submitButton() {
+  Widget _submitButton(double width) {
+    // return Container(
+    //   height: 50,
+    //   width: width,
+    //   decoration: BoxDecoration(
+    //       gradient: const LinearGradient(
+    //         colors: [
+    //           Color.fromARGB(255, 167, 226, 253),
+    //           Color.fromARGB(255, 118, 212, 255),
+    //         ],
+    //         begin: Alignment.centerLeft,
+    //         end: Alignment.centerRight,
+    //       ),
+    //       borderRadius: const BorderRadius.all(
+    //         Radius.circular(25.0),
+    //       ),
+    //       boxShadow: [
+    //         BoxShadow(
+    //           color: Colors.black.withOpacity(0.1),
+    //           spreadRadius: 4,
+    //           blurRadius: 10,
+    //           offset: const Offset(0, 3),
+    //         )
+    //       ]),
+    //   child: Center(
+    //     child: GestureDetector(
+    //       onTap: signIn,
+    //       child: const Text(
+    //         'Login',
+    //         textAlign: TextAlign.left,
+    //         style: TextStyle(
+    //           fontFamily: "Netflix",
+    //           fontWeight: FontWeight.w600,
+    //           fontSize: 18,
+    //           letterSpacing: 0.0,
+    //           color: Colors.black54,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
     return SizedBox(
-        width: 365.0,
-        child: RawMaterialButton(
-          fillColor: Colors.lightBlue[200],
-          elevation: 0.0,
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          onPressed: signIn,
-          child: const Text('Login'),
-          // child: Text(isLoginState ? 'Login' : 'Register'),
-        ));
-  }
-
-  Widget _loginOrRegisterButton() {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          isLoginState = !isLoginState;
-        });
-      },
-      child: Text(
-        'Register Now',
-        style: TextStyle(
-          color: Colors.lightBlue[400],
+      width: width,
+      child: RawMaterialButton(
+        fillColor: Colors.lightBlue[100],
+        elevation: 0.0,
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
         ),
+        onPressed: signIn,
+        child: Text(
+          'Login',
+          style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
+        ),
+        // child: Text(isLoginState ? 'Login' : 'Register'),
       ),
-      // child: Text(isLoginState ? 'Register instead' : 'Login instead'),
     );
   }
 
@@ -128,7 +142,9 @@ class _LoginPageState extends State<LoginPage> {
           icon,
           color: Colors.grey,
         ),
+        border: InputBorder.none,
       ),
+      obscureText: title == 'password' ? true : false,
       validator: (val) {
         if (val == null || val.isEmpty) {
           return "$title cannot be empty";
@@ -141,106 +157,86 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
+    var screenWidth = queryData.size.width;
+    var screenHeight = queryData.size.height;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.medical_services,
-                  size: 100,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'My Dentist',
-                  style: GoogleFonts.caveat(
-                    fontSize: 75,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Hey Doctor, Welcome Back!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue[50],
-                      border: Border.all(color: Colors.white10),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: _entryField(
-                        'email',
-                        _controllerEmail,
-                        Icons.email_outlined,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue[50],
-                      border: Border.all(color: Colors.white10),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: _entryField(
-                        'password',
-                        _controllerPassword,
-                        Icons.lock_outline,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _submitButton(),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                //   child: Container(
-                //     padding: const EdgeInsets.all(20),
-                //     decoration: BoxDecoration(
-                //       color: Colors.blue[200],
-                //       borderRadius: BorderRadius.circular(12),
-                //     ),
-                //     child: const Center(
-                //       child: Text(
-                //         "Sign In",
-                //         style: TextStyle(color: Colors.white),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                const SizedBox(height: 10),
-                Row(
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth / 6, vertical: screenHeight / 5),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Dont have a user?',
-                      style: TextStyle(
+                    const Icon(
+                      Icons.medical_services,
+                      size: 60,
+                    ),
+                    Text(
+                      'My Dentist',
+                      style: GoogleFonts.caveat(
+                        fontSize: 55,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    _loginOrRegisterButton(),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Hey Doctor!',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[50],
+                          border: Border.all(color: Colors.white10),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: _entryField(
+                            'email',
+                            _controllerEmail,
+                            Icons.email_outlined,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[50],
+                          border: Border.all(color: Colors.white10),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: _entryField(
+                            'password',
+                            _controllerPassword,
+                            Icons.lock_outline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _submitButton(screenWidth * 0.2),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
