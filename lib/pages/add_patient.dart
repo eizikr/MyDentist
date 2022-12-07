@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:side_navigation/side_navigation.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -9,69 +10,119 @@ class AddPatientPage extends StatefulWidget {
 }
 
 class _AddPatientPageState extends State<AddPatientPage> {
+  List<Widget> views = const [
+    Center(
+      child: Text('Show Private Information'),
+    ),
+    Center(
+      child: Text('Show Comunication Details'),
+    ),
+    Center(
+      child: Text('Show Medical Information'),
+    ),
+    Center(
+      child: Text('Show Patient Status and General Details'),
+    ),
+    Center(
+      child: Text('Save Details'),
+    ),
+  ];
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
-
-class BottomBar extends StatelessWidget {
-  const BottomBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.lightBlue[300],
-      child: IconTheme(
-        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-        child: Row(
-          children: <Widget>[
-            const Spacer(
-              flex: 1,
+    return Scaffold(
+      body: Row(
+        children: [
+          SideNavigationBar(
+            header: SideNavigationBarHeader(
+                image: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 207, 235, 248),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.exit_to_app,
+                      color: Colors.black,
+                    ),
+                    tooltip: "Go back to home page",
+                  ),
+                ),
+                title: Text('Add Patient'),
+                subtitle: Text('To System')),
+            footer: const SideNavigationBarFooter(label: Text('Close bar')),
+            selectedIndex: selectedIndex,
+            items: const [
+              SideNavigationBarItem(
+                icon: Icons.manage_accounts_rounded,
+                label: 'Private-Info',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.phone,
+                label: 'Comunication',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.medical_information,
+                label: 'Medical-Info',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.description_sharp,
+                label: 'Patient-Status',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.save_as_rounded,
+                label: 'Save',
+              ),
+            ],
+            onTap: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            toggler: const SideBarToggler(
+              shrinkIcon: Icons.keyboard_arrow_left,
+              expandIcon: Icons.keyboard_arrow_right,
             ),
-            const IconButton(
-                tooltip: 'Logout', icon: Icon(Icons.logout), onPressed: null),
-            const Spacer(
-              flex: 10,
+            theme: SideNavigationBarTheme(
+              togglerTheme: SideNavigationBarTogglerTheme.standard(),
+              itemTheme: SideNavigationBarItemTheme(
+                selectedItemColor: Colors.lightBlue,
+                unselectedItemColor: Colors.black,
+              ),
+              dividerTheme: SideNavigationBarDividerTheme.standard(),
             ),
-            IconButton(
-              tooltip: 'Settings',
-              icon: const Icon(Icons.settings),
-              onPressed: () {},
-            ),
-            const Spacer(
-              flex: 1,
-            ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: views.elementAt(selectedIndex),
+          )
+        ],
       ),
     );
   }
-}
+  // @override
+  // Widget build(BuildContext context) {
+  //   MediaQueryData? queryData;
+  //   queryData = MediaQuery.of(context);
 
-class ButtonWidget extends StatelessWidget {
-  final String text;
-  final VoidCallback onClicked;
+  //   var screenWidth = queryData.size.width;
+  //   var screenHeight = queryData.size.height;
 
-  const ButtonWidget({
-    Key? key,
-    required this.text,
-    required this.onClicked,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(50),
-          shape: const StadiumBorder(),
-          backgroundColor: Colors.lightBlue[300],
-        ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.white),
-          ),
-        ),
-      );
+  //   return Scaffold(
+  //     body: SingleChildScrollView(
+  //       child: Container(
+  //         width: screenWidth,
+  //         height: screenHeight,
+  //         alignment: Alignment.center,
+  //         child: Container(
+  //           width: screenWidth / 1.1,
+  //           height: screenHeight / 1.1,
+  //           decoration: BoxDecoration(
+  //             border: Border.all(color: Colors.grey),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_dentist/widget_tree.dart';
 import 'firebase_options.dart';
 // import 'pages/home_page.dart';
+import 'pages/add_patient.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const WidgetTree(),
       // home: HomePage(),
+      // home: const AddPatientPage(),
     );
   }
 }

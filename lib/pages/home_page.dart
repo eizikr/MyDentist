@@ -39,38 +39,39 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
-          child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: screenWidth / 3, vertical: screenHeight / 6),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _title(fontSize: screenWidth * 0.04),
-            const SizedBox(height: 60),
-            ButtonWidget(
-              text: 'Patient Card',
-              onClicked: () => {},
-            ),
-            const SizedBox(height: 35),
-            ButtonWidget(
-                text: 'Add Patient',
-                onClicked: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddPatientPage(),
-                    ),
-                  );
-                }),
-            const SizedBox(height: 35),
-            ButtonWidget(text: 'Treatment Plan', onClicked: () => {}),
-            const SizedBox(height: 35),
-            ButtonWidget(text: 'daily planner', onClicked: () => {}),
-            const SizedBox(height: 35),
-            ButtonWidget(text: 'Reports', onClicked: () => {}),
-          ],
+        child: Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth / 3, vertical: screenHeight / 6),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _title(fontSize: screenWidth * 0.04),
+              const SizedBox(height: 60),
+              ButtonWidget(
+                text: 'Patient Card',
+                onClicked: () => {},
+              ),
+              const SizedBox(height: 35),
+              ButtonWidget(
+                  text: 'Add Patient',
+                  onClicked: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddPatientPage(),
+                      ),
+                    );
+                  }),
+              const SizedBox(height: 35),
+              ButtonWidget(text: 'Treatment Plan', onClicked: () => {}),
+              const SizedBox(height: 35),
+              ButtonWidget(text: 'daily planner', onClicked: () => {}),
+              const SizedBox(height: 35),
+              ButtonWidget(text: 'Reports', onClicked: () => {}),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
