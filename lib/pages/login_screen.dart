@@ -128,7 +128,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _entryField(
     String title,
-    TextEditingController controller,
     IconData icon,
   ) {
     return TextFormField(
@@ -207,7 +206,6 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.only(left: 10.0),
                           child: _entryField(
                             'email',
-                            _controllerEmail,
                             Icons.email_outlined,
                           ),
                         ),
@@ -226,7 +224,6 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.only(left: 10.0),
                           child: _entryField(
                             'password',
-                            _controllerPassword,
                             Icons.lock_outline,
                           ),
                         ),

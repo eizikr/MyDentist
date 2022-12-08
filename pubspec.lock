@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  date_field:
+    dependency: "direct main"
+    description:
+      name: date_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   fake_async:
     dependency: transitive
     description:

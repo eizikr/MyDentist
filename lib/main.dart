@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/widget_tree.dart';
 import 'firebase_options.dart';
-// import 'pages/home_page.dart';
+import 'pages/home_page.dart';
 import 'pages/add_patient.dart';
 
 Future<void> main() async {
@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         scaffoldBackgroundColor: Color.fromARGB(255, 207, 235, 248),
       ),
-      home: const WidgetTree(),
-      // home: HomePage(),
+      // home: const WidgetTree(),
+      home: HomePage(),
       // home: const AddPatientPage(),
     );
   }
