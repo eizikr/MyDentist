@@ -357,51 +357,69 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
   Future CreatePatient() async{
-    if (_idController != null){
-/*
-  DateTime today = DateTime.now();
-  final _creationDateController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _fathersNameController = TextEditingController();
-  final _idController = TextEditingController();
-  final _imageController = TextEditingController();
-  final _cityController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _postalCodeController = TextEditingController();
-  final _houseNumberController = TextEditingController();
-  final _countryBirthController = TextEditingController();
-  final _professionController = TextEditingController();
- */
-
     final docUser = FirebaseFirestore.instance.collection("Patients").doc(_idController.text);
     final patient = Patient(
-      first_name : _firstNameController.text,
-      last_name : _lastNameController.text,
       id : docUser.id,
+      creationDate : _creationDateController.text,
+      firstName : _firstNameController.text,
+      lastName : _lastNameController.text,
+      fathersName : _fathersNameController.text,
+      image : _imageController.text,
+      city : _cityController.text,
+      address : _addressController.text,
+      postalCode : _postalCodeController.text,
+      houseNumber : _houseNumberController.text,
+      countryBirth : _countryBirthController.text,
+      profession : _professionController.text,
     );
     final json=patient.toJason();
     await docUser.set(json);
-    print("saving changes");
-    }
   }
 }
 
 class Patient{
   String id;
-  final String first_name;
-  final String last_name;
+  final String creationDate;
+  final String firstName;
+  final String lastName;
+  final String fathersName;
+  final String image;
+  final String city;
+  final String address;
+  final String postalCode;
+  final String houseNumber;
+  final String countryBirth;
+  final String profession;
+
 
   Patient({
     this.id = '',
-    required this.first_name,
-    required this.last_name,
+    this.creationDate='undefined',
+    required this.firstName,
+    required this.lastName,
+    this.fathersName='undefined',
+    this.image='undefined',
+    this.city='undefined',
+    this.address='undefined',
+    this.postalCode='undefined',
+    this.houseNumber='undefined',
+    this.countryBirth='undefined',
+    this.profession='undefined',
   });
   
   Map <String,dynamic> toJason() =>{
-      'first_name' : first_name,
-      'last_name' : last_name,
       'id' : id,
+      'creationDate' : creationDate,
+      'first_name' : firstName,
+      'last_name' : lastName,
+      'fathers_name' : fathersName,
+      'image' : image,
+      'city' : city,
+      'address' : address,
+      'postalCode' : postalCode,
+      'houseNumber' : houseNumber,
+      'countryBirth' : countryBirth,
+      'profession' : profession,
   };
 }
 
