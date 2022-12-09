@@ -372,7 +372,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       countryBirth : _countryBirthController.text,
       profession : _professionController.text,
     );
-    final json=patient.toJason();
+    final json=patient.toJson();
     await docUser.set(json);
   }
 }
@@ -407,7 +407,7 @@ class Patient{
     this.profession='undefined',
   });
   
-  Map <String,dynamic> toJason() =>{
+  Map <String,dynamic> toJson() =>{
       'id' : id,
       'creationDate' : creationDate,
       'first_name' : firstName,
@@ -421,6 +421,20 @@ class Patient{
       'countryBirth' : countryBirth,
       'profession' : profession,
   };
+  static Patient fromJson(Map <String,dynamic> json) => Patient(
+    id : json['id'],
+    creationDate : json['creationDate'],
+    firstName : json['first_name'],
+    lastName : json['last_name'],
+    fathersName : json['fathers_name'],
+    image : json['image'],
+    city : json['city'],
+    address : json['address'],
+    postalCode : json['postalCode'],
+    houseNumber : json['houseNumber'],
+    countryBirth : json['countryBirth'],
+    profession : json['profession'],
+  );
 }
 
 // class AddPatientPage extends StatefulWidget {
