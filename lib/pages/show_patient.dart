@@ -19,11 +19,10 @@ class _ShowPatientState extends State<ShowPatient> {
     snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
   Widget buildPatient(Patient patient)=> ListTile(
-    leading: CircleAvatar(child: Text('${patient.firstName}')),
+    leading: CircleAvatar(child: Text(patient.id)),
     title: Text(patient.id),
-    subtitle: Text(patient.lastName),
+    subtitle: Text('${patient.firstName} ${patient.lastName}'),
   );
-
 
   @override
   Widget build(BuildContext context) {
