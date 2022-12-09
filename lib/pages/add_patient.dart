@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -349,23 +350,61 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   }
 
   continued() {
-    _currentStep < 2 ? setState(() => _currentStep += 1) : CreatePatient(name: "s");
+    _currentStep < 2 ? setState(() => _currentStep += 1) : CreatePatient();
   }
 
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
-    Future CreatePatient({required String name}) async{
-    final docUser = FirebaseFirestore.instance.collection("Patients").doc('my-id');
-    final json={
-      'first_name' : name,
-      'last_name' : name,
-      'id' : name,
-    };
+  Future CreatePatient() async{
+    if (_idController != null){
+/*
+  DateTime today = DateTime.now();
+  final _creationDateController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _fathersNameController = TextEditingController();
+  final _idController = TextEditingController();
+  final _imageController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _postalCodeController = TextEditingController();
+  final _houseNumberController = TextEditingController();
+  final _countryBirthController = TextEditingController();
+  final _professionController = TextEditingController();
+ */
+
+    final docUser = FirebaseFirestore.instance.collection("Patients").doc(_idController.text);
+    final patient = Patient(
+      first_name : _firstNameController.text,
+      last_name : _lastNameController.text,
+      id : docUser.id,
+    );
+    final json=patient.toJason();
     await docUser.set(json);
     print("saving changes");
+    }
   }
 }
+
+class Patient{
+  String id;
+  final String first_name;
+  final String last_name;
+
+  Patient({
+    this.id = '',
+    required this.first_name,
+    required this.last_name,
+  });
+  
+  Map <String,dynamic> toJason() =>{
+      'first_name' : first_name,
+      'last_name' : last_name,
+      'id' : id,
+  };
+}
+
 // class AddPatientPage extends StatefulWidget {
 //   const AddPatientPage({super.key});
 
