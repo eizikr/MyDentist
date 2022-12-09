@@ -32,7 +32,7 @@ class _ShowPatientState extends State<ShowPatient> {
         stream: readPatients(),
         builder: (context, snapshot) {
           if (snapshot.hasError){
-            return Text("somthing went wrong");
+            return Text('somthing went wrong ${snapshot.error}');
           }
           else if (snapshot.hasData){
             final patients = snapshot.data!;
