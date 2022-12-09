@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,9 +81,8 @@ class _PatientCardState extends State<PatientCard> {
             onTap: (index) {
               setState(() {
                 selectedIndex = index;
-                if (index==4)
-                  CreatePatient(name: "name");
-                  print("saving changes");
+                // if (index==4)
+                //  TODO: updating patient
               });
             },
             toggler: const SideBarToggler(
@@ -112,9 +112,7 @@ class _PatientCardState extends State<PatientCard> {
     );
   }
   
-  Future CreatePatient({required String name}) async{
-    //final docUser = FirebaseFirestore.instance.collection
-  }
+
   // @override
   // Widget build(BuildContext context) {
   //   MediaQueryData? queryData;

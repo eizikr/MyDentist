@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -348,11 +349,21 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   }
 
   continued() {
-    _currentStep < 2 ? setState(() => _currentStep += 1) : null;
+    _currentStep < 2 ? setState(() => _currentStep += 1) : CreatePatient(name: "s");
   }
 
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
+  }
+    Future CreatePatient({required String name}) async{
+    final docUser = FirebaseFirestore.instance.collection("Patients").doc('my-id');
+    final json={
+      'first_name' : name,
+      'last_name' : name,
+      'id' : name,
+    };
+    await docUser.set(json);
+    print("saving changes");
   }
 }
 // class AddPatientPage extends StatefulWidget {
