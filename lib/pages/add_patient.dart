@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 
@@ -450,10 +452,91 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   }
 
   continued() {
-    _currentStep < 2 ? setState(() => _currentStep += 1) : null;
+    _currentStep < 2 ? setState(() => _currentStep += 1) : CreatePatient();
   }
 
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
+
+  Future CreatePatient() async {
+    final docUser = FirebaseFirestore.instance
+        .collection("Patients")
+        .doc(_idController.text);
+    final patient = Patient(
+      id: docUser.id,
+      creationDate: _creationDateController.text,
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      fathersName: _fathersNameController.text,
+      image: _imageController.text,
+      city: _cityController.text,
+      address: _addressController.text,
+      postalCode: _postalCodeController.text,
+      houseNumber: _houseNumberController.text,
+      countryBirth: _countryBirthController.text,
+      profession: _professionController.text,
+    );
+    final json = patient.toJson();
+    await docUser.set(json);
+  }
+}
+
+class Patient {
+  String id;
+  final String creationDate;
+  final String firstName;
+  final String lastName;
+  final String fathersName;
+  final String image;
+  final String city;
+  final String address;
+  final String postalCode;
+  final String houseNumber;
+  final String countryBirth;
+  final String profession;
+
+  Patient({
+    this.id = '',
+    this.creationDate = 'undefined',
+    required this.firstName,
+    required this.lastName,
+    this.fathersName = 'undefined',
+    this.image = 'undefined',
+    this.city = 'undefined',
+    this.address = 'undefined',
+    this.postalCode = 'undefined',
+    this.houseNumber = 'undefined',
+    this.countryBirth = 'undefined',
+    this.profession = 'undefined',
+  });
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'creationDate': creationDate,
+        'first_name': firstName,
+        'last_name': lastName,
+        'fathers_name': fathersName,
+        'image': image,
+        'city': city,
+        'address': address,
+        'postalCode': postalCode,
+        'houseNumber': houseNumber,
+        'countryBirth': countryBirth,
+        'profession': profession,
+      };
+  static Patient fromJson(Map<String, dynamic> json) => Patient(
+        id: json['id'],
+        creationDate: json['creationDate'],
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        fathersName: json['fathers_name'],
+        image: json['image'],
+        city: json['city'],
+        address: json['address'],
+        postalCode: json['postalCode'],
+        houseNumber: json['houseNumber'],
+        countryBirth: json['countryBirth'],
+        profession: json['profession'],
+      );
 }

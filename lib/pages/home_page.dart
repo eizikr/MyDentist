@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/pages/add_patient.dart';
 import 'package:my_dentist/pages/patient_card.dart';
+import 'package:my_dentist/pages/show_patient.dart';
 import './add_patient.dart';
 
 Future<void> signOut() async {
@@ -48,6 +49,17 @@ class HomePage extends StatelessWidget {
             children: [
               _title(fontSize: screenWidth * 0.04),
               const SizedBox(height: 60),
+              ButtonWidget(
+                  text: 'Show Patient',
+                  onClicked: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShowPatient(),
+                      ),
+                    );
+                  }),
+              const SizedBox(height: 35),
               ButtonWidget(
                   text: 'Patient Card',
                   onClicked: () {

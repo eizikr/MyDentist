@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:side_navigation/side_navigation.dart';
@@ -79,6 +81,8 @@ class _PatientCardState extends State<PatientCard> {
             onTap: (index) {
               setState(() {
                 selectedIndex = index;
+                // if (index==4)
+                //  TODO: updating patient
               });
             },
             toggler: const SideBarToggler(
@@ -107,6 +111,8 @@ class _PatientCardState extends State<PatientCard> {
       ),
     );
   }
+  
+
   // @override
   // Widget build(BuildContext context) {
   //   MediaQueryData? queryData;
