@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -15,8 +14,8 @@ class _AddPatientPageState extends State<AddPatientPage> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(25),
-        child: CreatePatientStepper(),
+        padding: const EdgeInsets.all(25),
+        child: const CreatePatientStepper(),
       ),
     );
   }
@@ -32,6 +31,7 @@ class CreatePatientStepper extends StatefulWidget {
 class _CreatePatientStepperState extends State<CreatePatientStepper> {
   int _currentStep = 0;
   DateTime today = DateTime.now();
+  // Private information
   final _creationDateController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -44,6 +44,19 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _houseNumberController = TextEditingController();
   final _countryBirthController = TextEditingController();
   final _professionController = TextEditingController();
+  // Comunication
+  final _homePhoneController = TextEditingController();
+  final _email1Controller = TextEditingController();
+  final _email2Controller = TextEditingController();
+  final _insuranceCompanyController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _faxController = TextEditingController();
+  final _HMOController = TextEditingController();
+  final _treatingDoctorController = TextEditingController();
+  // Status
+  final _statusController = TextEditingController();
+  final _RemarksController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,15 +314,88 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                           : StepState.disabled,
                     ),
                     Step(
-                      title: new Text('Address'),
+                      title: const Text('Comunication'),
                       content: Column(
                         children: <Widget>[
+                          const SizedBox(height: 10),
                           TextFormField(
-                            decoration:
-                                InputDecoration(labelText: 'Home Address'),
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Phone",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
                           ),
+                          const SizedBox(height: 10),
                           TextFormField(
-                            decoration: InputDecoration(labelText: 'Postcode'),
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Home Phone",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Email 1",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Email 2",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Insurance Company",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Fax",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "HMO",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Treating Doctor",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
                           ),
                         ],
                       ),
@@ -319,12 +405,28 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                           : StepState.disabled,
                     ),
                     Step(
-                      title: new Text('Mobile Number'),
+                      title: const Text('Status'),
                       content: Column(
                         children: <Widget>[
+                          const SizedBox(height: 10),
                           TextFormField(
-                            decoration:
-                                InputDecoration(labelText: 'Mobile Number'),
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Status",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _postalCodeController,
+                            decoration: const InputDecoration(
+                              labelText: "Remarks",
+                              icon: Icon(Icons.circle_outlined),
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {},
                           ),
                         ],
                       ),
@@ -355,37 +457,3 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
 }
-// class AddPatientPage extends StatefulWidget {
-//   const AddPatientPage({super.key});
-
-//   @override
-//   AddPatientPageState createState() {
-//     return AddPatientPageState();
-//   }
-// }
-
-// class AddPatientPageState extends State<AddPatientPage> {
-//   DateTime today = DateTime.now();
-//   final _formKey = GlobalKey<FormState>();
-
-//   //<controller name>.text will give you the text
-//   final _creationDateController = TextEditingController();
-//   final _firstNameController = TextEditingController();
-//   final _lastNameController = TextEditingController();
-//   final _fathersNameController = TextEditingController();
-//   final _idController = TextEditingController();
-//   final _imageController = TextEditingController();
-//   final _cityController = TextEditingController();
-//   final _addressController = TextEditingController();
-//   final _postalCodeController = TextEditingController();
-//   final _houseNumberController = TextEditingController();
-//   final _countryBirthController = TextEditingController();
-//   final _professionController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Text('jeu'),
-//     );
-//   }
-// }
