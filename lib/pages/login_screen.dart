@@ -18,9 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   late String email;
   final formKey = GlobalKey<FormState>();
 
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-
   String signInError(String errorCode) {
     switch (errorCode) {
       case "user-not-found":
@@ -67,46 +64,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _submitButton(double width) {
-    // return Container(
-    //   height: 50,
-    //   width: width,
-    //   decoration: BoxDecoration(
-    //       gradient: const LinearGradient(
-    //         colors: [
-    //           Color.fromARGB(255, 167, 226, 253),
-    //           Color.fromARGB(255, 118, 212, 255),
-    //         ],
-    //         begin: Alignment.centerLeft,
-    //         end: Alignment.centerRight,
-    //       ),
-    //       borderRadius: const BorderRadius.all(
-    //         Radius.circular(25.0),
-    //       ),
-    //       boxShadow: [
-    //         BoxShadow(
-    //           color: Colors.black.withOpacity(0.1),
-    //           spreadRadius: 4,
-    //           blurRadius: 10,
-    //           offset: const Offset(0, 3),
-    //         )
-    //       ]),
-    //   child: Center(
-    //     child: GestureDetector(
-    //       onTap: signIn,
-    //       child: const Text(
-    //         'Login',
-    //         textAlign: TextAlign.left,
-    //         style: TextStyle(
-    //           fontFamily: "Netflix",
-    //           fontWeight: FontWeight.w600,
-    //           fontSize: 18,
-    //           letterSpacing: 0.0,
-    //           color: Colors.black54,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
     return SizedBox(
       width: width,
       child: RawMaterialButton(

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
+import '../modules/patient.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -33,8 +33,12 @@ class CreatePatientStepper extends StatefulWidget {
 class _CreatePatientStepperState extends State<CreatePatientStepper> {
   int _currentStep = 0;
   DateTime today = DateTime.now();
+  final List<GlobalKey<FormState>> _formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
   // Private information
-  final _creationDateController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _fathersNameController = TextEditingController();
@@ -46,6 +50,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _houseNumberController = TextEditingController();
   final _countryBirthController = TextEditingController();
   final _professionController = TextEditingController();
+  String _dateOfBirth = 'undefined';
   // Comunication
   final _homePhoneController = TextEditingController();
   final _email1Controller = TextEditingController();
@@ -58,6 +63,31 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   // Status
   final _statusController = TextEditingController();
   final _RemarksController = TextEditingController();
+
+  Widget _entryField({
+    required String title,
+    required TextEditingController controller,
+    required bool isRequired,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: title,
+        icon: isRequired
+            ? const Icon(Icons.info_outlined)
+            : const Icon(Icons.circle_outlined),
+        border: const OutlineInputBorder(),
+      ),
+      onChanged: (value) {},
+      validator: (val) {
+        if (isRequired && (val == null || val.isEmpty)) {
+          return "You have to enter $title!";
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,219 +126,134 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                   physics: const ScrollPhysics(),
                   currentStep: _currentStep,
                   onStepTapped: (step) => tapped(step),
-                  onStepContinue: continued,
+                  onStepContinue: () {
+                    final isLastStep = _currentStep < 2 ? false : true;
+                    if (isLastStep) {
+                      CreatePatient();
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        if (_formKeys[_currentStep].currentState!.validate()) {
+                          _currentStep++;
+                        }
+                      });
+                    }
+                  },
                   onStepCancel: cancel,
                   steps: <Step>[
                     Step(
                       title: const Text('Patient private information'),
-                      content: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          DateTimeFormField(
-                            initialValue: today,
-                            decoration: const InputDecoration(
-                              errorStyle: TextStyle(color: Colors.redAccent),
-                              border: OutlineInputBorder(),
-                              icon: Icon(Icons.info_outlined),
-                              labelText: 'Patient creation date',
-                              suffixIcon: Icon(Icons.date_range),
+                      content: Form(
+                        key: _formKeys[0],
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            Text(
+                                'Date of creation: ${today.day}.${today.month}.${today.year}'),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "First name",
+                              controller: _firstNameController,
+                              isRequired: true,
                             ),
-                            mode: DateTimeFieldPickerMode.date,
-                            autovalidateMode: AutovalidateMode.always,
-                            validator: (e) => (e?.compareTo(today) ?? 0) == 1
-                                ? 'You cannot enter a future date'
-                                : null,
-                            onDateSelected: (DateTime value) {
-                              print(value);
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _firstNameController,
-                            decoration: const InputDecoration(
-                              labelText: "First name",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+                            // TextFormField(
+                            //   controller: _firstNameController,
+                            //   decoration: const InputDecoration(
+                            //     labelText: "First name",
+                            //     icon: Icon(Icons.info_outlined),
+                            //     border: OutlineInputBorder(),
+                            //   ),
+                            //   onChanged: (value) {},
+                            //   validator: (val) {
+                            //     if (val == null || val.isEmpty) {
+                            //       return " cannot be empty";
+                            //     }
+                            //     return null;
+                            //   },
+                            //   autovalidateMode:
+                            //       AutovalidateMode.onUserInteraction,
+                            // ),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Last name",
+                              controller: _lastNameController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _lastNameController,
-                            decoration: const InputDecoration(
-                              labelText: "Last name",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Father's Name",
+                              controller: _fathersNameController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _fathersNameController,
-                            decoration: const InputDecoration(
-                              labelText: "Father's Name",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "ID",
+                              controller: _idController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _idController,
-                            decoration: const InputDecoration(
-                              labelText: "ID",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            DateTimeFormField(
+                              onSaved: (val) =>
+                                  setState(() => _dateOfBirth = val.toString()),
+                              decoration: const InputDecoration(
+                                errorStyle: TextStyle(color: Colors.redAccent),
+                                border: OutlineInputBorder(),
+                                icon: Icon(Icons.info_outlined),
+                                labelText: 'Date if birth',
+                                suffixIcon: Icon(Icons.date_range),
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              autovalidateMode: AutovalidateMode.always,
+                              validator: (e) => (e?.compareTo(today) ?? 0) == 1
+                                  ? 'You cannot enter a future date'
+                                  : null,
+                              onDateSelected: (DateTime value) {
+                                _dateOfBirth = value.toString();
+                              },
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          DateTimeFormField(
-                            decoration: const InputDecoration(
-                              errorStyle: TextStyle(color: Colors.redAccent),
-                              border: OutlineInputBorder(),
-                              icon: Icon(Icons.info_outlined),
-                              labelText: 'Date if birth',
-                              suffixIcon: Icon(Icons.date_range),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "City",
+                              controller: _cityController,
+                              isRequired: true,
                             ),
-                            mode: DateTimeFieldPickerMode.date,
-                            autovalidateMode: AutovalidateMode.always,
-                            validator: (e) => (e?.compareTo(today) ?? 0) == 1
-                                ? 'You cannot enter a future date'
-                                : null,
-                            onDateSelected: (DateTime value) {
-                              print(value);
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _imageController,
-                            decoration: const InputDecoration(
-                              labelText: "Image",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Address",
+                              controller: _addressController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _cityController,
-                            decoration: const InputDecoration(
-                              labelText: "City",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Postal Code",
+                              controller: _postalCodeController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _addressController,
-                            decoration: const InputDecoration(
-                              labelText: "Address",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "House Number",
+                              controller: _houseNumberController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Postal Code",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Country of Birth",
+                              controller: _countryBirthController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _houseNumberController,
-                            decoration: const InputDecoration(
-                              labelText: "House number",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
+
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Profession",
+                              controller: _professionController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _countryBirthController,
-                            decoration: const InputDecoration(
-                              labelText: "Country of Birth",
-                              icon: Icon(Icons.info_outlined),
-                              border: OutlineInputBorder(),
-                            ),
-                            onChanged: (value) {},
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return " cannot be empty";
-                              }
-                              return null;
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _professionController,
-                            decoration: const InputDecoration(
-                              labelText: "Profession",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
-                            ),
-                            onChanged: (value) {},
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       isActive: _currentStep >= 0,
                       state: _currentStep >= 0
@@ -317,89 +262,60 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                     ),
                     Step(
                       title: const Text('Comunication'),
-                      content: Column(
-                        children: <Widget>[
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Phone",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                      content: Form(
+                        key: _formKeys[1],
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Phone",
+                              controller: _phoneController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Home Phone",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Home Phone",
+                              controller: _homePhoneController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Email 1",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Email 1",
+                              controller: _email1Controller,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Email 2",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Email 2",
+                              controller: _email2Controller,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Insurance Company",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Insurance Company",
+                              controller: _insuranceCompanyController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Fax",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Fax",
+                              controller: _faxController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "HMO",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "HMO",
+                              controller: _HMOController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Treating Doctor",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Treating Doctor",
+                              controller: _treatingDoctorController,
+                              isRequired: true,
                             ),
-                            onChanged: (value) {},
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       isActive: _currentStep >= 0,
                       state: _currentStep >= 1
@@ -408,29 +324,24 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                     ),
                     Step(
                       title: const Text('Status'),
-                      content: Column(
-                        children: <Widget>[
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Status",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                      content: Form(
+                        key: _formKeys[2],
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Status",
+                              controller: _statusController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            decoration: const InputDecoration(
-                              labelText: "Remarks",
-                              icon: Icon(Icons.circle_outlined),
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Remarks",
+                              controller: _RemarksController,
+                              isRequired: false,
                             ),
-                            onChanged: (value) {},
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       isActive: _currentStep >= 0,
                       state: _currentStep >= 2
@@ -451,10 +362,6 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     setState(() => _currentStep = step);
   }
 
-  continued() {
-    _currentStep < 2 ? setState(() => _currentStep += 1) : CreatePatient();
-  }
-
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
@@ -465,78 +372,29 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
         .doc(_idController.text);
     final patient = Patient(
       id: docUser.id,
-      creationDate: _creationDateController.text,
+      creationDate: '${today.day}.${today.month}.${today.year}',
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
       fathersName: _fathersNameController.text,
-      image: _imageController.text,
       city: _cityController.text,
       address: _addressController.text,
       postalCode: _postalCodeController.text,
       houseNumber: _houseNumberController.text,
       countryBirth: _countryBirthController.text,
       profession: _professionController.text,
+      dateOfBirth: _dateOfBirth,
+      homePhone: _homePhoneController.text,
+      email1: _email1Controller.text,
+      email2: _email2Controller.text,
+      insuranceCompany: _insuranceCompanyController.text,
+      phone: _phoneController.text,
+      fax: _faxController.text,
+      HMO: _HMOController.text,
+      treatingDoctor: _treatingDoctorController.text,
+      status: _statusController.text,
+      remarks: _RemarksController.text,
     );
     final json = patient.toJson();
     await docUser.set(json);
   }
-}
-
-class Patient {
-  String id;
-  final String creationDate;
-  final String firstName;
-  final String lastName;
-  final String fathersName;
-  final String image;
-  final String city;
-  final String address;
-  final String postalCode;
-  final String houseNumber;
-  final String countryBirth;
-  final String profession;
-
-  Patient({
-    this.id = '',
-    this.creationDate = 'undefined',
-    required this.firstName,
-    required this.lastName,
-    this.fathersName = 'undefined',
-    this.image = 'undefined',
-    this.city = 'undefined',
-    this.address = 'undefined',
-    this.postalCode = 'undefined',
-    this.houseNumber = 'undefined',
-    this.countryBirth = 'undefined',
-    this.profession = 'undefined',
-  });
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'creationDate': creationDate,
-        'first_name': firstName,
-        'last_name': lastName,
-        'fathers_name': fathersName,
-        'image': image,
-        'city': city,
-        'address': address,
-        'postalCode': postalCode,
-        'houseNumber': houseNumber,
-        'countryBirth': countryBirth,
-        'profession': profession,
-      };
-  static Patient fromJson(Map<String, dynamic> json) => Patient(
-        id: json['id'],
-        creationDate: json['creationDate'],
-        firstName: json['first_name'],
-        lastName: json['last_name'],
-        fathersName: json['fathers_name'],
-        image: json['image'],
-        city: json['city'],
-        address: json['address'],
-        postalCode: json['postalCode'],
-        houseNumber: json['houseNumber'],
-        countryBirth: json['countryBirth'],
-        profession: json['profession'],
-      );
 }
