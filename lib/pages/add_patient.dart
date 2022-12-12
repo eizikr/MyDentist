@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
+import 'package:flutter/services.dart';
 import '../modules/patient.dart';
 
 class AddPatientPage extends StatefulWidget {
@@ -43,7 +44,6 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _lastNameController = TextEditingController();
   final _fathersNameController = TextEditingController();
   final _idController = TextEditingController();
-  final _imageController = TextEditingController();
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _postalCodeController = TextEditingController();
@@ -58,18 +58,23 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _insuranceCompanyController = TextEditingController();
   final _phoneController = TextEditingController();
   final _faxController = TextEditingController();
-  final _HMOController = TextEditingController();
+  final _hmoController = TextEditingController();
   final _treatingDoctorController = TextEditingController();
   // Status
   final _statusController = TextEditingController();
-  final _RemarksController = TextEditingController();
+  final _remarksController = TextEditingController();
 
   Widget _entryField({
     required String title,
     required TextEditingController controller,
     required bool isRequired,
+    bool numerical = false,
   }) {
     return TextFormField(
+      keyboardType: numerical ? TextInputType.number : null,
+      inputFormatters: numerical
+          ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+          : null,
       controller: controller,
       decoration: InputDecoration(
         labelText: title,
@@ -81,7 +86,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       onChanged: (value) {},
       validator: (val) {
         if (isRequired && (val == null || val.isEmpty)) {
-          return "You have to enter $title!";
+          return "Please enter $title!${numerical ? ' (Only Digits)' : ''}";
         }
         return null;
       },
@@ -129,7 +134,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                   onStepContinue: () {
                     final isLastStep = _currentStep < 2 ? false : true;
                     if (isLastStep) {
-                      CreatePatient();
+                      createPatient();
                       Navigator.pop(context);
                     } else {
                       setState(() {
@@ -139,7 +144,11 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                       });
                     }
                   },
-                  onStepCancel: cancel,
+                  onStepCancel: () {
+                    _currentStep > 0
+                        ? setState(() => _currentStep -= 1)
+                        : Navigator.pop(context);
+                  },
                   steps: <Step>[
                     Step(
                       title: const Text('Patient private information'),
@@ -187,10 +196,10 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                             ),
                             const SizedBox(height: 10),
                             _entryField(
-                              title: "ID",
-                              controller: _idController,
-                              isRequired: true,
-                            ),
+                                title: "ID",
+                                controller: _idController,
+                                isRequired: true,
+                                numerical: true),
                             const SizedBox(height: 10),
                             DateTimeFormField(
                               onSaved: (val) =>
@@ -230,14 +239,15 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               title: "Postal Code",
                               controller: _postalCodeController,
                               isRequired: false,
+                              numerical: true,
                             ),
 
                             const SizedBox(height: 10),
                             _entryField(
-                              title: "House Number",
-                              controller: _houseNumberController,
-                              isRequired: true,
-                            ),
+                                title: "House Number",
+                                controller: _houseNumberController,
+                                isRequired: true,
+                                numerical: true),
 
                             const SizedBox(height: 10),
                             _entryField(
@@ -268,16 +278,16 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                           children: <Widget>[
                             const SizedBox(height: 10),
                             _entryField(
-                              title: "Phone",
-                              controller: _phoneController,
-                              isRequired: true,
-                            ),
+                                title: "Phone",
+                                controller: _phoneController,
+                                isRequired: true,
+                                numerical: true),
                             const SizedBox(height: 10),
                             _entryField(
-                              title: "Home Phone",
-                              controller: _homePhoneController,
-                              isRequired: false,
-                            ),
+                                title: "Home Phone",
+                                controller: _homePhoneController,
+                                isRequired: false,
+                                numerical: true),
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Email 1",
@@ -298,14 +308,14 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                             ),
                             const SizedBox(height: 10),
                             _entryField(
-                              title: "Fax",
-                              controller: _faxController,
-                              isRequired: false,
-                            ),
+                                title: "Fax",
+                                controller: _faxController,
+                                isRequired: false,
+                                numerical: true),
                             const SizedBox(height: 10),
                             _entryField(
                               title: "HMO",
-                              controller: _HMOController,
+                              controller: _hmoController,
                               isRequired: false,
                             ),
                             const SizedBox(height: 10),
@@ -337,7 +347,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Remarks",
-                              controller: _RemarksController,
+                              controller: _remarksController,
                               isRequired: false,
                             ),
                           ],
@@ -366,7 +376,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
   }
 
-  Future CreatePatient() async {
+  Future createPatient() async {
     final docUser = FirebaseFirestore.instance
         .collection("Patients")
         .doc(_idController.text);
@@ -389,10 +399,10 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       insuranceCompany: _insuranceCompanyController.text,
       phone: _phoneController.text,
       fax: _faxController.text,
-      HMO: _HMOController.text,
+      hmo: _hmoController.text,
       treatingDoctor: _treatingDoctorController.text,
       status: _statusController.text,
-      remarks: _RemarksController.text,
+      remarks: _remarksController.text,
     );
     final json = patient.toJson();
     await docUser.set(json);

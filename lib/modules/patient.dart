@@ -18,7 +18,7 @@ class Patient {
   final String insuranceCompany;
   final String phone;
   final String fax;
-  final String HMO;
+  final String hmo;
   final String treatingDoctor;
 
   final String status;
@@ -43,7 +43,7 @@ class Patient {
     this.insuranceCompany = 'undefined',
     this.phone = 'undefined',
     this.fax = 'undefined',
-    this.HMO = 'undefined',
+    this.hmo = 'undefined',
     this.treatingDoctor = 'undefined',
     this.status = 'undefined',
     this.remarks = 'undefined',
@@ -68,7 +68,7 @@ class Patient {
         'inisurance_company': insuranceCompany,
         'phone': phone,
         'fax': fax,
-        'HMO': HMO,
+        'HMO': hmo,
         'treating_docrot': treatingDoctor,
         'status': status,
         'remarks': remarks
@@ -92,7 +92,7 @@ class Patient {
       insuranceCompany: json['inisurance_company'],
       phone: json['phone'],
       fax: json['fax'],
-      HMO: json['HMO'],
+      hmo: json['HMO'],
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);

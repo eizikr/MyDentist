@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/pages/add_patient.dart';
 import 'package:my_dentist/pages/patient_card.dart';
 import 'package:my_dentist/pages/show_patient.dart';
-import './add_patient.dart';
 
 Future<void> signOut() async {
   await Auth().signOut();
@@ -55,7 +54,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ShowPatient(),
+                        builder: (context) => const ShowPatient(),
                       ),
                     );
                   }),
@@ -66,7 +65,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PatientCard(),
+                        builder: (context) => const PatientCard(),
                       ),
                     );
                   }),
@@ -77,7 +76,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddPatientPage(),
+                        builder: (context) => const AddPatientPage(),
                       ),
                     );
                   }),

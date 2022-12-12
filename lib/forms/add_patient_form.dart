@@ -16,26 +16,16 @@ class AddPatientFormState extends State<AddPatientForm> {
   final _formKey = GlobalKey<FormState>();
 
   //<controller name>.text will give you the text
-  final _creationDateController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-
   final _fathersNameController = TextEditingController();
-
   final _idController = TextEditingController();
-
   final _imageController = TextEditingController();
-
   final _cityController = TextEditingController();
-
   final _addressController = TextEditingController();
-
   final _postalCodeController = TextEditingController();
-
   final _houseNumberController = TextEditingController();
-
   final _countryBirthController = TextEditingController();
-
   final _professionController = TextEditingController();
 
   @override
@@ -68,9 +58,7 @@ class AddPatientFormState extends State<AddPatientForm> {
                 validator: (e) => (e?.compareTo(today) ?? 0) == 1
                     ? 'You cannot enter a future date'
                     : null,
-                onDateSelected: (DateTime value) {
-                  print(value);
-                },
+                onDateSelected: (DateTime value) {},
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -147,9 +135,7 @@ class AddPatientFormState extends State<AddPatientForm> {
                 validator: (e) => (e?.compareTo(today) ?? 0) == 1
                     ? 'You cannot enter a future date'
                     : null,
-                onDateSelected: (DateTime value) {
-                  print(value);
-                },
+                onDateSelected: (DateTime value) {},
               ),
               const SizedBox(height: 20),
               TextFormField(

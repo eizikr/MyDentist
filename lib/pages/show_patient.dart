@@ -1,10 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:my_dentist/pages/add_patient.dart';
-import 'package:side_navigation/side_navigation.dart';
-import '../forms/add_patient_form.dart';
 import '../modules/patient.dart';
 
 class ShowPatient extends StatefulWidget {
@@ -41,7 +36,7 @@ class _ShowPatientState extends State<ShowPatient> {
               children: patients.map(buildPatient).toList(),
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
