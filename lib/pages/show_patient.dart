@@ -25,6 +25,24 @@ class _ShowPatientState extends State<ShowPatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.exit_to_app,
+              color: Colors.black87,
+            ),
+            tooltip: "Go back to home page",
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+        automaticallyImplyLeading: false,
+        title: const Text('search patient card'),
+        centerTitle: true,
+        backgroundColor: Colors.lightBlue[200],
+      ),
       body: StreamBuilder<List<Patient>>(
         stream: readPatients(),
         builder: (context, snapshot) {
