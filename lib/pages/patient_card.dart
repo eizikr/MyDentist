@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
 import '../forms/add_patient_form.dart';
+import '../modules/patient.dart';
+
 
 class PatientCard extends StatefulWidget {
   const PatientCard({super.key});
@@ -10,6 +12,7 @@ class PatientCard extends StatefulWidget {
 }
 
 class _PatientCardState extends State<PatientCard> {
+
   List<Widget> views = const [
     Center(
       child: AddPatientForm(),
@@ -31,6 +34,9 @@ class _PatientCardState extends State<PatientCard> {
 
   @override
   Widget build(BuildContext context) {
+    
+    final Patient args = ModalRoute.of(context)!.settings.arguments as Patient;
+    print('${args.id}');
     return Scaffold(
       body: Row(
         children: [

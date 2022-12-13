@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dentist/pages/patient_card.dart';
 import '../modules/patient.dart';
 
 class ShowPatient extends StatefulWidget {
@@ -17,10 +18,19 @@ class _ShowPatientState extends State<ShowPatient> {
           snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
   Widget buildPatient(Patient patient) => ListTile(
-        leading: CircleAvatar(child: Text(patient.id)),
-        title: Text(patient.id),
-        subtitle: Text('${patient.firstName} ${patient.lastName}'),
-      );
+    leading: CircleAvatar(child: Text(patient.id)),
+    title: Text(patient.id),
+    subtitle: Text('${patient.firstName} ${patient.lastName}'),
+    onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PatientCard(),
+                    settings: RouteSettings(
+                      arguments: (patient),
+                    ),
+                  ),
+                ),
+  );
 
   @override
   Widget build(BuildContext context) {
