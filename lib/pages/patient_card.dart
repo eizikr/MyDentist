@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dentist/forms/show_patienr_form.dart';
 import 'package:side_navigation/side_navigation.dart';
 import '../forms/add_patient_form.dart';
 import '../modules/patient.dart';
@@ -15,7 +16,7 @@ class _PatientCardState extends State<PatientCard> {
 
   List<Widget> views = const [
     Center(
-      child: AddPatientForm(),
+      child: ShowPatientForm(),
     ),
     Center(
       child: Text('Show Comunication Details'),
@@ -35,8 +36,7 @@ class _PatientCardState extends State<PatientCard> {
   @override
   Widget build(BuildContext context) {
     
-    final Patient args = ModalRoute.of(context)!.settings.arguments as Patient;
-    print('${args.id}');
+    final Patient patient = ModalRoute.of(context)!.settings.arguments as Patient;
     return Scaffold(
       body: Row(
         children: [
@@ -55,8 +55,8 @@ class _PatientCardState extends State<PatientCard> {
                     tooltip: "Go back to home page",
                   ),
                 ),
-                title: const Text('Add Patient'),
-                subtitle: const Text('To System')),
+                title: const Text('Patient ID: '),
+                subtitle: Text('${patient.id}')),
             footer: const SideNavigationBarFooter(label: Text('Close bar')),
             selectedIndex: selectedIndex,
             items: const [
@@ -67,6 +67,7 @@ class _PatientCardState extends State<PatientCard> {
               SideNavigationBarItem(
                 icon: Icons.phone,
                 label: 'Comunication',
+
               ),
               SideNavigationBarItem(
                 icon: Icons.medical_information,

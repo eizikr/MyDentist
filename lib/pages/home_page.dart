@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   }),
-              const SizedBox(height: 35),
+              const SizedBox(height: 35),/*
               ButtonWidget(
                   text: 'Patient Card',
                   onClicked: () {
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   }),
-              const SizedBox(height: 35),
+              const SizedBox(height: 35),*/
               ButtonWidget(
                   text: 'Add Patient',
                   onClicked: () {
