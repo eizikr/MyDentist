@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_dentist/our_widgets.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/pages/add_patient.dart';
 import 'package:my_dentist/pages/patient_card.dart';
 import 'package:my_dentist/pages/show_patient.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:my_dentist/pages/treatment_types.dart';
+
+enum MenuItem {
+  settings,
+  addTreatmentType,
+  logout,
+}
 
 Future<void> signOut() async {
   await Auth().signOut();
@@ -23,10 +28,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final User? user = Auth().currentUser;
+  // final User? user = Auth().currentUser;
+  CollectionReference patient =
+      FirebaseFirestore.instance.collection('Patients');
 
   final _patientController = TextEditingController();
-
   final firestore = FirebaseFirestore.instance;
 
   Widget _title({double fontSize = 40}) {
@@ -47,10 +53,58 @@ class _HomePageState extends State<HomePage> {
     var screenWidth = queryData.size.width;
     var screenHeight = queryData.size.height;
 
-    bool patientExists = false;
-
     return Scaffold(
-      bottomNavigationBar: const BottomBar(),
+      appBar: AppBar(
+        title: const Center(
+          child: Text(
+            'Home Page',
+            textAlign: TextAlign.center,
+          ),
+        ),
+        backgroundColor: Colors.lightBlue[100],
+        actions: [
+          PopupMenuButton<MenuItem>(
+            tooltip: 'More Options',
+            onSelected: (value) {
+              if (value == MenuItem.settings) {
+                null;
+              } else if (value == MenuItem.addTreatmentType) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TreatmentTypesPage(),
+                  ),
+                );
+              } else if (value == MenuItem.logout) {
+                signOut();
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: MenuItem.settings,
+                child: ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Settings'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: MenuItem.addTreatmentType,
+                child: ListTile(
+                  leading: Icon(Icons.add_box_outlined),
+                  title: Text('Add Treatment Type'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: MenuItem.logout,
+                child: ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Sign Out'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -66,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ShowPatient(),
+                        builder: (context) => const ShowPatient(),
                       ),
                     );
                   }),
@@ -74,7 +128,7 @@ class _HomePageState extends State<HomePage> {
               ButtonWidget(
                 text: 'Patient Card',
                 onClicked: () async {
-                  await openDialog(context);
+                  await openSearchPatientDialog(context);
                 },
               ),
               const SizedBox(height: 35),
@@ -104,7 +158,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> openDialog(context) => showDialog<void>(
+  Future<void> openSearchPatientDialog(context) => showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Please enter patient ID'),
@@ -156,43 +210,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       errorToast('Please fill the ID field');
     }
-  }
-}
-
-class BottomBar extends StatelessWidget {
-  const BottomBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.lightBlue[100],
-      child: IconTheme(
-        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-        child: Row(
-          children: <Widget>[
-            const Spacer(
-              flex: 1,
-            ),
-            const IconButton(
-              tooltip: 'Logout',
-              icon: Icon(Icons.logout),
-              onPressed: signOut,
-            ),
-            const Spacer(
-              flex: 10,
-            ),
-            IconButton(
-              tooltip: 'Settings',
-              icon: const Icon(Icons.settings),
-              onPressed: () {},
-            ),
-            const Spacer(
-              flex: 1,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 

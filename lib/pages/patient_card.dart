@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/patient_show/comunication_info.dart';
 import 'package:my_dentist/patient_show/private_info.dart';
@@ -6,7 +7,6 @@ import 'package:side_navigation/side_navigation.dart';
 
 class PatientCard extends StatefulWidget {
   final String patientID;
-
   const PatientCard({super.key, required this.patientID});
 
   @override
@@ -61,8 +61,8 @@ class _PatientCardState extends State<PatientCard> {
                     tooltip: "Go back to home page",
                   ),
                 ),
-                title: const Text('Add Patient'),
-                subtitle: const Text('To System')),
+                title: const Text('Patient Card'),
+                subtitle: const Text('Show Details')),
             footer: const SideNavigationBarFooter(label: Text('Close bar')),
             selectedIndex: selectedIndex,
             items: const [

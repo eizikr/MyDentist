@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:my_dentist/our_widgets.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class PatientPrivateInfo extends StatelessWidget {
   final String patientID;
@@ -30,24 +30,34 @@ class PatientPrivateInfo extends StatelessWidget {
 Widget privateInfoScreen(Map<String, dynamic> data) {
   return SingleChildScrollView(
     child: Column(children: [
-      Text('First name: ${data['first_name']}'),
-      SizedBox(height: 10),
-      Text('Last name: ${data['last_name']}'),
-      SizedBox(height: 10),
-      Text('Father' 's name: ${data['fathers_name']}'),
-      SizedBox(height: 10),
-      Text('ID: ${data['id']}'),
-      SizedBox(height: 10),
-      Text('age: ${data['date_of_birth']}'),
-      SizedBox(height: 10),
+      Text('First name: ${data['first_name']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('Last name: ${data['last_name']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('Father' 's name: ${data['fathers_name']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('ID: ${data['id']}', style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('age: ${data['date_of_birth']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
       Text(
-          'Address: ${data['address']}/${data['houseNumber']}, ${data['city']}'),
-      SizedBox(height: 10),
-      Text('Postal Code: ${data['postalCode']}'),
-      SizedBox(height: 10),
-      Text('Counter of birth: ${data['countryBirth']}'),
-      SizedBox(height: 10),
-      Text('Profession: ${data['profession']}'),
+          'Address: ${data['address']}/${data['houseNumber']}, ${data['city']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('Postal Code: ${data['postalCode']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text('Counter of birth: ${data['countryBirth']}',
+          style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 15),
+      Text(
+        'Profession: ${data['profession']}',
+        style: const TextStyle(fontSize: 20),
+      ),
     ]),
   );
 }
