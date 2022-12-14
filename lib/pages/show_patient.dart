@@ -32,11 +32,17 @@ class _ShowPatientState extends State<ShowPatient> {
             return Text('somthing went wrong ${snapshot.error}');
           } else if (snapshot.hasData) {
             final patients = snapshot.data!;
+            print(patients);
             return ListView(
               children: patients.map(buildPatient).toList(),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 8.0,
+                color: Colors.blue,
+              ),
+            );
           }
         },
       ),

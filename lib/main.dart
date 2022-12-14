@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.cyan,
-        scaffoldBackgroundColor: Color.fromARGB(255, 207, 235, 248),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 207, 235, 248),
       ),
       // home: const WidgetTree(),
       home: HomePage(),

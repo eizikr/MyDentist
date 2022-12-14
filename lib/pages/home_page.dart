@@ -1,19 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_dentist/our_widgets.dart';
 import 'package:my_dentist/pages/add_patient.dart';
 import 'package:my_dentist/pages/patient_card.dart';
 import 'package:my_dentist/pages/show_patient.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 Future<void> signOut() async {
   await Auth().signOut();
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final User? user = Auth().currentUser;
+
+  final _patientController = TextEditingController();
+
+  final firestore = FirebaseFirestore.instance;
 
   Widget _title({double fontSize = 40}) {
     return Text(
@@ -25,10 +39,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Widget _userEmail() {
-  //   return Text(user?.email ?? 'User email');
-  // }
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData;
@@ -36,6 +46,8 @@ class HomePage extends StatelessWidget {
 
     var screenWidth = queryData.size.width;
     var screenHeight = queryData.size.height;
+
+    bool patientExists = false;
 
     return Scaffold(
       bottomNavigationBar: const BottomBar(),
@@ -54,21 +66,17 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ShowPatient(),
+                        builder: (context) => ShowPatient(),
                       ),
                     );
                   }),
               const SizedBox(height: 35),
               ButtonWidget(
-                  text: 'Patient Card',
-                  onClicked: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PatientCard(),
-                      ),
-                    );
-                  }),
+                text: 'Patient Card',
+                onClicked: () async {
+                  await openDialog(context);
+                },
+              ),
               const SizedBox(height: 35),
               ButtonWidget(
                   text: 'Add Patient',
@@ -81,7 +89,10 @@ class HomePage extends StatelessWidget {
                     );
                   }),
               const SizedBox(height: 35),
-              ButtonWidget(text: 'Treatment Plan', onClicked: () => {}),
+              ButtonWidget(
+                text: 'Treatment Plan',
+                onClicked: () => {},
+              ),
               const SizedBox(height: 35),
               ButtonWidget(text: 'daily planner', onClicked: () => {}),
               const SizedBox(height: 35),
@@ -91,6 +102,60 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> openDialog(context) => showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Please enter patient ID'),
+          content: TextField(
+            autofocus: true,
+            decoration: const InputDecoration(
+              hintText: 'Patient ID',
+            ),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            controller: _patientController,
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () async => Navigator.of(context).pop(),
+                  child: const Text('Cancle'),
+                ),
+                TextButton(
+                  onPressed: () async => dialog_submit(context),
+                  child: const Text('Show Patient Card'),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+
+  void dialog_submit(BuildContext context) {
+    String patientID = _patientController.text;
+    _patientController.clear();
+    if (patientID.isNotEmpty) {
+      DocumentReference patientRef =
+          firestore.collection('Patients').doc(patientID);
+      patientRef.get().then((value) => {
+            if (value.exists)
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PatientCard(patientID: patientID),
+                ),
+              )
+            else
+              {errorToast('ID not found')}
+          });
+    } else {
+      errorToast('Please fill the ID field');
+    }
   }
 }
 

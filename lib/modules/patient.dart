@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Patient {
   String id;
   final String creationDate;
@@ -96,4 +98,22 @@ class Patient {
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);
+}
+
+Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
+    .collection('Patients')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
+
+Future<bool> checkPatientExists(patientID) async {
+  final firestore = FirebaseFirestore.instance;
+  bool patientExists = false;
+  DocumentReference patientRef =
+      firestore.collection('Patients').doc(patientID);
+  patientRef.get().then((value) => {
+        if (value.exists) {patientExists = true} else {patientExists = false}
+      });
+
+  return patientExists;
 }

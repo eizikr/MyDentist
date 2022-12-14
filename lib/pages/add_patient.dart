@@ -233,7 +233,6 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               controller: _addressController,
                               isRequired: true,
                             ),
-
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Postal Code",

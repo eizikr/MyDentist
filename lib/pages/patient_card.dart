@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:my_dentist/patient_show/comunication_info.dart';
+import 'package:my_dentist/patient_show/private_info.dart';
+import 'package:my_dentist/patient_show/status_info.dart';
 import 'package:side_navigation/side_navigation.dart';
-import '../forms/add_patient_form.dart';
 
 class PatientCard extends StatefulWidget {
-  const PatientCard({super.key});
+  final String patientID;
+
+  const PatientCard({super.key, required this.patientID});
 
   @override
   State<PatientCard> createState() => _PatientCardState();
 }
 
 class _PatientCardState extends State<PatientCard> {
-  List<Widget> views = const [
+  late String _patientID;
+
+  @override
+  void initState() {
+    super.initState();
+    _patientID = widget.patientID;
+  }
+
+  late List<Widget> views = [
     Center(
-      child: AddPatientForm(),
+      child: PatientPrivateInfo(patientID: _patientID),
     ),
     Center(
-      child: Text('Show Comunication Details'),
+      child: PatientComunicationInfo(patientID: _patientID),
     ),
     Center(
       child: Text('Show Medical Information'),
     ),
     Center(
-      child: Text('Show Patient Status and General Details'),
+      child: PatientStatusInfo(patientID: _patientID),
     ),
     Center(
       child: Text('Save Details'),
