@@ -4,10 +4,10 @@ import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
-import 'package:my_dentist/pages/add_patient.dart';
-import 'package:my_dentist/pages/patient_card.dart';
-import 'package:my_dentist/pages/show_patient.dart';
-import 'package:my_dentist/pages/treatment_types.dart';
+import 'package:my_dentist/apps/patient/pages/add_patient.dart';
+import 'package:my_dentist/apps/patient/pages/patient_card.dart';
+import 'package:my_dentist/apps/patient/pages/show_patient.dart';
+import 'package:my_dentist/apps/treatments/treatment_types.dart';
 
 enum MenuItem {
   settings,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class TreatmentType {
   late final String name;
@@ -49,6 +50,22 @@ Future createTreatmentType(String name, double price) async {
         snapshot.docs[0].reference.update(instance.toJson());
       } else {
         treatmentsTypeDocuments.add(instance.toJson());
+      }
+    },
+  );
+}
+
+Future deleteTreatmentTyoe(String name) async {
+  final treatmentsTypeDocuments =
+      FirebaseFirestore.instance.collection('Treatment Types');
+  var query = treatmentsTypeDocuments.where('name', isEqualTo: name);
+
+  query.get().then(
+    (snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        snapshot.docs[0].reference.delete();
+      } else {
+        errorToast('ID not found');
       }
     },
   );

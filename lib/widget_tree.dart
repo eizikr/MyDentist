@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_dentist/pages/home_page.dart';
-import 'package:my_dentist/pages/login_screen.dart';
+import 'package:my_dentist/apps/home/home_page.dart';
+import 'package:my_dentist/apps/home/login_screen.dart';
 import 'package:flutter/material.dart';
 
 /*

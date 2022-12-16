@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
-import '../modules/patient.dart';
+import '/modules/patient.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});

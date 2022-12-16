@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-Widget loadingCircule({String circuleText = "loading..."}) {
+Widget loadingCircule(String circuleText) {
   return Center(
       child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -44,13 +44,13 @@ Future<bool?> errorToast(String myMsg) {
     toastLength: Toast.LENGTH_LONG,
     webPosition: "center",
     webBgColor: "red",
-    timeInSecForIosWeb: 5,
+    timeInSecForIosWeb: 2,
   );
 }
 
 class LoadingPage extends StatefulWidget {
-  const LoadingPage({super.key});
-
+  final String loadingText;
+  const LoadingPage({required this.loadingText, super.key});
   @override
   State<LoadingPage> createState() => _LoadingPageState();
 }
@@ -63,7 +63,7 @@ class _LoadingPageState extends State<LoadingPage> {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(25),
         child: Container(
-          child: loadingCircule(),
+          child: loadingCircule(widget.loadingText),
         ),
       ),
     );

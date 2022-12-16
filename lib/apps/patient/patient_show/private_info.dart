@@ -22,7 +22,7 @@ class PatientPrivateInfo extends StatelessWidget {
             return privateInfoScreen(data);
             //Center(child: Text('First name: ${data['first_name']}'));
           }
-          return loadingCircule();
+          return loadingCircule('Loading private info...');
         })));
   }
 }

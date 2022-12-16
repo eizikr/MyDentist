@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../modules/patient.dart';
+import '/modules/patient.dart';
 
 class ShowPatient extends StatefulWidget {
   const ShowPatient({super.key});
