@@ -32,7 +32,6 @@ class _ShowPatientState extends State<ShowPatient> {
             return Text('somthing went wrong ${snapshot.error}');
           } else if (snapshot.hasData) {
             final patients = snapshot.data!;
-            print(patients);
             return ListView(
               children: patients.map(buildPatient).toList(),
             );

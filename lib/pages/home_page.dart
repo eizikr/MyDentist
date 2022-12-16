@@ -7,7 +7,6 @@ import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/pages/add_patient.dart';
 import 'package:my_dentist/pages/patient_card.dart';
 import 'package:my_dentist/pages/show_patient.dart';
-import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/pages/treatment_types.dart';
 
 enum MenuItem {
@@ -21,29 +20,18 @@ Future<void> signOut() async {
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // final User? user = Auth().currentUser;
   CollectionReference patient =
       FirebaseFirestore.instance.collection('Patients');
 
   final _patientController = TextEditingController();
   final firestore = FirebaseFirestore.instance;
-
-  Widget _title({double fontSize = 40}) {
-    return Text(
-      'Home Page',
-      style: GoogleFonts.lato(
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +100,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _title(fontSize: screenWidth * 0.04),
-              const SizedBox(height: 60),
               ButtonWidget(
                   text: 'Show Patient',
                   onClicked: () {
@@ -181,7 +167,10 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('Cancle'),
                 ),
                 TextButton(
-                  onPressed: () async => dialog_submit(context),
+                  onPressed: () async {
+                    dialogSubmit(context);
+                    _patientController.clear();
+                  },
                   child: const Text('Show Patient Card'),
                 ),
               ],
@@ -190,20 +179,21 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  void dialog_submit(BuildContext context) {
+  void dialogSubmit(BuildContext context) {
     String patientID = _patientController.text;
-    _patientController.clear();
     if (patientID.isNotEmpty) {
       DocumentReference patientRef =
           firestore.collection('Patients').doc(patientID);
       patientRef.get().then((value) => {
             if (value.exists)
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PatientCard(patientID: patientID),
-                ),
-              )
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PatientCard(patientID: patientID),
+                  ),
+                )
+              }
             else
               {errorToast('ID not found')}
           });

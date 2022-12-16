@@ -31,7 +31,7 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
   return SingleChildScrollView(
     child: Column(children: [
       Text('Status: ${data['status']}'),
-      SizedBox(height: 10),
+      const SizedBox(height: 10),
       Text('General Remarks: ${data['remarks']}'),
     ]),
   );

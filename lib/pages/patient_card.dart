@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/patient_show/comunication_info.dart';
 import 'package:my_dentist/patient_show/private_info.dart';
@@ -29,13 +28,13 @@ class _PatientCardState extends State<PatientCard> {
     Center(
       child: PatientComunicationInfo(patientID: _patientID),
     ),
-    Center(
+    const Center(
       child: Text('Show Medical Information'),
     ),
     Center(
       child: PatientStatusInfo(patientID: _patientID),
     ),
-    Center(
+    const Center(
       child: Text('Save Details'),
     ),
   ];

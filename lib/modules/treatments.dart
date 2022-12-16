@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_dentist/modules/patient.dart';
 
 class TreatmentType {
   late final String name;
@@ -11,8 +10,8 @@ class TreatmentType {
   });
 
   Map<String, dynamic> toJson() => {
-        'name': this.name,
-        'price': this.price,
+        'name': name,
+        'price': price,
       };
 
   static TreatmentType fromJson(Map<String, dynamic> json) => TreatmentType(
@@ -48,10 +47,8 @@ Future createTreatmentType(String name, double price) async {
     (snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs[0].reference.update(instance.toJson());
-        print("Update $name $price");
       } else {
         treatmentsTypeDocuments.add(instance.toJson());
-        print("set $name $price");
       }
     },
   );

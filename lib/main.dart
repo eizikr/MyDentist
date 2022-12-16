@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
-import 'pages/home_page.dart';
 import 'widget_tree.dart';
 
 Future<void> main() async {
@@ -23,9 +22,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         scaffoldBackgroundColor: const Color.fromARGB(255, 207, 235, 248),
       ),
-      // home: const WidgetTree(),
-      home: HomePage(),
-      // home: const AddPatientPage(),
+      home: const WidgetTree(),
+      // home: HomePage(),
     );
   }
 }

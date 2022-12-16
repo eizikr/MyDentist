@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import '../auth.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   late String pass;
   late String email;
   final formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   String signInError(String errorCode) {
     switch (errorCode) {
@@ -42,10 +44,16 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signIn() async {
     try {
       if (formKey.currentState!.validate()) {
+        setState(() {
+          loading = true;
+        });
         await Auth().signIn(
           email: email,
           password: pass,
         );
+        setState(() {
+          loading = false;
+        });
       }
     } on FirebaseAuthException catch (e) {
       //print(e.code.toString());
@@ -119,82 +127,87 @@ class _LoginPageState extends State<LoginPage> {
     var screenWidth = queryData.size.width;
     var screenHeight = queryData.size.height;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth / 6, vertical: screenHeight / 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.medical_services,
-                      size: 60,
-                    ),
-                    Text(
-                      'My Dentist',
-                      style: GoogleFonts.caveat(
-                        fontSize: 55,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Hey Doctor!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue[50],
-                          border: Border.all(color: Colors.white10),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: _entryField(
-                            'email',
-                            Icons.email_outlined,
+    return loading == true
+        ? const LoadingPage()
+        : Scaffold(
+            body: SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: formKey,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth / 6,
+                          vertical: screenHeight / 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.medical_services,
+                            size: 60,
                           ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue[50],
-                          border: Border.all(color: Colors.white10),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: _entryField(
-                            'password',
-                            Icons.lock_outline,
+                          Text(
+                            'My Dentist',
+                            style: GoogleFonts.caveat(
+                              fontSize: 55,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Hey Doctor!',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.lightBlue[50],
+                                border: Border.all(color: Colors.white10),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: _entryField(
+                                  'email',
+                                  Icons.email_outlined,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.lightBlue[50],
+                                border: Border.all(color: Colors.white10),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: _entryField(
+                                  'password',
+                                  Icons.lock_outline,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          _submitButton(screenWidth * 0.2),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    _submitButton(screenWidth * 0.2),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
