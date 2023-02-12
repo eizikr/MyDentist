@@ -30,29 +30,42 @@ class PatientPrivateInfo extends StatelessWidget {
 Widget privateInfoScreen(Map<String, dynamic> data) {
   return SingleChildScrollView(
     child: Column(children: [
-      Text('First name: ${data['first_name']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'First name: ${data['first_name']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
-      Text('Last name: ${data['last_name']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'Last name: ${data['last_name']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
-      Text('Father' 's name: ${data['fathers_name']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'Father' 's name: ${data['fathers_name']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
       Text('ID: ${data['id']}', style: const TextStyle(fontSize: 20)),
       const SizedBox(height: 15),
-      Text('age: ${data['date_of_birth']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'age: ${data['date_of_birth']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
       Text(
-          'Address: ${data['address']}/${data['houseNumber']}, ${data['city']}',
-          style: const TextStyle(fontSize: 20)),
+        'Address: ${data['address']}/${data['houseNumber']}, ${data['city']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
-      Text('Postal Code: ${data['postalCode']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'Postal Code: ${data['postalCode']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
-      Text('Counter of birth: ${data['countryBirth']}',
-          style: const TextStyle(fontSize: 20)),
+      Text(
+        'Counter of birth: ${data['countryBirth']}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
       Text(
         'Profession: ${data['profession']}',

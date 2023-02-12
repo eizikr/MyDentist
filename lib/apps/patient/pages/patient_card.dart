@@ -29,13 +29,13 @@ class _PatientCardState extends State<PatientCard> {
       child: PatientComunicationInfo(patientID: _patientID),
     ),
     const Center(
-      child: Text('Show Medical Information'),
+      child: Text('Coming soon...'),
     ),
     Center(
       child: PatientStatusInfo(patientID: _patientID),
     ),
     const Center(
-      child: Text('Save Details'),
+      child: Text('edit page'),
     ),
   ];
   int selectedIndex = 0;
@@ -46,6 +46,7 @@ class _PatientCardState extends State<PatientCard> {
       body: Row(
         children: [
           SideNavigationBar(
+            initiallyExpanded: false,
             header: SideNavigationBarHeader(
                 image: CircleAvatar(
                   backgroundColor: const Color.fromARGB(255, 207, 235, 248),
@@ -54,10 +55,10 @@ class _PatientCardState extends State<PatientCard> {
                       Navigator.pop(context);
                     },
                     icon: const Icon(
-                      Icons.exit_to_app,
+                      Icons.close,
                       color: Colors.black,
                     ),
-                    tooltip: "Go back to home page",
+                    tooltip: "Exit",
                   ),
                 ),
                 title: const Text('Patient Card'),
@@ -82,8 +83,8 @@ class _PatientCardState extends State<PatientCard> {
                 label: 'Patient-Status',
               ),
               SideNavigationBarItem(
-                icon: Icons.save_as_rounded,
-                label: 'Save',
+                icon: Icons.edit_note,
+                label: 'Edit Patient Info',
               ),
             ],
             onTap: (index) {
@@ -117,30 +118,4 @@ class _PatientCardState extends State<PatientCard> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   MediaQueryData? queryData;
-  //   queryData = MediaQuery.of(context);
-
-  //   var screenWidth = queryData.size.width;
-  //   var screenHeight = queryData.size.height;
-
-  //   return Scaffold(
-  //     body: SingleChildScrollView(
-  //       child: Container(
-  //         width: screenWidth,
-  //         height: screenHeight,
-  //         alignment: Alignment.center,
-  //         child: Container(
-  //           width: screenWidth / 1.1,
-  //           height: screenHeight / 1.1,
-  //           decoration: BoxDecoration(
-  //             border: Border.all(color: Colors.grey),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

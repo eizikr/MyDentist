@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_dentist/apps/home/home_page.dart';
 import 'package:my_dentist/apps/home/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 /*
   Manage the login states
@@ -24,7 +25,11 @@ class _WidgetTreeState extends State<WidgetTree> {
     return StreamBuilder<User?>(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState != ConnectionState.active) {
+          return const LoadingPage(
+            loadingText: 'loading...',
+          );
+        } else if (snapshot.hasData) {
           return const HomePage();
         } else {
           return const LoginPage();

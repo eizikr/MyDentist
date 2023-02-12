@@ -29,21 +29,45 @@ class PatientComunicationInfo extends StatelessWidget {
 Widget privateInfoScreen(Map<String, dynamic> data) {
   return SingleChildScrollView(
     child: Column(children: [
-      Text('Phone number: ${data['phone']}'),
-      const SizedBox(height: 10),
-      Text('Home phone: ${data['home_phone']}'),
-      const SizedBox(height: 10),
-      Text('Email1: ${data['email1']}'),
-      const SizedBox(height: 10),
-      Text('Email2: ${data['email2']}'),
-      const SizedBox(height: 10),
-      Text('Insurance Company: ${data['inisurance_company']}'),
-      const SizedBox(height: 10),
-      Text('Fax: ${data['fax']}'),
-      const SizedBox(height: 10),
-      Text('HMO: ${data['HMO']}'),
-      const SizedBox(height: 10),
-      Text('Treating Doctor: ${data['treating_doctor']}'),
+      Text(
+        'Phone number: ${data['phone']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Home phone: ${data['home_phone']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Email1: ${data['email1']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Email2: ${data['email2']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Insurance Company: ${data['inisurance_company']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Fax: ${data['fax']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'HMO: ${data['HMO']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Treating Doctor: ${data['treating_doctor']}',
+        style: const TextStyle(fontSize: 20),
+      ),
     ]),
   );
 }

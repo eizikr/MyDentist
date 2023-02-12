@@ -25,7 +25,7 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
             .toList());
 
     Widget buildPatient(TreatmentType treatmentInstance) => ListTile(
-          leading: TextButton(
+          leading: IconButton(
             onPressed: () async {
               nameController.text = treatmentInstance.name;
               await addTreatmentDialog(context,
@@ -33,10 +33,11 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
                   isEdit: true);
               nameController.clear();
             },
-            child: Text(
-              "${treatmentInstance.name}  -  ${treatmentInstance.price} ₪ \n",
-              style: const TextStyle(color: Colors.black),
-            ),
+            icon: const Icon(Icons.edit),
+          ),
+          title: Text(
+            "${treatmentInstance.name}  -  ${treatmentInstance.price} ₪ \n",
+            style: const TextStyle(color: Colors.black),
           ),
         );
 
@@ -68,11 +69,14 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
               return Text('somthing went wrong ${snapshot.error}');
             } else if (snapshot.hasData) {
               final patients = snapshot.data!;
-              return Container(
-                alignment: Alignment.center,
-                child: ListView(
-                  children: patients.map(buildPatient).toList(),
-                ),
+              return ListView.separated(
+                itemBuilder: (BuildContext context, int index) {
+                  return buildPatient(patients[index]);
+                },
+                itemCount: patients.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+                addAutomaticKeepAlives: true,
               );
             } else {
               return const LoadingPage(loadingText: "Loading treatments...");

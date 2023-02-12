@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -34,6 +36,8 @@ class _LoginPageState extends State<LoginPage> {
         {
           return "Invalid email!";
         }
+      case "too-many-requests":
+        return "Try again in a second";
       default:
         {
           return "General error!";
@@ -51,12 +55,12 @@ class _LoginPageState extends State<LoginPage> {
           email: email,
           password: pass,
         );
-        setState(() {
-          loading = false;
-        });
       }
     } on FirebaseAuthException catch (e) {
-      //print(e.code.toString());
+      setState(() {
+        loading = false;
+      });
+      print(e.code.toString());
       Fluttertoast.showToast(
         msg: signInError(e.code.toString()),
         gravity: ToastGravity.TOP,
@@ -66,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
         toastLength: Toast.LENGTH_LONG,
         webPosition: "center",
         webBgColor: "red",
-        timeInSecForIosWeb: 5,
+        timeInSecForIosWeb: 2,
       );
     }
   }

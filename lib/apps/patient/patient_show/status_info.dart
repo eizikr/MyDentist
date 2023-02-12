@@ -30,9 +30,15 @@ class PatientStatusInfo extends StatelessWidget {
 Widget privateInfoScreen(Map<String, dynamic> data) {
   return SingleChildScrollView(
     child: Column(children: [
-      Text('Status: ${data['status']}'),
-      const SizedBox(height: 10),
-      Text('General Remarks: ${data['remarks']}'),
+      Text(
+        'Status: ${data['status']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'General Remarks: ${data['remarks']}',
+        style: const TextStyle(fontSize: 20),
+      ),
     ]),
   );
 }

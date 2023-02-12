@@ -17,7 +17,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(25),
         child: const CreatePatientStepper(),
       ),
     );
@@ -96,12 +95,18 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
+    var screenWidth = queryData.size.width;
+    var screenHeight = queryData.size.height;
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
             icon: const Icon(
-              Icons.exit_to_app,
+              Icons.close,
               color: Colors.black87,
             ),
             tooltip: "Go back to home page",
@@ -113,10 +118,11 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
         automaticallyImplyLeading: false,
         title: const Text('Create new patient card'),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue[200],
+        backgroundColor: Colors.lightBlue[100],
       ),
       body: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+        padding: EdgeInsets.symmetric(
+            vertical: screenHeight * 0.025, horizontal: screenWidth * 0.025),
         child: Column(
           children: [
             Expanded(

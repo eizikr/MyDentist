@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
-import 'package:my_dentist/apps/patient/pages/show_patient.dart';
 import 'package:my_dentist/apps/treatments/treatment_types.dart';
 
 enum MenuItem {
@@ -100,16 +99,16 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ButtonWidget(
-                  text: 'Show Patient',
-                  onClicked: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ShowPatient(),
-                      ),
-                    );
-                  }),
+              // ButtonWidget(
+              //     text: 'Show Patient',
+              //     onClicked: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => const ShowPatient(),
+              //         ),
+              //       );
+              //     }),
               const SizedBox(height: 35),
               ButtonWidget(
                 text: 'Patient Card',
@@ -187,12 +186,13 @@ class _HomePageState extends State<HomePage> {
       patientRef.get().then((value) => {
             if (value.exists)
               {
+                Navigator.of(context).pop(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => PatientCard(patientID: patientID),
                   ),
-                )
+                ),
               }
             else
               {errorToast('ID not found')}
