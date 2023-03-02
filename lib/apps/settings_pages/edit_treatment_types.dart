@@ -4,20 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 
-class TreatmentTypesPage extends StatefulWidget {
-  const TreatmentTypesPage({super.key});
+class EditTreatmentTypesPage extends StatefulWidget {
+  const EditTreatmentTypesPage({super.key});
 
   @override
-  State<TreatmentTypesPage> createState() => _TreatmentTypesPageState();
+  State<EditTreatmentTypesPage> createState() => _EditTreatmentTypesPageState();
 }
 
-class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
+class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
+  final detailsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Stream<List<TreatmentType>> readPatients() => FirebaseFirestore.instance
+    Stream<List<TreatmentType>> readTreatmentss() => FirebaseFirestore.instance
         .collection('Treatment Types')
         .snapshots()
         .map((snapshot) => snapshot.docs
@@ -29,14 +30,14 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
             onPressed: () async {
               nameController.text = treatmentInstance.name;
               await addTreatmentDialog(context,
-                  title: "Edit '${treatmentInstance.name}' Treatment cost",
+                  title: "Edit '${treatmentInstance.name}' Treatment",
                   isEdit: true);
               nameController.clear();
             },
             icon: const Icon(Icons.edit),
           ),
           title: Text(
-            "${treatmentInstance.name}  -  ${treatmentInstance.price} ₪ \n",
+            "${treatmentInstance.name}  -  ${treatmentInstance.price} ₪ \n${treatmentInstance.details}\n",
             style: const TextStyle(color: Colors.black),
           ),
         );
@@ -63,7 +64,7 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(25),
         child: StreamBuilder<List<TreatmentType>>(
-          stream: readPatients(),
+          stream: readTreatmentss(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('somthing went wrong ${snapshot.error}');
@@ -108,6 +109,10 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                 ),
+                TextField(
+                  decoration: const InputDecoration(labelText: 'Details'),
+                  controller: detailsController,
+                ),
               ],
             ),
           ),
@@ -123,7 +128,10 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
                     ? TextButton(
                         child: const Text('delete'),
                         onPressed: () => {
-                          deleteTreatmentTyoe(nameController.text),
+                          deleteTreatmentType(nameController.text),
+                          nameController.clear(),
+                          priceController.clear(),
+                          detailsController.clear(),
                           Navigator.of(context).pop()
                         },
                       )
@@ -148,12 +156,14 @@ class _TreatmentTypesPageState extends State<TreatmentTypesPage> {
       createTreatmentType(
         nameController.text,
         double.parse(priceController.text),
+        detailsController.text,
       );
       isEntyFields = true;
     }
     if (isEntyFields) {
       nameController.clear();
       priceController.clear();
+      detailsController.clear();
       Navigator.of(context).pop();
     }
   }

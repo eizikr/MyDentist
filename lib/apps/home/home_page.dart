@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
-import 'package:my_dentist/apps/treatments/treatment_types.dart';
+import 'package:my_dentist/apps/settings_pages/edit_treatment_types.dart';
 
 enum MenuItem {
   settings,
-  addTreatmentType,
+  editTreatmentType,
+  editAssistents,
   logout,
 }
 
@@ -55,11 +57,18 @@ class _HomePageState extends State<HomePage> {
             onSelected: (value) {
               if (value == MenuItem.settings) {
                 null;
-              } else if (value == MenuItem.addTreatmentType) {
+              } else if (value == MenuItem.editTreatmentType) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const TreatmentTypesPage(),
+                    builder: (context) => const EditTreatmentTypesPage(),
+                  ),
+                );
+              } else if (value == MenuItem.editAssistents) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditAssistentPage(),
                   ),
                 );
               } else if (value == MenuItem.logout) {
@@ -75,10 +84,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const PopupMenuItem(
-                value: MenuItem.addTreatmentType,
+                value: MenuItem.editTreatmentType,
                 child: ListTile(
                   leading: Icon(Icons.add_box_outlined),
-                  title: Text('Add Treatment Type'),
+                  title: Text('Edit Treatment Types'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: MenuItem.editAssistents,
+                child: ListTile(
+                  leading: Icon(Icons.add_box_outlined),
+                  title: Text('Edit Assistants'),
                 ),
               ),
               const PopupMenuItem(

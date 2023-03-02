@@ -48,7 +48,12 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
       Text('ID: ${data['id']}', style: const TextStyle(fontSize: 20)),
       const SizedBox(height: 15),
       Text(
-        'age: ${data['date_of_birth']}',
+        'Birth date: ${data['date_of_birth']}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Age: ${data['age']}',
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
