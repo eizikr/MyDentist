@@ -1,11 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/pages/show_patient.dart
-import 'package:my_dentist/pages/patient_card.dart';
-import '../modules/patient.dart';
-=======
 import '/modules/patient.dart';
->>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/show_patient.dart
 
 class ShowPatient extends StatefulWidget {
   const ShowPatient({super.key});
@@ -22,41 +17,14 @@ class _ShowPatientState extends State<ShowPatient> {
           snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
   Widget buildPatient(Patient patient) => ListTile(
-    leading: CircleAvatar(child: Text(patient.id)),
-    title: Text(patient.id),
-    subtitle: Text('${patient.firstName} ${patient.lastName}'),
-    onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PatientCard(),
-                    settings: RouteSettings(
-                      arguments: (patient),
-                    ),
-                  ),
-                ),
-  );
+        leading: CircleAvatar(child: Text(patient.id)),
+        title: Text(patient.id),
+        subtitle: Text('${patient.firstName} ${patient.lastName}'),
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: Colors.black87,
-            ),
-            tooltip: "Go back to home page",
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-        automaticallyImplyLeading: false,
-        title: const Text('search patient card'),
-        centerTitle: true,
-        backgroundColor: Colors.lightBlue[200],
-      ),
       body: StreamBuilder<List<Patient>>(
         stream: readPatients(),
         builder: (context, snapshot) {

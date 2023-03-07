@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/pages/patient_card.dart
-import 'package:my_dentist/forms/show_patienr_form.dart';
-import 'package:side_navigation/side_navigation.dart';
-import '../forms/add_patient_form.dart';
-import '../modules/patient.dart';
-
-=======
 import 'package:my_dentist/apps/patient/patient_show/comunication_info.dart';
 import 'package:my_dentist/apps/patient/patient_show/private_info.dart';
 import 'package:my_dentist/apps/patient/patient_show/status_info.dart';
 import 'package:side_navigation/side_navigation.dart';
->>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
 
 class PatientCard extends StatefulWidget {
   final String patientID;
@@ -21,12 +13,6 @@ class PatientCard extends StatefulWidget {
 }
 
 class _PatientCardState extends State<PatientCard> {
-<<<<<<< HEAD:lib/pages/patient_card.dart
-
-  List<Widget> views = const [
-    Center(
-      child: ShowPatientForm(),
-=======
   late String _patientID;
 
   @override
@@ -38,7 +24,6 @@ class _PatientCardState extends State<PatientCard> {
   late List<Widget> views = [
     Center(
       child: PatientPrivateInfo(patientID: _patientID),
->>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
     ),
     Center(
       child: PatientComunicationInfo(patientID: _patientID),
@@ -57,8 +42,6 @@ class _PatientCardState extends State<PatientCard> {
 
   @override
   Widget build(BuildContext context) {
-    
-    final Patient patient = ModalRoute.of(context)!.settings.arguments as Patient;
     return Scaffold(
       body: Row(
         children: [
@@ -78,13 +61,8 @@ class _PatientCardState extends State<PatientCard> {
                     tooltip: "Exit",
                   ),
                 ),
-<<<<<<< HEAD:lib/pages/patient_card.dart
-                title: const Text('Patient ID: '),
-                subtitle: Text('${patient.id}')),
-=======
                 title: const Text('Patient Card'),
                 subtitle: const Text('Show Details')),
->>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
             footer: const SideNavigationBarFooter(label: Text('Close bar')),
             selectedIndex: selectedIndex,
             items: const [
@@ -95,7 +73,6 @@ class _PatientCardState extends State<PatientCard> {
               SideNavigationBarItem(
                 icon: Icons.phone,
                 label: 'Comunication',
-
               ),
               SideNavigationBarItem(
                 icon: Icons.medical_information,
