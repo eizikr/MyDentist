@@ -1,34 +1,56 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD:lib/pages/patient_card.dart
 import 'package:my_dentist/forms/show_patienr_form.dart';
 import 'package:side_navigation/side_navigation.dart';
 import '../forms/add_patient_form.dart';
 import '../modules/patient.dart';
 
+=======
+import 'package:my_dentist/apps/patient/patient_show/comunication_info.dart';
+import 'package:my_dentist/apps/patient/patient_show/private_info.dart';
+import 'package:my_dentist/apps/patient/patient_show/status_info.dart';
+import 'package:side_navigation/side_navigation.dart';
+>>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
 
 class PatientCard extends StatefulWidget {
-  const PatientCard({super.key});
+  final String patientID;
+  const PatientCard({super.key, required this.patientID});
 
   @override
   State<PatientCard> createState() => _PatientCardState();
 }
 
 class _PatientCardState extends State<PatientCard> {
+<<<<<<< HEAD:lib/pages/patient_card.dart
 
   List<Widget> views = const [
     Center(
       child: ShowPatientForm(),
+=======
+  late String _patientID;
+
+  @override
+  void initState() {
+    super.initState();
+    _patientID = widget.patientID;
+  }
+
+  late List<Widget> views = [
+    Center(
+      child: PatientPrivateInfo(patientID: _patientID),
+>>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
     ),
     Center(
-      child: Text('Show Comunication Details'),
+      child: PatientComunicationInfo(patientID: _patientID),
+    ),
+    const Center(
+      child: Text('Coming soon...'),
     ),
     Center(
-      child: Text('Show Medical Information'),
+      child: PatientStatusInfo(patientID: _patientID),
     ),
-    Center(
-      child: Text('Show Patient Status and General Details'),
-    ),
-    Center(
-      child: Text('Save Details'),
+    const Center(
+      child: Text('edit page'),
     ),
   ];
   int selectedIndex = 0;
@@ -41,6 +63,7 @@ class _PatientCardState extends State<PatientCard> {
       body: Row(
         children: [
           SideNavigationBar(
+            initiallyExpanded: false,
             header: SideNavigationBarHeader(
                 image: CircleAvatar(
                   backgroundColor: const Color.fromARGB(255, 207, 235, 248),
@@ -49,14 +72,19 @@ class _PatientCardState extends State<PatientCard> {
                       Navigator.pop(context);
                     },
                     icon: const Icon(
-                      Icons.exit_to_app,
+                      Icons.close,
                       color: Colors.black,
                     ),
-                    tooltip: "Go back to home page",
+                    tooltip: "Exit",
                   ),
                 ),
+<<<<<<< HEAD:lib/pages/patient_card.dart
                 title: const Text('Patient ID: '),
                 subtitle: Text('${patient.id}')),
+=======
+                title: const Text('Patient Card'),
+                subtitle: const Text('Show Details')),
+>>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/patient_card.dart
             footer: const SideNavigationBarFooter(label: Text('Close bar')),
             selectedIndex: selectedIndex,
             items: const [
@@ -78,8 +106,8 @@ class _PatientCardState extends State<PatientCard> {
                 label: 'Patient-Status',
               ),
               SideNavigationBarItem(
-                icon: Icons.save_as_rounded,
-                label: 'Save',
+                icon: Icons.edit_note,
+                label: 'Edit Patient Info',
               ),
             ],
             onTap: (index) {
@@ -113,30 +141,4 @@ class _PatientCardState extends State<PatientCard> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   MediaQueryData? queryData;
-  //   queryData = MediaQuery.of(context);
-
-  //   var screenWidth = queryData.size.width;
-  //   var screenHeight = queryData.size.height;
-
-  //   return Scaffold(
-  //     body: SingleChildScrollView(
-  //       child: Container(
-  //         width: screenWidth,
-  //         height: screenHeight,
-  //         alignment: Alignment.center,
-  //         child: Container(
-  //           width: screenWidth / 1.1,
-  //           height: screenHeight / 1.1,
-  //           decoration: BoxDecoration(
-  //             border: Border.all(color: Colors.grey),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

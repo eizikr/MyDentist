@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD:lib/pages/show_patient.dart
 import 'package:my_dentist/pages/patient_card.dart';
 import '../modules/patient.dart';
+=======
+import '/modules/patient.dart';
+>>>>>>> 8eada838199b47baf8e24174d41a36350a7c6e12:lib/apps/patient/pages/show_patient.dart
 
 class ShowPatient extends StatefulWidget {
   const ShowPatient({super.key});
@@ -64,7 +68,12 @@ class _ShowPatientState extends State<ShowPatient> {
               children: patients.map(buildPatient).toList(),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 8.0,
+                color: Colors.blue,
+              ),
+            );
           }
         },
       ),

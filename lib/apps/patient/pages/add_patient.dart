@@ -1,8 +1,9 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
-import '../modules/patient.dart';
+import '/modules/patient.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -17,7 +18,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(25),
         child: const CreatePatientStepper(),
       ),
     );
@@ -96,12 +96,18 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
+    var screenWidth = queryData.size.width;
+    var screenHeight = queryData.size.height;
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
             icon: const Icon(
-              Icons.exit_to_app,
+              Icons.close,
               color: Colors.black87,
             ),
             tooltip: "Go back to home page",
@@ -113,10 +119,11 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
         automaticallyImplyLeading: false,
         title: const Text('Create new patient card'),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue[200],
+        backgroundColor: Colors.lightBlue[100],
       ),
       body: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+        padding: EdgeInsets.symmetric(
+            vertical: screenHeight * 0.025, horizontal: screenWidth * 0.025),
         child: Column(
           children: [
             Expanded(
@@ -165,34 +172,11 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               controller: _firstNameController,
                               isRequired: true,
                             ),
-                            // TextFormField(
-                            //   controller: _firstNameController,
-                            //   decoration: const InputDecoration(
-                            //     labelText: "First name",
-                            //     icon: Icon(Icons.info_outlined),
-                            //     border: OutlineInputBorder(),
-                            //   ),
-                            //   onChanged: (value) {},
-                            //   validator: (val) {
-                            //     if (val == null || val.isEmpty) {
-                            //       return " cannot be empty";
-                            //     }
-                            //     return null;
-                            //   },
-                            //   autovalidateMode:
-                            //       AutovalidateMode.onUserInteraction,
-                            // ),
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Last name",
                               controller: _lastNameController,
                               isRequired: true,
-                            ),
-                            const SizedBox(height: 10),
-                            _entryField(
-                              title: "Father's Name",
-                              controller: _fathersNameController,
-                              isRequired: false,
                             ),
                             const SizedBox(height: 10),
                             _entryField(
@@ -217,7 +201,8 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                                   ? 'You cannot enter a future date'
                                   : null,
                               onDateSelected: (DateTime value) {
-                                _dateOfBirth = value.toString();
+                                _dateOfBirth =
+                                    value.toString().substring(0, 10);
                               },
                             ),
                             const SizedBox(height: 10),
@@ -226,14 +211,24 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               controller: _cityController,
                               isRequired: true,
                             ),
-
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Address",
                               controller: _addressController,
                               isRequired: true,
                             ),
-
+                            const SizedBox(height: 10),
+                            _entryField(
+                                title: "House Number",
+                                controller: _houseNumberController,
+                                isRequired: true,
+                                numerical: true),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Country of Birth",
+                              controller: _countryBirthController,
+                              isRequired: true,
+                            ),
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Postal Code",
@@ -241,21 +236,12 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               isRequired: false,
                               numerical: true,
                             ),
-
                             const SizedBox(height: 10),
                             _entryField(
-                                title: "House Number",
-                                controller: _houseNumberController,
-                                isRequired: true,
-                                numerical: true),
-
-                            const SizedBox(height: 10),
-                            _entryField(
-                              title: "Country of Birth",
-                              controller: _countryBirthController,
-                              isRequired: true,
+                              title: "Father's Name",
+                              controller: _fathersNameController,
+                              isRequired: false,
                             ),
-
                             const SizedBox(height: 10),
                             _entryField(
                               title: "Profession",
@@ -282,6 +268,12 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                                 controller: _phoneController,
                                 isRequired: true,
                                 numerical: true),
+                            const SizedBox(height: 10),
+                            _entryField(
+                              title: "Treating Doctor",
+                              controller: _treatingDoctorController,
+                              isRequired: true,
+                            ),
                             const SizedBox(height: 10),
                             _entryField(
                                 title: "Home Phone",
@@ -317,12 +309,6 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                               title: "HMO",
                               controller: _hmoController,
                               isRequired: false,
-                            ),
-                            const SizedBox(height: 10),
-                            _entryField(
-                              title: "Treating Doctor",
-                              controller: _treatingDoctorController,
-                              isRequired: true,
                             ),
                           ],
                         ),
@@ -393,6 +379,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       countryBirth: _countryBirthController.text,
       profession: _professionController.text,
       dateOfBirth: _dateOfBirth,
+      age: getAge(_dateOfBirth),
       homePhone: _homePhoneController.text,
       email1: _email1Controller.text,
       email2: _email2Controller.text,
@@ -407,4 +394,14 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     final json = patient.toJson();
     await docUser.set(json);
   }
+}
+
+String getAge(String dateString) {
+  List<String> ymd = dateString.split('-');
+  int year = int.parse(ymd[0]),
+      month = int.parse(ymd[1]),
+      day = int.parse(ymd[2]);
+  DateTime birthday = DateTime(year, month, day);
+  DateDuration age = AgeCalculator.age(birthday);
+  return '${age.years}.${age.months}';
 }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Patient {
   String id;
   final String creationDate;
@@ -11,6 +13,7 @@ class Patient {
   final String countryBirth;
   final String profession;
   final String dateOfBirth;
+  final String age;
 
   final String homePhone;
   final String email1;
@@ -37,6 +40,7 @@ class Patient {
     this.countryBirth = 'undefined',
     this.profession = 'undefined',
     this.dateOfBirth = 'undefined',
+    this.age = 'undefined',
     this.homePhone = 'undefined',
     this.email1 = 'undefined',
     this.email2 = 'undefined',
@@ -62,6 +66,7 @@ class Patient {
         'countryBirth': countryBirth,
         'profession': profession,
         'date_of_birth': dateOfBirth,
+        'age': age,
         'home_phone': homePhone,
         'email1': email1,
         'email2': email2,
@@ -86,6 +91,7 @@ class Patient {
       countryBirth: json['countryBirth'],
       profession: json['profession'],
       dateOfBirth: json['date_of_birth'],
+      age: json['age'],
       homePhone: json['home_phone'],
       email1: json['email1'],
       email2: json['email2'],
@@ -96,4 +102,22 @@ class Patient {
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);
+}
+
+Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
+    .collection('Patients')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
+
+Future<bool> checkPatientExists(patientID) async {
+  final firestore = FirebaseFirestore.instance;
+  bool patientExists = false;
+  DocumentReference patientRef =
+      firestore.collection('Patients').doc(patientID);
+  patientRef.get().then((value) => {
+        if (value.exists) {patientExists = true} else {patientExists = false}
+      });
+
+  return patientExists;
 }
