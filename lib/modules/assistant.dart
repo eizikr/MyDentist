@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+
+import '../our_widgets/global.dart';
 
 class Assistant {
   late final String name;
@@ -22,8 +25,8 @@ class Assistant {
 
   static Future<List<Assistant>> readAssistants() async {
     List<Assistant> list = [];
-    CollectionReference colRef =
-        FirebaseFirestore.instance.collection("Assistants");
+    final DB db = Get.find();
+    CollectionReference colRef = db.assistants;
 
     colRef.get().then(
       (QuerySnapshot snapshot) {
@@ -40,8 +43,8 @@ class Assistant {
 
 Future createAssistant(String name, double salary) async {
   Assistant instance = Assistant(name: name, salary: salary);
-  final assistentDocuments =
-      FirebaseFirestore.instance.collection('Assistants');
+  final DB db = Get.find();
+  final assistentDocuments = db.assistants;
 
   var query = assistentDocuments.where('name', isEqualTo: name);
 
@@ -57,8 +60,9 @@ Future createAssistant(String name, double salary) async {
 }
 
 Future deleteAssistant(String name) async {
-  final assistentDocuments =
-      FirebaseFirestore.instance.collection('Assistants');
+  final DB db = Get.find();
+  final assistentDocuments = db.assistants;
+
   var query = assistentDocuments.where('name', isEqualTo: name);
 
   query.get().then(

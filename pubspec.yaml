@@ -44,6 +44,8 @@ dependencies:
   fluttertoast: ^8.1.1
   google_fonts: ^3.0.1
   age_calculator: ^1.0.0
+  get: ^4.6.5
+  encrypt: ^5.0.1
   
   # firebase_core_platform_interface: ^4.5.1
   cloud_firestore: ^4.2.0

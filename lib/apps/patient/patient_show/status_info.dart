@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+
+import '../../../our_widgets/global.dart';
 
 class PatientStatusInfo extends StatelessWidget {
   final String patientID;
@@ -10,8 +13,9 @@ class PatientStatusInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference patient =
-        FirebaseFirestore.instance.collection('Patients');
+    final DB db = Get.find();
+
+    CollectionReference patient = db.patients;
 
     return FutureBuilder<DocumentSnapshot>(
         future: patient.doc(patientID).get(),
@@ -28,17 +32,27 @@ class PatientStatusInfo extends StatelessWidget {
 }
 
 Widget privateInfoScreen(Map<String, dynamic> data) {
+  EncryptData crypto = Get.find();
+
   return SingleChildScrollView(
     child: Column(children: [
-      Text(
-        'Status: ${data['status']}',
-        style: const TextStyle(fontSize: 20),
-      ),
-      const SizedBox(height: 15),
-      Text(
-        'General Remarks: ${data['remarks']}',
-        style: const TextStyle(fontSize: 20),
-      ),
+      Container(
+          child: data['status'] != ''
+              ? Text(
+                  'Status: ${crypto.decryptAES(data['status'])}',
+                  style: const TextStyle(fontSize: 20),
+                )
+              : null),
+      Container(
+          child: data['remarks'] != ''
+              ? Column(children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'General Remarks: ${crypto.decryptAES(data['remarks'])}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ])
+              : null),
     ]),
   );
 }

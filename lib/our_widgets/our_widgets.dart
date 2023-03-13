@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
+import 'global.dart';
 
 Widget loadingCircule(String circuleText) {
   return Center(
@@ -69,3 +73,18 @@ class _LoadingPageState extends State<LoadingPage> {
     );
   }
 }
+
+// String encrypt(String msg) {
+//   AESCrypto cryptography = Get.find();
+
+//   final encrypter = Encrypter(AES(cryptography.key));
+
+//   return encrypter.encrypt(msg, iv: cryptography.iv).base64;
+// }
+
+// String decrypt(String msg) {
+//   AESCrypto cryptography = Get.find();
+
+//   final encrypter = Encrypter(AES(cryptography.key));
+//   return encrypter.decrypt(msg as Encrypted, iv: cryptography.iv);
+// }

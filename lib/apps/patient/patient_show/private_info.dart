@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+
+import '../../../our_widgets/global.dart';
 
 class PatientPrivateInfo extends StatelessWidget {
   final String patientID;
-  final DateTime today = DateTime.now();
 
-  PatientPrivateInfo({super.key, required this.patientID});
+  const PatientPrivateInfo({super.key, required this.patientID});
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference patient =
-        FirebaseFirestore.instance.collection('Patients');
+    final DB db = Get.find();
+
+    CollectionReference patient = db.patients;
 
     return FutureBuilder<DocumentSnapshot>(
         future: patient.doc(patientID).get(),
@@ -28,54 +31,74 @@ class PatientPrivateInfo extends StatelessWidget {
 }
 
 Widget privateInfoScreen(Map<String, dynamic> data) {
+  EncryptData crypto = Get.find();
   return SingleChildScrollView(
     child: Column(children: [
       Text(
-        'First name: ${data['first_name']}',
+        'First name: ${crypto.decryptAES(data['first_name'])}',
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
       Text(
-        'Last name: ${data['last_name']}',
+        'Last name: ${crypto.decryptAES(data['last_name'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      Container(
+          child: data['fathers_name'] != ''
+              ? Column(children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'Father'
+                    's name: ${crypto.decryptAES(data['fathers_name'])}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ])
+              : null),
+      const SizedBox(height: 15),
+      Text(
+        'ID: ${crypto.decryptAES(data['id'])}',
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
       Text(
-        'Father' 's name: ${data['fathers_name']}',
-        style: const TextStyle(fontSize: 20),
-      ),
-      const SizedBox(height: 15),
-      Text('ID: ${data['id']}', style: const TextStyle(fontSize: 20)),
-      const SizedBox(height: 15),
-      Text(
-        'Birth date: ${data['date_of_birth']}',
+        'Birth date: ${crypto.decryptAES(data['date_of_birth'])}',
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
       Text(
-        'Age: ${data['age']}',
+        'Age: ${crypto.decryptAES(data['age'])}',
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
       Text(
-        'Address: ${data['address']}/${data['houseNumber']}, ${data['city']}',
+        'Address: ${crypto.decryptAES(data['address'])}/${crypto.decryptAES(data['houseNumber'])}, ${crypto.decryptAES(data['city'])}',
         style: const TextStyle(fontSize: 20),
       ),
+      Container(
+          child: data['postalCode'] != ''
+              ? Column(children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'Postal Code: ${crypto.decryptAES(data['postalCode'])}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ])
+              : null),
       const SizedBox(height: 15),
       Text(
-        'Postal Code: ${data['postalCode']}',
+        'Counter of birth: ${crypto.decryptAES(data['countryBirth'])}',
         style: const TextStyle(fontSize: 20),
       ),
-      const SizedBox(height: 15),
-      Text(
-        'Counter of birth: ${data['countryBirth']}',
-        style: const TextStyle(fontSize: 20),
-      ),
-      const SizedBox(height: 15),
-      Text(
-        'Profession: ${data['profession']}',
-        style: const TextStyle(fontSize: 20),
-      ),
+      Container(
+          child: data['profession'] != ''
+              ? Column(children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'Profession: ${crypto.decryptAES(data['profession'])}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ])
+              : null),
     ]),
   );
 }

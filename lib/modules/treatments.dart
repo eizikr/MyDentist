@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 
+import '../our_widgets/global.dart';
 import 'assistant.dart';
 
 enum Code {
@@ -51,10 +53,11 @@ class Treatment {
       );
 
   static Future<List<Treatment>> getPatientTreatments(String id) async {
+    final DB db = Get.find();
     List<Treatment> list = [];
-    CollectionReference colRef = FirebaseFirestore.instance
-        .collection("Treatments")
-        .where('id', isEqualTo: id) as CollectionReference<Object?>;
+
+    CollectionReference colRef = db.treatments.where('id', isEqualTo: id)
+        as CollectionReference<Object?>;
 
     colRef.get().then(
       (QuerySnapshot snapshot) {
@@ -94,8 +97,8 @@ Future createTreatment(
       remarks: remarks,
       assistent: assistent);
 
-  final treatmentsDocuments =
-      FirebaseFirestore.instance.collection('Treatments');
+  final DB db = Get.find();
+  final treatmentsDocuments = db.treatments;
 
   treatmentsDocuments.add(instance.toJson());
 }
@@ -119,10 +122,11 @@ class TreatmentType {
 
   static Future<List<TreatmentType>> readTreatmentTypes() async {
     List<TreatmentType> list = [];
-    CollectionReference colRef =
-        FirebaseFirestore.instance.collection("Treatment Types");
 
-    colRef.get().then(
+    final DB db = Get.find();
+    // CollectionReference colRef = db.treatmentTypes;
+
+    db.treatmentTypes.get().then(
       (QuerySnapshot snapshot) {
         for (var docSnapshot in snapshot.docs) {
           Map<String, dynamic> data =
@@ -141,8 +145,9 @@ class TreatmentType {
 Future createTreatmentType(String name, double price, String details) async {
   TreatmentType instance =
       TreatmentType(name: name, price: price, details: details);
-  final treatmentsTypeDocuments =
-      FirebaseFirestore.instance.collection('Treatment Types');
+  final DB db = Get.find();
+  final treatmentsTypeDocuments = db.treatmentTypes;
+
   var query = treatmentsTypeDocuments.where('name', isEqualTo: name);
 
   query.get().then(
@@ -157,8 +162,8 @@ Future createTreatmentType(String name, double price, String details) async {
 }
 
 Future deleteTreatmentType(String name) async {
-  final treatmentsTypeDocuments =
-      FirebaseFirestore.instance.collection('Treatment Types');
+  final DB db = Get.find();
+  final treatmentsTypeDocuments = db.treatmentTypes;
   var query = treatmentsTypeDocuments.where('name', isEqualTo: name);
 
   query.get().then(
