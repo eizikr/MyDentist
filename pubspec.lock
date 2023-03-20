@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  chaquopy:
+    dependency: "direct main"
+    description:
+      name: chaquopy
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.19"
   characters:
     dependency: transitive
     description:
@@ -345,6 +352,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  sklite:
+    dependency: "direct main"
+    description:
+      name: sklite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
