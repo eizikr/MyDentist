@@ -3,6 +3,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'global.dart';
 
@@ -88,3 +89,55 @@ class _LoadingPageState extends State<LoadingPage> {
 //   final encrypter = Encrypter(AES(cryptography.key));
 //   return encrypter.decrypt(msg as Encrypted, iv: cryptography.iv);
 // }
+
+class HomePageButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+
+  const HomePageButton({
+    required this.text,
+    required this.onClicked,
+  });
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size.fromHeight(50),
+          shape: const StadiumBorder(),
+          backgroundColor: Colors.lightBlue[100],
+        ),
+        onPressed: onClicked,
+        child: FittedBox(
+          child: Text(
+            text,
+            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
+          ),
+        ),
+      );
+}
+
+class BasicButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+
+  const BasicButton({
+    super.key,
+    required this.text,
+    required this.onClicked,
+  });
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          backgroundColor: Colors.lightBlue[100],
+        ),
+        onPressed: onClicked,
+        child: FittedBox(
+          child: Text(
+            text,
+            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
+          ),
+        ),
+      );
+}

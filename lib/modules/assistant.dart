@@ -13,6 +13,22 @@ class Assistant {
     required this.salary,
   });
 
+  static Future<List<String>> getNames() async {
+    List<String> list = <String>[];
+
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('Assistants');
+
+    QuerySnapshot snapshot = await collectionRef.get();
+
+    for (var doc in snapshot.docs) {
+      String name = doc.get('name');
+      list.add(name);
+    }
+
+    return list;
+  }
+
   Map<String, dynamic> toJson() => {
         'name': name,
         'salary': salary,

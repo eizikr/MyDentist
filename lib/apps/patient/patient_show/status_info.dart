@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
-
-import '../../../our_widgets/global.dart';
 
 class PatientStatusInfo extends StatelessWidget {
   final String patientID;

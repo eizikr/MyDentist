@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:my_dentist/modules/patient.dart';
 
 class DB {
   late final CollectionReference assistants;
@@ -15,6 +14,12 @@ class DB {
     treatments = FirebaseFirestore.instance.collection('Treatments');
     treatmentTypes = FirebaseFirestore.instance.collection('Treatment Types');
   }
+
+  static Stream<List<String>> getNames() => FirebaseFirestore.instance
+      .collection('Treatment Types')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => doc['name'] as String).toList());
 }
 
 class EncryptData {

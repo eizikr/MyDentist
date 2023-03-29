@@ -14,13 +14,16 @@ enum Code {
 }
 
 class Treatment {
-  late final int toothNumber;
+  late final String toothNumber;
   late final TreatmentType type;
   late final Patient patient;
   late final String treatingDoctor;
   late final bool isDone;
   late final String remarks;
   late final Assistant assistent;
+  late final DateTime startTime;
+  late final DateTime endTime;
+  late final int duration;
 
   Treatment({
     required this.toothNumber,
@@ -28,6 +31,9 @@ class Treatment {
     required this.patient,
     required this.treatingDoctor,
     required this.assistent,
+    required this.startTime,
+    required this.endTime,
+    required this.duration,
     this.isDone = false,
     this.remarks = 'No remarks',
   });
@@ -38,6 +44,9 @@ class Treatment {
         'patient': patient,
         'treatingDoctor': treatingDoctor,
         'assistent': assistent,
+        'startTime:': startTime,
+        'endTime': startTime,
+        'duration': duration,
         'isDone': isDone,
         'remarks': remarks,
       };
@@ -48,6 +57,9 @@ class Treatment {
         patient: json['patient'],
         treatingDoctor: json['treatingDoctor'],
         assistent: json['assistent'],
+        startTime: json['startTime'],
+        endTime: json['endTime'],
+        duration: json['duration'],
         isDone: json['isDone'],
         remarks: json['remarks'],
       );
@@ -70,6 +82,9 @@ class Treatment {
             patient: data['patient'],
             treatingDoctor: data['treatingDoctor'],
             assistent: data['assistent'],
+            startTime: data['startTime'],
+            endTime: data['endTime'],
+            duration: data['duration'],
             isDone: data['isDone'],
             remarks: data['remarks'],
           ));
@@ -81,21 +96,29 @@ class Treatment {
 }
 
 Future createTreatment(
-    int toothNumber,
-    TreatmentType type,
-    Patient patient,
-    String treatingDoctor,
-    bool isDone,
-    String remarks,
-    Assistant assistent) async {
+  String toothNumber,
+  TreatmentType type,
+  Patient patient,
+  String treatingDoctor,
+  bool isDone,
+  String remarks,
+  Assistant assistent,
+  DateTime startTime,
+  DateTime endTime,
+  int duration,
+) async {
   Treatment instance = Treatment(
-      toothNumber: toothNumber,
-      type: type,
-      patient: patient,
-      treatingDoctor: treatingDoctor,
-      isDone: isDone,
-      remarks: remarks,
-      assistent: assistent);
+    toothNumber: toothNumber,
+    type: type,
+    patient: patient,
+    treatingDoctor: treatingDoctor,
+    isDone: isDone,
+    remarks: remarks,
+    assistent: assistent,
+    startTime: startTime,
+    endTime: endTime,
+    duration: duration,
+  );
 
   final DB db = Get.find();
   final treatmentsDocuments = db.treatments;
@@ -119,6 +142,28 @@ class TreatmentType {
         price: json['price'],
         details: json['details'],
       );
+
+  // static Stream<List<String>> getNames() => FirebaseFirestore.instance
+  //     .collection('Treatment Types')
+  //     .snapshots()
+  //     .map((snapshot) =>
+  //         snapshot.docs.map((doc) => doc['name'] as String).toList());
+
+  static Future<List<String>> getNames() async {
+    List<String> list = <String>[];
+
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('Treatment Types');
+
+    QuerySnapshot snapshot = await collectionRef.get();
+
+    for (var doc in snapshot.docs) {
+      String name = doc.get('name');
+      list.add(name);
+    }
+
+    return list;
+  }
 
   static Future<List<TreatmentType>> readTreatmentTypes() async {
     List<TreatmentType> list = [];

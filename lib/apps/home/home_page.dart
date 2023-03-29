@@ -126,14 +126,14 @@ class _HomePageState extends State<HomePage> {
               //       );
               //     }),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                 text: 'Patient Card',
                 onClicked: () async {
                   await openSearchPatientDialog(context);
                 },
               ),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                   text: 'Add Patient',
                   onClicked: () {
                     Navigator.push(
@@ -144,14 +144,14 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                 text: 'Treatment Plan',
                 onClicked: () => {},
               ),
               const SizedBox(height: 35),
-              ButtonWidget(text: 'daily planner', onClicked: () => {}),
+              HomePageButton(text: 'daily planner', onClicked: () => {}),
               const SizedBox(height: 35),
-              ButtonWidget(text: 'Reports', onClicked: () => {}),
+              HomePageButton(text: 'Reports', onClicked: () => {}),
             ],
           ),
         ),
@@ -217,31 +217,4 @@ class _HomePageState extends State<HomePage> {
       errorToast('Please fill the ID field');
     }
   }
-}
-
-class ButtonWidget extends StatelessWidget {
-  final String text;
-  final VoidCallback onClicked;
-
-  const ButtonWidget({
-    Key? key,
-    required this.text,
-    required this.onClicked,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(50),
-          shape: const StadiumBorder(),
-          backgroundColor: Colors.lightBlue[100],
-        ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
-          ),
-        ),
-      );
 }
