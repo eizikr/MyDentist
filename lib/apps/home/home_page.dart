@@ -4,6 +4,7 @@ import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_dentist/our_widgets/calendar.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
@@ -149,7 +150,16 @@ class _HomePageState extends State<HomePage> {
                 onClicked: () => {},
               ),
               const SizedBox(height: 35),
-              HomePageButton(text: 'daily planner', onClicked: () => {}),
+              HomePageButton(
+                  text: 'Schedule planner',
+                  onClicked: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoadDataFromFireBase(),
+                      ),
+                    );
+                  }),
               const SizedBox(height: 35),
               HomePageButton(text: 'Reports', onClicked: () => {}),
             ],

@@ -63,7 +63,7 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
         return AlertDialog(content:
             StatefulBuilder(// You need this, notice the parameters below:
                 builder: (BuildContext context, StateSetter setState) {
-          return const toothPicker();
+          return const treatmentForm();
         }));
       },
     );
@@ -158,21 +158,22 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
 //       );
 }
 
-class toothPicker extends StatefulWidget {
-  const toothPicker({super.key});
+class treatmentForm extends StatefulWidget {
+  const treatmentForm({super.key});
 
   @override
-  State<toothPicker> createState() => _toothPickerState();
+  State<treatmentForm> createState() => _treatmentFormState();
 }
 
-class _toothPickerState extends State<toothPicker> {
+class _treatmentFormState extends State<treatmentForm> {
   String tooth = '1';
   late final List<String> tooths;
   String? type;
   String? assistent;
   String? remarks;
+  String? startTime;
 
-  _toothPickerState() {
+  _treatmentFormState() {
     tooths = [];
     for (int i = 1; i <= 32; i++) {
       tooths.add(i.toString());

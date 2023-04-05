@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:my_dentist/modules/patient.dart';
 
 class DB {
   late final CollectionReference assistants;
   late final CollectionReference patients;
   late final CollectionReference treatments;
   late final CollectionReference treatmentTypes;
+  late final CollectionReference meetings;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
     patients = FirebaseFirestore.instance.collection('Patients');
     treatments = FirebaseFirestore.instance.collection('Treatments');
     treatmentTypes = FirebaseFirestore.instance.collection('Treatment Types');
+    meetings = FirebaseFirestore.instance.collection('Meetings');
   }
 
-  static Stream<List<String>> getNames() => FirebaseFirestore.instance
+  static Stream<List<String>> treatmentNames() => FirebaseFirestore.instance
       .collection('Treatment Types')
       .snapshots()
       .map((snapshot) =>

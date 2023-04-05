@@ -21,9 +21,6 @@ class Treatment {
   late final bool isDone;
   late final String remarks;
   late final Assistant assistent;
-  late final DateTime startTime;
-  late final DateTime endTime;
-  late final int duration;
 
   Treatment({
     required this.toothNumber,
@@ -31,9 +28,6 @@ class Treatment {
     required this.patient,
     required this.treatingDoctor,
     required this.assistent,
-    required this.startTime,
-    required this.endTime,
-    required this.duration,
     this.isDone = false,
     this.remarks = 'No remarks',
   });
@@ -44,9 +38,6 @@ class Treatment {
         'patient': patient,
         'treatingDoctor': treatingDoctor,
         'assistent': assistent,
-        'startTime:': startTime,
-        'endTime': startTime,
-        'duration': duration,
         'isDone': isDone,
         'remarks': remarks,
       };
@@ -57,9 +48,6 @@ class Treatment {
         patient: json['patient'],
         treatingDoctor: json['treatingDoctor'],
         assistent: json['assistent'],
-        startTime: json['startTime'],
-        endTime: json['endTime'],
-        duration: json['duration'],
         isDone: json['isDone'],
         remarks: json['remarks'],
       );
@@ -82,9 +70,6 @@ class Treatment {
             patient: data['patient'],
             treatingDoctor: data['treatingDoctor'],
             assistent: data['assistent'],
-            startTime: data['startTime'],
-            endTime: data['endTime'],
-            duration: data['duration'],
             isDone: data['isDone'],
             remarks: data['remarks'],
           ));
@@ -115,9 +100,6 @@ Future createTreatment(
     isDone: isDone,
     remarks: remarks,
     assistent: assistent,
-    startTime: startTime,
-    endTime: endTime,
-    duration: duration,
   );
 
   final DB db = Get.find();
