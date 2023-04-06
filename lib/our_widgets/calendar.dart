@@ -261,7 +261,7 @@ class _MeetingFormState extends State<MeetingForm> {
                 child: const Text('Cancle'),
               ),
               TextButton(
-                onPressed: () async {
+                onPressed: () {
                   addMeeting(_from, _to, _eventName.text);
                   Navigator.of(context).pop();
                 },
@@ -298,13 +298,8 @@ class _MeetingFormState extends State<MeetingForm> {
     }).toList();
   }
 
-  void addMeeting(DateTime from, DateTime to, String name) async {
-    createMeeting(
-      'hey',
-      DateTime(2017, 9, 7, 17, 30),
-      DateTime(2017, 9, 7, 16, 30),
-    );
-    // Meeting.createMeeting(name, from, to);
+  void addMeeting(DateTime from, DateTime to, String name) {
+    createMeeting(name, from, to);
   }
 }
 

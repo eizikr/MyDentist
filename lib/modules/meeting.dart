@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-const treatmentColor = Color.fromARGB(255, 59, 199, 4);
-const meetingColor = Color.fromARGB(255, 24, 21, 204);
+String treatmentColor = Color.fromARGB(255, 59, 199, 4).value.toRadixString(16);
+String meetingColor = Color.fromARGB(255, 24, 21, 204).value.toRadixString(16);
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Meeting> source) {
@@ -44,7 +45,7 @@ class Meeting {
   String? eventType;
   DateTime? from;
   DateTime? to;
-  Color? background;
+  String? background;
   bool? isAllDay;
   Treatment? treatment;
 
@@ -76,9 +77,12 @@ class Meeting {
         isAllDay: json['isAllDay'],
         treatment: json['treatment'],
       );
+
+  Color get backgroundColor =>
+      Color(int.parse(background ?? '0xFF000000', radix: 16));
 }
 
-Future createMeeting(
+Future<void> createMeeting(
   String eventName,
   // Color background,
   DateTime from,
@@ -96,9 +100,31 @@ Future createMeeting(
     isAllDay: isAllDay,
     treatment: treatment,
   );
-  final DB db = Get.find();
-  final meetingDocuments = db.meetings;
 
-  print('hey');
-  meetingDocuments.doc().set(instance.toJson());
+  try {
+    await FirebaseFirestore.instance
+        .collection('Meetings')
+        .doc()
+        .set(instance.toJson());
+    print('Meeting saved successfully');
+  } catch (e) {
+    print('Error saving meeting: $e');
+  }
+  // final DB db = Get.find();
+  // final meetingDocuments = db.meetings;
+
+  // // print('hey');
+  // var query = meetingDocuments.where('from', isGreaterThan: to);
+
+  // query.get().then(
+  //   (snapshot) {
+  //     if (snapshot.docs.isNotEmpty) {
+  //       print('dates error');
+  //     } else {
+  //       meetingDocuments.add(instance.toJson());
+  //     }
+  //   },
+  // ).catchError((error) {
+  //   print('The write failed...${error}');
+  // });
 }
