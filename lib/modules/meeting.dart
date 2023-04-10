@@ -117,7 +117,7 @@ Future<void> createMeeting(
     to: to,
     background: treatment == null ? meetingColor : treatmentColor,
     isAllDay: isAllDay,
-    treatment: treatment!.toJson(),
+    treatment: treatment?.toJson(),
   );
 
   try {
