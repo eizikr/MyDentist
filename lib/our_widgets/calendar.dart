@@ -179,12 +179,6 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _toggleCalendarView,
-        child: Icon(_calendarView == CalendarView.month
-            ? Icons.view_week
-            : Icons.view_module),
-      ),
     );
   }
 
@@ -212,7 +206,6 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           content: SizedBox(
             width: double.infinity,
             child: StatefulBuilder(
-              // You need this, notice the parameters below:
               builder: (BuildContext context, StateSetter setState) {
                 return MeetingForm(
                   selectedDate: _selectedDate,
@@ -279,6 +272,7 @@ class _MeetingFormState extends State<MeetingForm> {
   late DateTime _from;
   late DateTime _to;
   final _eventName = TextEditingController();
+  late bool isAllDay = false;
 
   @override
   void initState() {
@@ -315,41 +309,63 @@ class _MeetingFormState extends State<MeetingForm> {
           Row(
             children: [
               const Text(
-                'From:',
+                'Is all day:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              DropdownButton(
-                value: _from,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                items: _buildHoureItems(startTimes),
-                onChanged: (DateTime? time) {
+              Checkbox(
+                checkColor: Colors.white,
+                value: isAllDay,
+                onChanged: (bool? value) {
                   setState(() {
-                    _from = time!;
+                    isAllDay = value!;
                   });
                 },
               ),
             ],
           ),
-          Row(
-            children: [
-              const Text(
-                'To:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              DropdownButton(
-                value: _to,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                items: _buildHoureItems(endTimes),
-                onChanged: (DateTime? time) {
-                  setState(() {
-                    _to = time!;
-                  });
-                },
-              ),
-            ],
-          ),
+          !isAllDay
+              ? Row(
+                  children: [
+                    const Text(
+                      'From:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: _from,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: _buildHoureItems(startTimes),
+                      onChanged: (DateTime? time) {
+                        setState(() {
+                          _from = time!;
+                        });
+                      },
+                    ),
+                  ],
+                )
+              : Container(),
+          !isAllDay
+              ? Row(
+                  children: [
+                    const Text(
+                      'To:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: _to,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: _buildHoureItems(endTimes),
+                      onChanged: (DateTime? time) {
+                        setState(() {
+                          _to = time!;
+                        });
+                      },
+                    ),
+                  ],
+                )
+              : Container(),
           Row(
             children: [
               Expanded(
@@ -371,7 +387,14 @@ class _MeetingFormState extends State<MeetingForm> {
               ),
               TextButton(
                 onPressed: () {
-                  addMeeting(_from, _to, _eventName.text);
+                  !isAllDay
+                      ? addMeeting(_from, _to, _eventName.text)
+                      : addMeeting(
+                          startTimes.first,
+                          endTimes.last,
+                          _eventName.text,
+                          isAllDay: isAllDay,
+                        );
                   Navigator.of(context).pop();
                 },
                 child:
@@ -384,13 +407,14 @@ class _MeetingFormState extends State<MeetingForm> {
     );
   }
 
-  void addMeeting(DateTime from, DateTime to, String name) {
+  void addMeeting(DateTime from, DateTime to, String name,
+      {bool isAllDay = false}) {
     if (from.isAfter(to) || from.compareTo(to) == 0) {
       errorToast('"To" field has to be after "From"');
     } else if (DateTime.now().isAfter(from)) {
       errorToast('Cant set meeting on past time');
     } else {
-      createMeeting(name, from, to);
+      createMeeting(name, from, to, isAllDay: isAllDay);
     }
   }
 }
@@ -410,17 +434,6 @@ List<DropdownMenuItem<DateTime>> _buildHoureItems(List<DateTime> items) {
 void _deleteMeeting(Meeting meeting) {
   meeting.deleteMeeting();
 }
-
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
 
 class treatmentForm extends StatefulWidget {
   final DateTime? selectedDate;

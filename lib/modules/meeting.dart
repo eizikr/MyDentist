@@ -8,7 +8,8 @@ import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 Color treatmentColor = Color.fromARGB(255, 51, 150, 56);
-Color meetingColor = Color.fromARGB(255, 75, 60, 131);
+Color meetingColor = Color.fromARGB(255, 60, 61, 131);
+Color allDayColor = Color.fromARGB(255, 131, 60, 60);
 
 class FirebaseMeetingDataSource extends CalendarDataSource {
   FirebaseMeetingDataSource() {
@@ -115,7 +116,11 @@ Future<void> createMeeting(
     eventType: treatment == null ? 'Meeting' : 'Treatment',
     from: from,
     to: to,
-    background: treatment == null ? meetingColor : treatmentColor,
+    background: treatment == null
+        ? meetingColor
+        : isAllDay == true
+            ? allDayColor
+            : treatmentColor,
     isAllDay: isAllDay,
     treatment: treatment?.toJson(),
   );
