@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'global.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 Widget loadingCircule(String circuleText) {
   return Center(
@@ -53,6 +50,20 @@ Future<bool?> errorToast(String myMsg) {
   );
 }
 
+Future<bool?> successToast(String myMsg) {
+  return Fluttertoast.showToast(
+    msg: myMsg,
+    gravity: ToastGravity.TOP,
+    fontSize: 10.0,
+    webShowClose: true,
+    backgroundColor: Colors.black,
+    toastLength: Toast.LENGTH_LONG,
+    webPosition: "center",
+    webBgColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    timeInSecForIosWeb: 2,
+  );
+}
+
 class LoadingPage extends StatefulWidget {
   final String loadingText;
   const LoadingPage({required this.loadingText, super.key});
@@ -75,21 +86,6 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 }
 
-// String encrypt(String msg) {
-//   AESCrypto cryptography = Get.find();
-
-//   final encrypter = Encrypter(AES(cryptography.key));
-
-//   return encrypter.encrypt(msg, iv: cryptography.iv).base64;
-// }
-
-// String decrypt(String msg) {
-//   AESCrypto cryptography = Get.find();
-
-//   final encrypter = Encrypter(AES(cryptography.key));
-//   return encrypter.decrypt(msg as Encrypted, iv: cryptography.iv);
-// }
-
 class HomePageButton extends StatelessWidget {
   final String text;
   final VoidCallback onClicked;
@@ -104,7 +100,7 @@ class HomePageButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
           shape: const StadiumBorder(),
-          backgroundColor: Colors.lightBlue[100],
+          backgroundColor: ourSettings.appbarColor,
         ),
         onPressed: onClicked,
         child: FittedBox(

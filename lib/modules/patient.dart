@@ -121,3 +121,14 @@ Future<bool> checkPatientExists(patientID) async {
 
   return patientExists;
 }
+
+Future<String?> getPatientNameById(String id) async {
+  final snapshot =
+      await FirebaseFirestore.instance.collection('patients').doc(id).get();
+
+  if (snapshot.exists) {
+    return snapshot.data()!['name'];
+  } else {
+    return 'Unrecognized';
+  }
+}

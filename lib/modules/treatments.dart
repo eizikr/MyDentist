@@ -15,17 +15,17 @@ enum Code {
 
 class Treatment {
   late final String toothNumber;
-  late final TreatmentType type;
-  late final Patient patient;
+  late final String type;
+  late final String patientID;
   late final String treatingDoctor;
   late final bool isDone;
   late final String remarks;
-  late final Assistant assistent;
+  late final String assistent;
 
   Treatment({
     required this.toothNumber,
     required this.type,
-    required this.patient,
+    required this.patientID,
     required this.treatingDoctor,
     required this.assistent,
     this.isDone = false,
@@ -35,7 +35,7 @@ class Treatment {
   Map<String, dynamic> toJson() => {
         'toothNumber': toothNumber,
         'type': type,
-        'patient': patient,
+        'patientID': patientID,
         'treatingDoctor': treatingDoctor,
         'assistent': assistent,
         'isDone': isDone,
@@ -45,7 +45,7 @@ class Treatment {
   static Treatment fromJson(Map<String, dynamic> json) => Treatment(
         toothNumber: json['toothNumber'],
         type: json['type'],
-        patient: json['patient'],
+        patientID: json['patientID'],
         treatingDoctor: json['treatingDoctor'],
         assistent: json['assistent'],
         isDone: json['isDone'],
@@ -67,7 +67,7 @@ class Treatment {
           list.add(Treatment(
             toothNumber: data["toothNumber"],
             type: data["type"],
-            patient: data['patient'],
+            patientID: data['patientID'],
             treatingDoctor: data['treatingDoctor'],
             assistent: data['assistent'],
             isDone: data['isDone'],
@@ -80,28 +80,7 @@ class Treatment {
   }
 }
 
-Future createTreatment(
-  String toothNumber,
-  TreatmentType type,
-  Patient patient,
-  String treatingDoctor,
-  bool isDone,
-  String remarks,
-  Assistant assistent,
-  DateTime startTime,
-  DateTime endTime,
-  int duration,
-) async {
-  Treatment instance = Treatment(
-    toothNumber: toothNumber,
-    type: type,
-    patient: patient,
-    treatingDoctor: treatingDoctor,
-    isDone: isDone,
-    remarks: remarks,
-    assistent: assistent,
-  );
-
+Future createTreatment(Treatment instance) async {
   final DB db = Get.find();
   final treatmentsDocuments = db.treatments;
 

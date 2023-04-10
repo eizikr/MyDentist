@@ -1,9 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/apps/home/home_page.dart';
-import 'package:my_dentist/modules/meeting.dart';
-import 'package:my_dentist/our_widgets/calendar.dart';
 import 'firebase_options.dart';
+import 'our_widgets/settings.dart';
 import 'widget_tree.dart';
 import 'our_widgets/global.dart';
 import 'package:get/get.dart';
@@ -15,6 +14,7 @@ Future<void> main() async {
   );
   Get.put(DB());
   Get.put(EncryptData());
+  // printMeeting("yJjgrXHCXZNyhuEJAo5V");
 
   runApp(const MyApp());
 }
@@ -27,12 +27,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.cyan,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 207, 235, 248),
+        primarySwatch: ourSettings.ourMaterialColor,
+        scaffoldBackgroundColor: ourSettings.backgroundColor,
       ),
-      home: const LoadDataFromFireBase(),
+      // home: const LoadDataFromFireBase(),
       // home: const WidgetTree(),
-      // home: const HomePage(),
+      home: const HomePage(),
     );
   }
 }

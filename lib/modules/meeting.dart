@@ -4,50 +4,63 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-String treatmentColor = Color.fromARGB(255, 59, 199, 4).value.toRadixString(16);
-String meetingColor = Color.fromARGB(255, 24, 21, 204).value.toRadixString(16);
+Color treatmentColor = Color.fromARGB(255, 51, 150, 56);
+Color meetingColor = Color.fromARGB(255, 75, 60, 131);
 
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
+class FirebaseMeetingDataSource extends CalendarDataSource {
+  FirebaseMeetingDataSource() {
+    streamMeetings();
+  }
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  void streamMeetings() {
+    _firestore.collection('Meetings').snapshots().listen((event) {
+      List<Meeting> meetings =
+          event.docs.map((doc) => Meeting.fromJson(doc.data())).toList();
+      appointments = meetings;
+      notifyListeners(CalendarDataSourceAction.reset, meetings);
+    });
   }
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].from;
+    return appointments![index].from!;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].to;
+    return appointments![index].to!;
   }
 
   @override
   bool isAllDay(int index) {
-    return appointments![index].isAllDay;
+    return appointments![index].isAllDay!;
   }
 
   @override
   String getSubject(int index) {
-    return appointments![index].eventName;
+    return appointments![index].eventName!;
   }
 
   @override
   Color getColor(int index) {
-    return appointments![index].background;
+    return appointments![index].background!;
   }
 }
 
 class Meeting {
+  String? id;
   String? eventName;
   String? eventType;
   DateTime? from;
   DateTime? to;
-  String? background;
+  Color? background;
   bool? isAllDay;
-  Treatment? treatment;
+  Map<String, dynamic>? treatment;
 
   Meeting(
       {this.eventName,
@@ -56,14 +69,15 @@ class Meeting {
       this.to,
       this.background,
       this.isAllDay,
-      this.treatment});
+      this.treatment,
+      this.id});
 
   Map<String, dynamic> toJson() => {
         'eventName': eventName,
         'eventType': eventType,
         'from': from,
         'to': to,
-        'background': background,
+        'background': background!.value.toString(),
         'isAllDay': isAllDay,
         'treatment': treatment //remember to send here as a json
       };
@@ -71,60 +85,48 @@ class Meeting {
   static Meeting fromJson(Map<String, dynamic> json) => Meeting(
         eventName: json['eventName'],
         eventType: json['eventType'],
-        from: json['from'],
-        to: json['to'],
-        background: json['background'],
+        from: (json['from'] as Timestamp).toDate(),
+        to: (json['to'] as Timestamp).toDate(),
+        background: Color(int.parse(json['background'])),
         isAllDay: json['isAllDay'],
         treatment: json['treatment'],
+        id: json['id'],
       );
 
-  Color get backgroundColor =>
-      Color(int.parse(background ?? '0xFF000000', radix: 16));
+  Future<void> deleteMeeting() async {
+    try {
+      await FirebaseFirestore.instance.collection('Meetings').doc(id).delete();
+      successToast('Meeting deleted successfully');
+    } catch (e) {
+      errorToast('Error: $e');
+    }
+  }
 }
 
 Future<void> createMeeting(
   String eventName,
-  // Color background,
   DateTime from,
   DateTime to, {
   Treatment? treatment,
   bool isAllDay = false,
 }) async {
-  // Later take care of colors desetion
   Meeting instance = Meeting(
     eventName: eventName,
-    eventType: treatment == null ? 'Treatment' : 'Meeting',
+    eventType: treatment == null ? 'Meeting' : 'Treatment',
     from: from,
     to: to,
     background: treatment == null ? meetingColor : treatmentColor,
     isAllDay: isAllDay,
-    treatment: treatment,
+    treatment: treatment!.toJson(),
   );
 
   try {
-    await FirebaseFirestore.instance
-        .collection('Meetings')
-        .doc()
-        .set(instance.toJson());
-    print('Meeting saved successfully');
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection('Meetings');
+    DocumentReference newMeetingRef = await collection.add(instance.toJson());
+    await newMeetingRef.update({'id': newMeetingRef.id});
+    successToast('Meeting was successfully set');
   } catch (e) {
-    print('Error saving meeting: $e');
+    errorToast('Error: $e');
   }
-  // final DB db = Get.find();
-  // final meetingDocuments = db.meetings;
-
-  // // print('hey');
-  // var query = meetingDocuments.where('from', isGreaterThan: to);
-
-  // query.get().then(
-  //   (snapshot) {
-  //     if (snapshot.docs.isNotEmpty) {
-  //       print('dates error');
-  //     } else {
-  //       meetingDocuments.add(instance.toJson());
-  //     }
-  //   },
-  // ).catchError((error) {
-  //   print('The write failed...${error}');
-  // });
 }

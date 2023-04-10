@@ -1,24 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/meeting.dart';
+import 'package:my_dentist/modules/treatments.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
-
-class LoadDataFromFireBase extends StatelessWidget {
-  const LoadDataFromFireBase({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Calendar',
-      home: SchedulePlanner(),
-    );
-  }
-}
 
 class SchedulePlanner extends StatefulWidget {
   String? patient_id;
@@ -33,9 +21,8 @@ class SchedulePlannerState extends State<SchedulePlanner> {
   DateTime _selectedDate = DateTime.now();
   // Duration _duration = const Duration(hours: 1);
   CalendarView _calendarView = CalendarView.month;
-  MeetingDataSource? events;
-  final List<String> options = <String>['Add', 'Delete', 'Update'];
   final databaseReference = FirebaseFirestore.instance;
+  late List<Meeting> _meetingDetails = <Meeting>[];
 
   void _toggleCalendarView() {
     setState(() {
@@ -45,35 +32,17 @@ class SchedulePlannerState extends State<SchedulePlanner> {
     });
   }
 
-  @override
-  void initState() {
-    getDataFromDatabase().then((results) {
-      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        setState(() {});
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    if (calendarTapDetails.targetElement == CalendarElement.calendarCell) {
+      setState(() {
+        _meetingDetails = calendarTapDetails.appointments!.cast<Meeting>();
       });
-    });
-
-    super.initState();
+    }
   }
 
-  Future<void> getDataFromDatabase() async {
-    var snapShotsValue = await databaseReference
-        .collection("CalendarAppointmentCollection")
-        .get();
-
-    List<Meeting> list = snapShotsValue.docs
-        .map((e) => Meeting(
-            eventName: e.data()['eventName'],
-            from:
-                DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['StartTime']),
-            to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['EndTime']),
-            background: e.data()['beckground'],
-            isAllDay: false,
-            treatment: e.data()['treatment']['type']))
-        .toList();
-    setState(() {
-      events = MeetingDataSource(list);
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -85,55 +54,130 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           title: 'Scheduler planner',
           child: const Text('Scheduler'),
         ),
-        leading: PopupMenuButton<String>(
-          icon: const Icon(Icons.settings),
-          itemBuilder: (BuildContext context) => options.map((String choice) {
-            return PopupMenuItem<String>(
-              value: choice,
-              child: Text(choice),
-            );
-          }).toList(),
-          onSelected: (String value) {
-            // later
-          },
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.exit_to_app),
+          tooltip: 'Exit',
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => widget.patient_id == null ? meetingDialog() : null,
-            icon: const Icon(Icons.add),
-          ),
+              onPressed: () => widget.patient_id == null
+                  ? meetingDialog()
+                  : createTreatmentDialog(),
+              icon: const Icon(Icons.add),
+              tooltip: 'Add event'),
         ],
       ),
-      body: GestureDetector(
-        onDoubleTapDown: (details) {
-          //final DateTime selectedDate = SfCalendar
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Selected data'),
-                content: Text(_selectedDate.toString()),
-              );
-            },
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Meetings').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          List<Meeting> meetings = [];
+
+          // Convert QuerySnapshot to List of Meeting objects
+          for (var document in snapshot.data!.docs) {
+            Map<String, dynamic>? data =
+                document.data() as Map<String, dynamic>?;
+            if (data != null) {
+              Meeting meeting = Meeting.fromJson(data);
+              meetings.add(meeting);
+            }
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: SfCalendar(
+                  view: _calendarView,
+                  dataSource: FirebaseMeetingDataSource(),
+                  timeSlotViewSettings:
+                      const TimeSlotViewSettings(startHour: 8, endHour: 18),
+                  showDatePickerButton: true,
+                  timeZone: 'Israel Standard Time',
+                  onTap: calendarTapped,
+                  onSelectionChanged: (date) {
+                    setState(() {
+                      _selectedDate = date.date!;
+                    });
+                  },
+                  todayHighlightColor: Colors.lightBlue[200],
+                  selectionDecoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.blue, width: 2),
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                      color: Colors.black12,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(2),
+                        itemCount: _meetingDetails.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                              padding: const EdgeInsets.all(2),
+                              height: 60,
+                              color: _meetingDetails[index].background,
+                              child: ListTile(
+                                leading: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      _meetingDetails[index].isAllDay!
+                                          ? ''
+                                          : DateFormat('hh:mm a').format(
+                                              _meetingDetails[index].from!),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      _meetingDetails[index].isAllDay!
+                                          ? 'All day'
+                                          : '',
+                                      style: const TextStyle(
+                                          height: 0.5, color: Colors.white),
+                                    ),
+                                    Text(
+                                      _meetingDetails[index].isAllDay!
+                                          ? ''
+                                          : DateFormat('hh:mm a').format(
+                                              _meetingDetails[index].to!),
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    _showAppointmentDetails(
+                                        context, _meetingDetails[index]);
+                                  },
+                                  tooltip: 'Delete meeting',
+                                ),
+                                title: Text(
+                                    '${_meetingDetails[index].eventName}',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                              ));
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(
+                          height: 5,
+                        ),
+                      )))
+            ],
           );
         },
-        child: SfCalendar(
-          view: _calendarView,
-          timeSlotViewSettings:
-              const TimeSlotViewSettings(startHour: 8, endHour: 18),
-          showDatePickerButton: true,
-          dataSource: events,
-          timeZone: 'Israel Standard Time',
-          monthViewSettings: const MonthViewSettings(
-            showAgenda: true,
-          ),
-          onSelectionChanged: (date) {
-            setState(() {
-              _selectedDate = date.date!;
-              print(_selectedDate.toString());
-            });
-          },
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _toggleCalendarView,
@@ -141,6 +185,22 @@ class SchedulePlannerState extends State<SchedulePlanner> {
             ? Icons.view_week
             : Icons.view_module),
       ),
+    );
+  }
+
+  void createTreatmentDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(content:
+            StatefulBuilder(// You need this, notice the parameters below:
+                builder: (BuildContext context, StateSetter setState) {
+          return treatmentForm(
+            selectedDate: _selectedDate,
+            patientID: widget.patient_id,
+          );
+        }));
+      },
     );
   }
 
@@ -164,6 +224,45 @@ class SchedulePlannerState extends State<SchedulePlanner> {
       },
     );
   }
+
+  void _showAppointmentDetails(BuildContext context, Meeting meeting) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Are you sure?"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text(
+                      'No',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      _deleteMeeting(meeting);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class MeetingForm extends StatefulWidget {
@@ -174,26 +273,26 @@ class MeetingForm extends StatefulWidget {
 }
 
 class _MeetingFormState extends State<MeetingForm> {
-  // final durations = List.generate(2 * 4, (i) => Duration(minutes: i * 15));
-  late List<DateTime> start_times;
-  late List<DateTime> end_times;
-
+  late List<DateTime> startTimes;
+  late List<DateTime> endTimes;
+  late DateTime selectedDate;
   late DateTime _from;
   late DateTime _to;
   final _eventName = TextEditingController();
 
   @override
   void initState() {
-    start_times = List.generate(
+    selectedDate = widget.selectedDate!;
+    startTimes = List.generate(
         16 * 4,
-        (i) => DateTime(widget.selectedDate!.year, widget.selectedDate!.month,
-            widget.selectedDate!.day, 6, i * 15));
-    end_times = List.generate(
+        (i) => DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+            6, i * 15));
+    endTimes = List.generate(
         18 * 4,
-        (i) => DateTime(widget.selectedDate!.year, widget.selectedDate!.month,
-            widget.selectedDate!.day, 6, i * 15));
-    _to = start_times.first;
-    _from = start_times.first;
+        (i) => DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+            6, i * 15));
+    _from = startTimes.first;
+    _to = startTimes[1];
     super.initState();
   }
 
@@ -205,6 +304,15 @@ class _MeetingFormState extends State<MeetingForm> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}'),
+            ],
+          ),
+          Row(
             children: [
               const Text(
                 'From:',
@@ -214,7 +322,7 @@ class _MeetingFormState extends State<MeetingForm> {
               DropdownButton(
                 value: _from,
                 icon: const Icon(Icons.keyboard_arrow_down),
-                items: _buildHoureItems(start_times),
+                items: _buildHoureItems(startTimes),
                 onChanged: (DateTime? time) {
                   setState(() {
                     _from = time!;
@@ -233,7 +341,7 @@ class _MeetingFormState extends State<MeetingForm> {
               DropdownButton(
                 value: _to,
                 icon: const Icon(Icons.keyboard_arrow_down),
-                items: _buildHoureItems(end_times),
+                items: _buildHoureItems(endTimes),
                 onChanged: (DateTime? time) {
                   setState(() {
                     _to = time!;
@@ -258,14 +366,16 @@ class _MeetingFormState extends State<MeetingForm> {
             children: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancle'),
+                child:
+                    const Text('Cancle', style: TextStyle(color: Colors.black)),
               ),
               TextButton(
                 onPressed: () {
                   addMeeting(_from, _to, _eventName.text);
                   Navigator.of(context).pop();
                 },
-                child: const Text('Save'),
+                child:
+                    const Text('Save', style: TextStyle(color: Colors.black)),
               ),
             ],
           ),
@@ -274,53 +384,282 @@ class _MeetingFormState extends State<MeetingForm> {
     );
   }
 
-  List<DropdownMenuItem<Duration>> _buildDurationItems(List<Duration> items) {
-    return items.map((duration) {
-      final hours = duration.inHours.toString().padLeft(2, '0');
-      final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-      final label = '$hours:$minutes';
-      return DropdownMenuItem<Duration>(
-        value: duration,
-        child: Text(label),
-      );
-    }).toList();
-  }
-
-  List<DropdownMenuItem<DateTime>> _buildHoureItems(List<DateTime> items) {
-    return items.map((time) {
-      final hours = time.hour.toString().padLeft(2, '0');
-      final minutes = time.minute.toString().padLeft(2, '0');
-      final label = '$hours:$minutes';
-      return DropdownMenuItem<DateTime>(
-        value: time,
-        child: Text(label),
-      );
-    }).toList();
-  }
-
   void addMeeting(DateTime from, DateTime to, String name) {
-    createMeeting(name, from, to);
+    if (from.isAfter(to) || from.compareTo(to) == 0) {
+      errorToast('"To" field has to be after "From"');
+    } else if (DateTime.now().isAfter(from)) {
+      errorToast('Cant set meeting on past time');
+    } else {
+      createMeeting(name, from, to);
+    }
   }
 }
 
+List<DropdownMenuItem<DateTime>> _buildHoureItems(List<DateTime> items) {
+  return items.map((time) {
+    final hours = time.hour.toString().padLeft(2, '0');
+    final minutes = time.minute.toString().padLeft(2, '0');
+    final label = '$hours:$minutes';
+    return DropdownMenuItem<DateTime>(
+      value: time,
+      child: Text(label),
+    );
+  }).toList();
+}
 
+void _deleteMeeting(Meeting meeting) {
+  meeting.deleteMeeting();
+}
 
-// Row(
-//             children: [
-//               const Text(
-//                 'To:',
-//                 style: TextStyle(fontWeight: FontWeight.bold),
-//               ),
-//               const Spacer(),
-//               DropdownButton(
-//                 value: _to,
-//                 icon: const Icon(Icons.keyboard_arrow_down),
-//                 items: _buildDurationItems(durations),
-//                 onChanged: (Duration? newValue) {
-//                   setState(() {
-//                     _to = newValue!;
-//                   });
-//                 },
-//               ),
-//             ],
-//           ),
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+class treatmentForm extends StatefulWidget {
+  final DateTime? selectedDate;
+  final String? patientID;
+
+  const treatmentForm(
+      {super.key, required this.selectedDate, required this.patientID});
+
+  @override
+  State<treatmentForm> createState() => _treatmentFormState();
+}
+
+class _treatmentFormState extends State<treatmentForm> {
+  String tooth = '1';
+  late final List<String> tooths;
+  String? type;
+  String? assistent;
+  String? startTime;
+  late List<DateTime> startTimes;
+  late List<DateTime> endTimes;
+  late DateTime selectedDate;
+  late DateTime _from;
+  late DateTime _to;
+  TextEditingController remarksContrtoller = new TextEditingController();
+
+  void initState() {
+    tooths = [];
+    for (int i = 1; i <= 32; i++) {
+      tooths.add(i.toString());
+    }
+    selectedDate = widget.selectedDate!;
+    startTimes = List.generate(
+        16 * 4,
+        (i) => DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+            6, i * 15));
+    endTimes = List.generate(
+        18 * 4,
+        (i) => DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+            6, i * 15));
+    _from = startTimes.first;
+    _to = startTimes[1];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: FutureBuilder(
+        future: Future.wait([
+          TreatmentType.getNames(),
+          Assistant.getNames(),
+        ]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            // The two futures data are available in snapshot.data.
+            var data1 = snapshot.data![0];
+            var data2 = snapshot.data![1];
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                //Tooth number dropdown
+                Row(
+                  children: [
+                    const Text(
+                      'From:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: _from,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: _buildHoureItems(startTimes),
+                      onChanged: (DateTime? time) {
+                        setState(() {
+                          _from = time!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'To:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: _to,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: _buildHoureItems(endTimes),
+                      onChanged: (DateTime? time) {
+                        setState(() {
+                          _to = time!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Tooth number:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: tooth,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: tooths.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          tooth = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                //Treatment type dropdown
+                Row(
+                  children: [
+                    const Text(
+                      'Treatment:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: type,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: data1.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          type = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    const Text(
+                      'Assistent:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    DropdownButton(
+                      value: assistent,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: data2.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          assistent = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    const Text(
+                      'Remarks:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    Expanded(
+                      child: TextField(
+                        maxLength: 50,
+                        decoration: const InputDecoration(labelText: 'Remarks'),
+                        controller: remarksContrtoller,
+                      ),
+                    ),
+                  ],
+                ),
+
+                //Bottom Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancle'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Treatment instance = Treatment(
+                            toothNumber: tooth,
+                            type: type!,
+                            patientID: widget.patientID!,
+                            treatingDoctor: 'Dr.Heler',
+                            assistent: assistent!,
+                            remarks: remarksContrtoller.text);
+                        createTreatment(instance);
+                        addTreatmentMeeting(_from, _to, type!, instance);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Save'),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void addTreatmentMeeting(
+      DateTime from, DateTime to, String name, Treatment treatment) {
+    if (from.isAfter(to) || from.compareTo(to) == 0) {
+      errorToast('"To" field has to be after "From"');
+    } else if (DateTime.now().isAfter(from)) {
+      errorToast('Cant set meeting on past time');
+    } else {
+      createMeeting(name, from, to, treatment: treatment);
+    }
+  }
+}
