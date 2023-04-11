@@ -1,8 +1,9 @@
 import 'package:age_calculator/age_calculator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import '/modules/patient.dart';
 
 class AddPatientPage extends StatefulWidget {
@@ -363,36 +364,38 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   }
 
   Future createPatient() async {
-    final docUser = FirebaseFirestore.instance
-        .collection("Patients")
-        .doc(_idController.text);
+    final DB db = Get.find();
+    final EncryptData crypto = Get.find();
+
+    final patientDoc = db.patients.doc(_idController.text); //
     final patient = Patient(
-      id: docUser.id,
-      creationDate: '${today.day}.${today.month}.${today.year}',
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
-      fathersName: _fathersNameController.text,
-      city: _cityController.text,
-      address: _addressController.text,
-      postalCode: _postalCodeController.text,
-      houseNumber: _houseNumberController.text,
-      countryBirth: _countryBirthController.text,
-      profession: _professionController.text,
-      dateOfBirth: _dateOfBirth,
-      age: getAge(_dateOfBirth),
-      homePhone: _homePhoneController.text,
-      email1: _email1Controller.text,
-      email2: _email2Controller.text,
-      insuranceCompany: _insuranceCompanyController.text,
-      phone: _phoneController.text,
-      fax: _faxController.text,
-      hmo: _hmoController.text,
-      treatingDoctor: _treatingDoctorController.text,
-      status: _statusController.text,
-      remarks: _remarksController.text,
+      id: crypto.encryptAES(patientDoc.id),
+      creationDate:
+          crypto.encryptAES('${today.day}.${today.month}.${today.year}'),
+      firstName: crypto.encryptAES(_firstNameController.text),
+      lastName: crypto.encryptAES(_lastNameController.text),
+      fathersName: crypto.encryptAES(_fathersNameController.text),
+      city: crypto.encryptAES(_cityController.text),
+      address: crypto.encryptAES(_addressController.text),
+      postalCode: crypto.encryptAES(_postalCodeController.text),
+      houseNumber: crypto.encryptAES(_houseNumberController.text),
+      countryBirth: crypto.encryptAES(_countryBirthController.text),
+      profession: crypto.encryptAES(_professionController.text),
+      dateOfBirth: crypto.encryptAES(_dateOfBirth),
+      age: crypto.encryptAES(getAge(_dateOfBirth)),
+      homePhone: crypto.encryptAES(_homePhoneController.text),
+      email1: crypto.encryptAES(_email1Controller.text),
+      email2: crypto.encryptAES(_email2Controller.text),
+      insuranceCompany: crypto.encryptAES(_insuranceCompanyController.text),
+      phone: crypto.encryptAES(_phoneController.text),
+      fax: crypto.encryptAES(_faxController.text),
+      hmo: crypto.encryptAES(_hmoController.text),
+      treatingDoctor: crypto.encryptAES(_treatingDoctorController.text),
+      status: crypto.encryptAES(_statusController.text),
+      remarks: crypto.encryptAES(_remarksController.text),
     );
     final json = patient.toJson();
-    await docUser.set(json);
+    await patientDoc.set(json);
   }
 }
 

@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:my_dentist/our_widgets/calendar.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
 import 'package:my_dentist/apps/settings_pages/edit_treatment_types.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 import 'package:my_dentist/apps/reports/report.dart';
+
 
 enum MenuItem {
   settings,
@@ -51,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             textAlign: TextAlign.center,
           ),
         ),
-        backgroundColor: Colors.lightBlue[100],
+        backgroundColor: ourSettings.appbarColor,
         actions: [
           PopupMenuButton<MenuItem>(
             tooltip: 'More Options',
@@ -116,25 +118,15 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ButtonWidget(
-              //     text: 'Show Patient',
-              //     onClicked: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => const ShowPatient(),
-              //         ),
-              //       );
-              //     }),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                 text: 'Patient Card',
                 onClicked: () async {
                   await openSearchPatientDialog(context);
                 },
               ),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                   text: 'Add Patient',
                   onClicked: () {
                     Navigator.push(
@@ -145,12 +137,21 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
               const SizedBox(height: 35),
-              ButtonWidget(
+              HomePageButton(
                 text: 'Treatment Plan',
                 onClicked: () => {},
               ),
               const SizedBox(height: 35),
-              ButtonWidget(text: 'daily planner', onClicked: () => {}),
+              HomePageButton(
+                  text: 'Schedule planner',
+                  onClicked: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SchedulePlanner(),
+                      ),
+                    );
+                  }),
               const SizedBox(height: 35),
               ButtonWidget(text: 'Reports', onClicked: () => {
                     Navigator.push(
@@ -225,31 +226,4 @@ class _HomePageState extends State<HomePage> {
       errorToast('Please fill the ID field');
     }
   }
-}
-
-class ButtonWidget extends StatelessWidget {
-  final String text;
-  final VoidCallback onClicked;
-
-  const ButtonWidget({
-    Key? key,
-    required this.text,
-    required this.onClicked,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(50),
-          shape: const StadiumBorder(),
-          backgroundColor: Colors.lightBlue[100],
-        ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
-          ),
-        ),
-      );
 }

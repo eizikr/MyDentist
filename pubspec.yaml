@@ -39,15 +39,19 @@ dependencies:
   firebase_core: ^2.2.0
   firebase_auth: ^4.1.2
 
+  syncfusion_flutter_calendar: ^21.1.37
   date_field: ^3.0.0
   side_navigation: ^1.0.4
   fluttertoast: ^8.1.1
   google_fonts: ^3.0.1
   age_calculator: ^1.0.0
+  get: ^4.6.5
+  encrypt: ^5.0.1
   
   # firebase_core_platform_interface: ^4.5.1
   cloud_firestore: ^4.2.0
   firebase_database: ^10.0.7
+  intl: ^0.17.0
 
 
 dev_dependencies:

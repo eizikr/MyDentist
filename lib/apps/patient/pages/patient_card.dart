@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dentist/apps/patient/patient_show/comunication_info.dart';
+import 'package:my_dentist/apps/patient/patient_show/patient_treatments.dart';
 import 'package:my_dentist/apps/patient/patient_show/private_info.dart';
 import 'package:my_dentist/apps/patient/patient_show/status_info.dart';
 import 'package:side_navigation/side_navigation.dart';
@@ -28,8 +29,8 @@ class _PatientCardState extends State<PatientCard> {
     Center(
       child: PatientComunicationInfo(patientID: _patientID),
     ),
-    const Center(
-      child: Text('Coming soon...'),
+    Center(
+      child: PatientTreatmentsPage(patientID: _patientID),
     ),
     Center(
       child: PatientStatusInfo(patientID: _patientID),
