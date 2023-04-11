@@ -10,7 +10,7 @@ import 'package:my_dentist/apps/patient/pages/patient_card.dart';
 import 'package:my_dentist/apps/settings_pages/edit_treatment_types.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 import 'package:my_dentist/apps/reports/report.dart';
-
+import 'package:my_dentist/pages/home_page.dart';
 
 enum MenuItem {
   settings,
@@ -153,14 +153,16 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
               const SizedBox(height: 35),
-              ButtonWidget(text: 'Reports', onClicked: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReportPage(),
-                      ),
-                    )
-              }),
+              ButtonWidget(
+                  text: 'Reports',
+                  onClicked: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ReportPage(),
+                          ),
+                        )
+                      }),
             ],
           ),
         ),

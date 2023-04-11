@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_dentist/pages/add_patient.dart';
-import 'package:my_dentist/pages/patient_card.dart';
-import 'package:my_dentist/pages/show_patient.dart';
+import 'package:my_dentist/apps/patient/pages/add_patient.dart';
+import 'package:my_dentist/apps/patient/pages/patient_card.dart';
+import "package:my_dentist/apps/patient/pages/show_patient.dart";
 
 Future<void> signOut() async {
   await Auth().signOut();
@@ -58,7 +58,8 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   }),
-              const SizedBox(height: 35),/*
+              const SizedBox(height: 35),
+              /*
               ButtonWidget(
                   text: 'Patient Card',
                   onClicked: () {
