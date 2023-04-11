@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 class EditTreatmentTypesPage extends StatefulWidget {
   const EditTreatmentTypesPage({super.key});
@@ -48,7 +49,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
           'Edit Treatment Types',
         ),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue[100],
+        backgroundColor: ourSettings.backgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

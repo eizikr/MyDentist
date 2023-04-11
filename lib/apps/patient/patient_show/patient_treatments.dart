@@ -7,6 +7,8 @@ import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:get/get.dart';
 
+import 'show_treatment_screen.dart';
+
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
   const PatientTreatmentsPage({super.key, required this.patientID});
@@ -19,6 +21,7 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
   Widget build(BuildContext context) {
     return Row(children: [
       Expanded(
+        flex: 1,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -39,7 +42,9 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
         // First column content
       ),
       Expanded(
+        flex: 2,
         child: Container(
+          child: ShowTreatmentScreen(patientID: widget.patientID),
           decoration: const BoxDecoration(
             border: Border(
               left: BorderSide(
