@@ -281,7 +281,7 @@ packages:
     source: hosted
     version: "3.0.1"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
@@ -461,6 +461,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  starflut:
+    dependency: "direct main"
+    description:
+      name: starflut
+      sha256: "43377329b7ad2b3c7c613d849086f68d6abf23967fe6df33026887af4986155b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.5"
   stream_channel:
     dependency: transitive
     description:
@@ -517,6 +525,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  tflite:
+    dependency: "direct main"
+    description:
+      name: tflite
+      sha256: "661f8942a0e8ca05fedf554cc6f9cc95f526d0e4588d1665e0eb4d29e25e69b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   timezone:
     dependency: transitive
     description:
