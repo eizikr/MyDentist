@@ -12,12 +12,19 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
-  
+
+  int age = 19;
+  String sw = 'female';
+  double pl = 27.9;
+  int pw = 0;
+  String sw2 = 'yes';
+  String sw3 = 'southwest';
+
+
   Future<String> getString() async {
-      var response = await http.get(Uri.parse('http://127.0.0.1:5000/'));
+      var response = await http.get(Uri.parse('http://127.0.0.1:5000/api?age=$age&sw=$sw&pl=$pl&pw=$pw'));
       if (response.statusCode == 200) {
-        var data = response.body;
-        var decodedData = jsonDecode(data);
+        var decodedData = jsonDecode(response.body);
         return decodedData['query'];
       } else {
         return "Error 404";
