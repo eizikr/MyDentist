@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/apps/home/home_page.dart';
+import 'package:my_dentist/apps/reports/report.dart';
 import 'firebase_options.dart';
 import 'our_widgets/settings.dart';
 import 'widget_tree.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: const LoadDataFromFireBase(),
       // home: const WidgetTree(),
-      home: const HomePage(),
+      // home: const HomePage(),
+      home: const ReportPage(),
     );
   }
 }
