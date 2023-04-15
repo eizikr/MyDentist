@@ -34,8 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const LoadDataFromFireBase(),
       // home: const WidgetTree(),
-      // home: const HomePage(),
-      home: const ReportPage(),
+      home: const HomePage(),
     );
   }
 }

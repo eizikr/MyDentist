@@ -3,6 +3,7 @@ import 'package:my_dentist/apps/patient/patient_show/comunication_info.dart';
 import 'package:my_dentist/apps/patient/patient_show/patient_treatments.dart';
 import 'package:my_dentist/apps/patient/patient_show/private_info.dart';
 import 'package:my_dentist/apps/patient/patient_show/status_info.dart';
+import 'package:my_dentist/apps/patient/patient_show/editPatient.dart';
 import 'package:side_navigation/side_navigation.dart';
 
 class PatientCard extends StatefulWidget {
@@ -35,8 +36,8 @@ class _PatientCardState extends State<PatientCard> {
     Center(
       child: PatientStatusInfo(patientID: _patientID),
     ),
-    const Center(
-      child: Text('edit page'),
+    Center(
+      child: EditPatientInfo(patientID: _patientID),
     ),
   ];
   int selectedIndex = 0;
