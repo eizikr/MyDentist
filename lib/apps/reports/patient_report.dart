@@ -25,12 +25,13 @@ class _PatientReportPageState extends State<PatientReportPage> {
 
   Future<String> getPred() async {
       //enter details
-      double bmi = 27.9;
       int ch = 0; // children
       //end
       String age = crypto.decryptAES(_patient.age);
       String sex = crypto.decryptAES(_patient.gender);
       String sm = crypto.decryptAES(_patient.smoker);
+      double h = double.parse(crypto.decryptAES(_patient.height))/100;
+      double bmi = double.parse(crypto.decryptAES(_patient.weight))/(h*h);
       var response = await http.get(Uri.parse('http://127.0.0.1:5000/api?age=$age&sex=$sex&bmi=$bmi&ch=$ch&sm=$sm'));
       if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
