@@ -14,6 +14,10 @@ class Patient {
   final String profession;
   final String dateOfBirth;
   final String age;
+  final String gender;
+  final String height;
+  final String weight;
+  final String smoker;
 
   final String homePhone;
   final String email1;
@@ -41,6 +45,10 @@ class Patient {
     this.profession = 'undefined',
     this.dateOfBirth = 'undefined',
     this.age = 'undefined',
+    this.gender = 'male',
+    this.height = 'undefined',
+    this.weight = 'undefined',
+    this.smoker = 'no',
     this.homePhone = 'undefined',
     this.email1 = 'undefined',
     this.email2 = 'undefined',
@@ -67,6 +75,10 @@ class Patient {
         'profession': profession,
         'date_of_birth': dateOfBirth,
         'age': age,
+        'gender': gender,
+        'height': height,
+        'weight': weight,
+        'smoker': smoker,      
         'home_phone': homePhone,
         'email1': email1,
         'email2': email2,
@@ -92,6 +104,10 @@ class Patient {
       profession: json['profession'],
       dateOfBirth: json['date_of_birth'],
       age: json['age'],
+      gender: json['gender'],
+      height: json['height'],
+      weight: json['weight'],
+      smoker: json['smoker'],    
       homePhone: json['home_phone'],
       email1: json['email1'],
       email2: json['email2'],

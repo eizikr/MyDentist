@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.2.0
   firebase_auth: ^4.1.2
-
+  syncfusion_flutter_sliders: ^21.1.41
   syncfusion_flutter_calendar: ^21.1.37
   date_field: ^3.0.0
   side_navigation: ^1.0.4
