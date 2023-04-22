@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async' show Future;
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 import '/modules/patient.dart';
 import '/our_widgets/global.dart';
 
@@ -51,11 +52,28 @@ class _PatientReportPageState extends State<PatientReportPage> {
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
-                      return Text('Data: ${snapshot.data}');
+                      return Scaffold(
+                              backgroundColor: ourSettings.appbarColor,
+                              body: Center(
+                                    child: Column (
+                                      
+                                      children: [
+                                      const Text('A recommendation for the cost of annual dental insurance is :',
+                                            style: TextStyle(fontSize: 30, color: Colors.black)
+                                        ),
+                                        Text('${snapshot.data}\$',
+                                            style: const TextStyle(fontSize: 45, color: Colors.black)
+                                    )
+                                    ],                                ),
+                              )
+                      );
                     }
                   } 
                   else {
-                    return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                          strokeWidth: 8.0,
+                          color: Colors.blue,
+                      );                  
                   }                          
             },
     );

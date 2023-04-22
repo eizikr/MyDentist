@@ -58,9 +58,10 @@ class _ReportPageState extends State<ReportPage> {
                       return Text('somthing went wrong ${snapshot.error}');
                     } else if (snapshot.hasData) {
                       final patients = snapshot.data!;
-                      return Wrap(
+                      return Center(child: Wrap(
                             spacing: 8.0,
                             children: patients.map(buildPatient).toList(),
+                            ),
                       );
                     } else {
                       return const CircularProgressIndicator(
