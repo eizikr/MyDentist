@@ -144,36 +144,36 @@ class ShowPatientFormState extends State<ShowPatientForm> {
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _genderController,
-                decoration: const InputDecoration(
-                  labelText: "Gender",
-                  icon: Icon(Icons.circle_outlined),
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {},
-              ), 
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _heightController,
-                decoration: const InputDecoration(
-                  labelText: "Height",
-                  icon: Icon(Icons.circle_outlined),
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {},
-              ), 
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _weightController,
-                decoration: const InputDecoration(
-                  labelText: "Weight",
-                  icon: Icon(Icons.circle_outlined),
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {},
-              ), 
+              // const SizedBox(height: 20),
+              // TextFormField(
+              //   controller: _genderController,
+              //   decoration: const InputDecoration(
+              //     labelText: "Gender",
+              //     icon: Icon(Icons.circle_outlined),
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   onChanged: (value) {},
+              // ), 
+              // const SizedBox(height: 20),
+              // TextFormField(
+              //   controller: _heightController,
+              //   decoration: const InputDecoration(
+              //     labelText: "Height",
+              //     icon: Icon(Icons.circle_outlined),
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   onChanged: (value) {},
+              // ), 
+              // const SizedBox(height: 20),
+              // TextFormField(
+              //   controller: _weightController,
+              //   decoration: const InputDecoration(
+              //     labelText: "Weight",
+              //     icon: Icon(Icons.circle_outlined),
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   onChanged: (value) {},
+              // ), 
               const SizedBox(height: 20),
               TextFormField(
                 controller: _smokerController,
@@ -184,7 +184,17 @@ class ShowPatientFormState extends State<ShowPatientForm> {
                 ),
                 onChanged: (value) {},
               ),              
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
+              // TextFormField(
+              //   controller: _childrenController,
+              //   decoration: const InputDecoration(
+              //     labelText: "Children amount",
+              //     icon: Icon(Icons.circle_outlined),
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   onChanged: (value) {},
+              // ),              
+              const SizedBox(height: 20),              
               DateTimeFormField(
                 decoration: const InputDecoration(
                   errorStyle: TextStyle(color: Colors.redAccent),
