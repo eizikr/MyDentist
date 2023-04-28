@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:get/get.dart';
+import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class EditPatientInfo extends StatelessWidget {
   final String patientID;
@@ -27,6 +30,7 @@ class EditPatientInfo extends StatelessWidget {
 }
 
 Widget editPatientInfoScreen(Map<String, dynamic> data) {
+  EncryptData crypto = Get.find();
   final myController = TextEditingController();
 
   return SingleChildScrollView(
@@ -34,7 +38,7 @@ Widget editPatientInfoScreen(Map<String, dynamic> data) {
       TextField(
         controller: myController,
         decoration: InputDecoration(
-          labelText: 'Phone number: ${data['phone']}',
+          labelText: 'Phone number: ${crypto.decryptAES(data['phone'])}',
         ),
       ),
     ]),
