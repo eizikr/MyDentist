@@ -48,14 +48,14 @@ class _ReportPageState extends State<ReportPage> {
         .map((snapshot) => snapshot.docs
             .map((doc) => Patient.fromJson(doc.data()))
             .toList());
-
+            
     return  Scaffold(
               body: 
                 StreamBuilder<List<Patient>>(
                   stream: readPatients(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Text('somthing went wrong ${snapshot.error}');
+                      return Text('something went wrong ${snapshot.error}');
                     } else if (snapshot.hasData) {
                       final patients = snapshot.data!;
                       return Center(child: Wrap(

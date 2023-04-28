@@ -25,6 +25,7 @@ class ShowPatientFormState extends State<ShowPatientForm> {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _smokerController = TextEditingController();
+  final _childrenController = TextEditingController();
   final _imageController = TextEditingController();
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
@@ -44,6 +45,7 @@ class ShowPatientFormState extends State<ShowPatientForm> {
     _heightController.text=patient.height;
     _weightController.text=patient.weight;
     _smokerController.text=patient.smoker;
+    _childrenController.text=patient.children;
     _cityController.text=patient.city;
     _addressController.text=patient.address;
     _postalCodeController.text = patient.postalCode;
@@ -161,24 +163,6 @@ class ShowPatientFormState extends State<ShowPatientForm> {
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {},
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return " cannot be empty";
-                  }
-                  else{
-                    try{
-                      if((int.parse(val))<=0){
-                        return " need to be positive value ";
-                      }
-                      else{
-                        return null;
-                      }
-                    }
-                    catch (e){
-                      return " must be numeric ";
-                    }
-                  }
-                },
               ), 
               const SizedBox(height: 20),
               TextFormField(
@@ -189,24 +173,6 @@ class ShowPatientFormState extends State<ShowPatientForm> {
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {},
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return " cannot be empty";
-                  }
-                  else{
-                    try{
-                      if((int.parse(val))<=0){
-                        return " need to be positive value ";
-                      }
-                      else{
-                        return null;
-                      }
-                    }
-                    catch (e){
-                      return " must be numeric ";
-                    }
-                  }
-                },
               ), 
               const SizedBox(height: 20),
               TextFormField(

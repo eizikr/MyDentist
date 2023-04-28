@@ -50,6 +50,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _smokerController = TextEditingController();  
+  final _childrenController = TextEditingController();  
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _postalCodeController = TextEditingController();
@@ -281,6 +282,14 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                                 controller: _smokerController,
                                 options: smokeroptions,
                                 ),                            
+                            const SizedBox(height: 10),                             
+                            _sliderField(
+                                title: "Children amount: ${_childrenController.text}\n(if more than 5 choose 5)",
+                                controller: _childrenController,
+                                val: 0,
+                                min:0,
+                                max:5,
+                                ),                            
                             const SizedBox(height: 10),                         
                             DateTimeFormField(
                               onSaved: (val) =>
@@ -475,6 +484,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       height: crypto.encryptAES(_heightController.text),
       weight: crypto.encryptAES(_weightController.text),
       smoker: crypto.encryptAES(_smokerController.text),
+      children: crypto.encryptAES(_childrenController.text),
       city: crypto.encryptAES(_cityController.text),
       address: crypto.encryptAES(_addressController.text),
       postalCode: crypto.encryptAES(_postalCodeController.text),

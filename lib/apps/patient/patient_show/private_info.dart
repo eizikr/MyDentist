@@ -74,32 +74,25 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
         style: const TextStyle(fontSize: 20),
       ),
       const SizedBox(height: 15),
-      Container(
-          child: data['heigth'] != null
-              ? Column(children: [
-                  const SizedBox(height: 15),
-                  Text(
-                    'Heigth: ${crypto.decryptAES(data['heigth'])}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ])
-              : null),
+      Text(
+        'Heigth: ${crypto.decryptAES(data['heigth'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
-      Container(
-          child: data['weigth'] != null
-              ? Column(children: [
-                  const SizedBox(height: 15),
-                  Text(
-                    'Weigth: ${crypto.decryptAES(data['weigth'])}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ])
-              : null),     
+      Text(
+        'Weigth: ${crypto.decryptAES(data['weigth'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
       const SizedBox(height: 15),
       Text(
         'Smoker: ${crypto.decryptAES(data['smoker'])}',
         style: const TextStyle(fontSize: 20),
       ),
+      const SizedBox(height: 15),
+      Text(
+        'Children: ${crypto.decryptAES(data['children'])}',
+        style: const TextStyle(fontSize: 20),
+      ),  
       const SizedBox(height: 15),
       Text(
         'Address: ${crypto.decryptAES(data['address'])}/${crypto.decryptAES(data['houseNumber'])}, ${crypto.decryptAES(data['city'])}',
