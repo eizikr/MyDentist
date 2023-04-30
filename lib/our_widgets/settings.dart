@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ourSettings {
-  static const Color backgroundColor = Color.fromARGB(255, 207, 235, 248);
-  static const Color appbarColor = Color.fromARGB(255, 179, 229, 252);
-  static const MaterialColor ourMaterialColor = MaterialColor(
-    0xFFB3E5FC,
+  static const Color backgroundColor = Color(0xFFB3E5FC);
+  static const Color appbarColor = Color(0xFF81D4FA);
+
+  static const MaterialColor backgroundColors = MaterialColor(
+    0xFF29B6F6,
     <int, Color>{
       50: Color(0xFFE1F5FE),
       100: Color(0xFFB3E5FC),
