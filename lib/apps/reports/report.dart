@@ -23,6 +23,3 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 }
-
- 
- 
