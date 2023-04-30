@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
-import 'package:date_field/date_field.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/global.dart';
-import 'package:age_calculator/age_calculator.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:flutter/services.dart';
-import '/modules/patient.dart';
 
 class EditPatientInfo extends StatelessWidget {
   final String patientID;
