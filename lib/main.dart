@@ -14,7 +14,6 @@ Future<void> main() async {
   );
   Get.put(DB());
   Get.put(EncryptData());
-  // printMeeting("yJjgrXHCXZNyhuEJAo5V");
 
   runApp(const MyApp());
 }
@@ -27,12 +26,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: ourSettings.ourMaterialColor,
+        primarySwatch: ourSettings.backgroundColors,
         scaffoldBackgroundColor: ourSettings.backgroundColor,
       ),
       // home: const LoadDataFromFireBase(),
-      // home: const WidgetTree(),
-      home: const HomePage(),
+      home: const WidgetTree(),
+      // home: const HomePage(),
     );
   }
 }

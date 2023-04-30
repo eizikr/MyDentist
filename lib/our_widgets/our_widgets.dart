@@ -6,18 +6,19 @@ import 'package:my_dentist/our_widgets/settings.dart';
 
 Widget loadingCircule(String circuleText) {
   return Center(
-      child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      CircularProgressIndicator(
-        color: Colors.blue[300],
-      ),
-      const SizedBox(
-        height: 20,
-      ), // add some space between the progress indicator and the title
-      Text(circuleText)
-    ],
-  ));
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircularProgressIndicator(
+          color: Colors.blue[300],
+        ),
+        const SizedBox(
+          height: 20,
+        ), // add some space between the progress indicator and the title
+        Text(circuleText)
+      ],
+    ),
+  );
 }
 
 Widget loadingDialog() {
@@ -100,7 +101,7 @@ class HomePageButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
           shape: const StadiumBorder(),
-          backgroundColor: ourSettings.appbarColor,
+          backgroundColor: Color.fromARGB(255, 156, 224, 255),
         ),
         onPressed: onClicked,
         child: FittedBox(

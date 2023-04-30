@@ -5,6 +5,7 @@ import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -54,6 +55,8 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           title: 'Scheduler planner',
           child: const Text('Scheduler'),
         ),
+        centerTitle: true,
+        backgroundColor: ourSettings.appbarColor,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.exit_to_app),
@@ -90,6 +93,7 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           return Column(
             children: [
               Expanded(
+                flex: 2,
                 child: SfCalendar(
                   view: _calendarView,
                   dataSource: FirebaseMeetingDataSource(),
@@ -110,71 +114,80 @@ class SchedulePlannerState extends State<SchedulePlanner> {
                     borderRadius: const BorderRadius.all(Radius.circular(4)),
                     shape: BoxShape.rectangle,
                   ),
+                  monthViewSettings: const MonthViewSettings(
+                    monthCellStyle: MonthCellStyle(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  todayTextStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Expanded(
-                  child: Container(
-                      color: Colors.black12,
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(2),
-                        itemCount: _meetingDetails.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                              padding: const EdgeInsets.all(2),
-                              height: 60,
-                              color: _meetingDetails[index].background,
-                              child: ListTile(
-                                leading: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      _meetingDetails[index].isAllDay!
-                                          ? ''
-                                          : DateFormat('hh:mm a').format(
-                                              _meetingDetails[index].from!),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      _meetingDetails[index].isAllDay!
-                                          ? 'All day'
-                                          : '',
-                                      style: const TextStyle(
-                                          height: 0.5, color: Colors.white),
-                                    ),
-                                    Text(
-                                      _meetingDetails[index].isAllDay!
-                                          ? ''
-                                          : DateFormat('hh:mm a').format(
-                                              _meetingDetails[index].to!),
-                                      textAlign: TextAlign.center,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ],
+                child: Container(
+                  color: Colors.black12,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(2),
+                    itemCount: _meetingDetails.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: const EdgeInsets.all(2),
+                          height: 60,
+                          color: _meetingDetails[index].background,
+                          child: ListTile(
+                            leading: Column(
+                              children: <Widget>[
+                                Text(
+                                  _meetingDetails[index].isAllDay!
+                                      ? ''
+                                      : DateFormat('hh:mm a')
+                                          .format(_meetingDetails[index].from!),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    _showAppointmentDetails(
-                                        context, _meetingDetails[index]);
-                                  },
-                                  tooltip: 'Delete meeting',
+                                Text(
+                                  _meetingDetails[index].isAllDay!
+                                      ? 'All day'
+                                      : '',
+                                  style: const TextStyle(
+                                      height: 0.5, color: Colors.white),
                                 ),
-                                title: Text(
-                                    '${_meetingDetails[index].eventName}',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        const TextStyle(color: Colors.white)),
-                              ));
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(
-                          height: 5,
-                        ),
-                      )))
+                                Text(
+                                  _meetingDetails[index].isAllDay!
+                                      ? ''
+                                      : DateFormat('hh:mm a')
+                                          .format(_meetingDetails[index].to!),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              color: Colors.white,
+                              onPressed: () {
+                                _showAppointmentDetails(
+                                    context, _meetingDetails[index]);
+                              },
+                              tooltip: 'Delete meeting',
+                            ),
+                            title: Text('${_meetingDetails[index].eventName}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white)),
+                          ));
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(
+                      height: 5,
+                    ),
+                  ),
+                ),
+              )
             ],
           );
         },
