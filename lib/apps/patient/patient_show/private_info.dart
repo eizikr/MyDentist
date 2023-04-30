@@ -31,6 +31,7 @@ class PatientPrivateInfo extends StatelessWidget {
 
 Widget privateInfoScreen(Map<String, dynamic> data) {
   EncryptData crypto = Get.find();
+
   return SingleChildScrollView(
     child: Column(children: [
       Text(
@@ -68,6 +69,31 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
         'Age: ${crypto.decryptAES(data['age'])}',
         style: const TextStyle(fontSize: 20),
       ),
+      const SizedBox(height: 15),
+      Text(
+        'Gender: ${crypto.decryptAES(data['gender'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Heigth: ${crypto.decryptAES(data['height'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Weigth: ${crypto.decryptAES(data['weight'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Smoker: ${crypto.decryptAES(data['smoker'])}',
+        style: const TextStyle(fontSize: 20),
+      ),
+      const SizedBox(height: 15),
+      Text(
+        'Children: ${crypto.decryptAES(data['children'])}',
+        style: const TextStyle(fontSize: 20),
+      ),  
       const SizedBox(height: 15),
       Text(
         'Address: ${crypto.decryptAES(data['address'])}/${crypto.decryptAES(data['houseNumber'])}, ${crypto.decryptAES(data['city'])}',
