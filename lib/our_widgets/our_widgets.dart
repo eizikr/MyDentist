@@ -101,7 +101,7 @@ class HomePageButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(50),
           shape: const StadiumBorder(),
-          backgroundColor: Color.fromARGB(255, 156, 224, 255),
+          backgroundColor: const Color.fromARGB(255, 156, 224, 255),
         ),
         onPressed: onClicked,
         child: FittedBox(
@@ -127,7 +127,7 @@ class BasicButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
-          backgroundColor: Colors.lightBlue[100],
+          backgroundColor: const Color.fromARGB(255, 156, 224, 255),
         ),
         onPressed: onClicked,
         child: FittedBox(
