@@ -35,7 +35,6 @@ class Patient {
   final String remarks;
   final EncryptData crypto = Get.find();
   Patient({
-
     this.id = '',
     this.creationDate = 'undefined',
     required this.firstName,
@@ -53,7 +52,7 @@ class Patient {
     this.height = 'undefined',
     this.weight = 'undefined',
     this.smoker = 'undefined',
-    this.children= 'undefined',
+    this.children = 'undefined',
     this.homePhone = 'undefined',
     this.email1 = 'undefined',
     this.email2 = 'undefined',
@@ -83,8 +82,8 @@ class Patient {
         'gender': gender,
         'height': height,
         'weight': weight,
-        'smoker': smoker,      
-        'children': children,      
+        'smoker': smoker,
+        'children': children,
         'home_phone': homePhone,
         'email1': email1,
         'email2': email2,
@@ -113,8 +112,8 @@ class Patient {
       gender: json['gender'],
       height: json['height'],
       weight: json['weight'],
-      smoker: json['smoker'],    
-      children: json['children'],    
+      smoker: json['smoker'],
+      children: json['children'],
       homePhone: json['home_phone'],
       email1: json['email1'],
       email2: json['email2'],
@@ -125,6 +124,15 @@ class Patient {
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);
+}
+
+Future<Patient> getPatientFromFirebase(String patientID) async {
+  DocumentSnapshot snapshot = await FirebaseFirestore.instance
+      .collection('patients')
+      .doc(patientID)
+      .get();
+  Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+  return Patient.fromJson(data!);
 }
 
 Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
