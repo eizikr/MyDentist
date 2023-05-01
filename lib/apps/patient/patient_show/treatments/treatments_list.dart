@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:my_dentist/apps/patient/patient_show/treatments/treatment_care.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/modules/treatments.dart';
@@ -11,12 +12,12 @@ import 'package:my_dentist/our_widgets/settings.dart';
 
 class ShowTreatmentScreen extends StatefulWidget {
   final String patientID;
-  final bool is_history;
+  final bool isHistory;
 
   const ShowTreatmentScreen({
     super.key,
     required this.patientID,
-    required this.is_history,
+    required this.isHistory,
   });
 
   @override
@@ -121,10 +122,22 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
       );
 
   Widget buildTreatment(Map<String, dynamic> meeting) => ListTile(
-        title: Text(meeting['eventName']),
-        subtitle: Text(
-          '${DateFormat("yyyy-MM-dd hh:mm").format(meeting['from'].toDate())}-${DateFormat("hh:mm").format(meeting['to'].toDate())}',
+        title: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TreatmentCare(
+                  meeting: meeting,
+                  patient_id: widget.patientID,
+                ),
+              ),
+            );
+          },
+          child: Text(meeting['eventName']),
         ),
+        subtitle: Text(
+            '${DateFormat("yyyy-MM-dd hh:mm").format(meeting['from'].toDate())}-${DateFormat("hh:mm").format(meeting['to'].toDate())}'),
         trailing: IconButton(
           onPressed: () {
             treatmentDialog(meeting);
@@ -138,16 +151,16 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-            widget.is_history ? 'Treatments History' : 'Future Treatments'),
+        title:
+            Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
         centerTitle: true,
         backgroundColor: ourSettings.backgroundColors[200],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Meetings')
-            .where('treatment.isDone', isEqualTo: widget.is_history)
             .where('treatment.patientID', isEqualTo: widget.patientID)
+            .where('treatment.isDone', isEqualTo: widget.isHistory)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {

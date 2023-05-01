@@ -8,6 +8,7 @@ import '/our_widgets/global.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
 
+
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
 
@@ -33,15 +34,13 @@ class _ReportPageState extends State<ReportPage> {
         padding: const EdgeInsets.all(8.0),
         avatar: const Icon(Icons.person),
         deleteIcon: const Icon(Icons.remove_circle),
-        onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PatientReportPage(patient: patient)));
-        }, 
-  );
-
-
-
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PatientReportPage(patient: patient)));
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -165,3 +164,4 @@ class _SalesData {
   final String doctor;
   final double sales;
 }
+
