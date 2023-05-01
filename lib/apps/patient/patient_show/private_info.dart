@@ -93,7 +93,7 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
       Text(
         'Children: ${crypto.decryptAES(data['children'])}',
         style: const TextStyle(fontSize: 20),
-      ),  
+      ),
       const SizedBox(height: 15),
       Text(
         'Address: ${crypto.decryptAES(data['address'])}/${crypto.decryptAES(data['houseNumber'])}, ${crypto.decryptAES(data['city'])}',

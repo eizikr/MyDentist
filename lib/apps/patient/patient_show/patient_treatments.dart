@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dentist/apps/home/home_page.dart';
+import 'package:my_dentist/apps/patient/patient_show/treatments/treatments_list.dart';
 import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/calendar.dart';
@@ -7,8 +8,6 @@ import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-import 'treatments/treatments_screen.dart';
 
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
@@ -29,44 +28,32 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: const Color.fromARGB(255, 156, 224, 255),
-                  ),
-                  onPressed: () => showHistory
+                BasicButton(
+                  onClicked: () => showHistory
                       ? setState(() {
                           showHistory = !showHistory;
                           title = "Future Treatments";
                         })
                       : null,
-                  child: const Text('Future Treatments'),
+                  text: 'Future Treatments',
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: const Color.fromARGB(255, 156, 224, 255),
-                  ),
-                  onPressed: () => showHistory
+                BasicButton(
+                  onClicked: () => showHistory
                       ? null
                       : setState(() {
                           showHistory = !showHistory;
                           title = "Treatments History";
                         }),
-                  child: const Text('History'),
+                  text: 'History',
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: const Color.fromARGB(255, 156, 224, 255),
-                  ),
-                  onPressed: () => Navigator.push(
+                BasicButton(
+                  onClicked: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SchedulePlanner(
@@ -74,7 +61,14 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
                       ),
                     ),
                   ),
-                  child: const Text('Create Treatment'),
+                  text: 'Create Treatment',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                BasicButton(
+                  onClicked: () {},
+                  text: 'Treatments plan',
                 ),
               ],
             ),
@@ -115,7 +109,7 @@ Widget historyTreatmentsScreen(String patientID) {
     ),
     child: ShowTreatmentScreen(
       patientID: patientID,
-      is_history: true,
+      isHistory: true,
     ),
     // Second column content
   );
@@ -145,7 +139,7 @@ Widget futureTreatmentsScreen(String patientID) {
     ),
     child: ShowTreatmentScreen(
       patientID: patientID,
-      is_history: false,
+      isHistory: false,
     ),
     // Second column content
   );

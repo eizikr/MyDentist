@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/meeting.dart';
+import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
@@ -11,7 +12,6 @@ import 'package:intl/intl.dart';
 
 class SchedulePlanner extends StatefulWidget {
   String? patient_id;
-
   SchedulePlanner({Key? key, this.patient_id}) : super(key: key);
 
   @override
@@ -19,6 +19,8 @@ class SchedulePlanner extends StatefulWidget {
 }
 
 class SchedulePlannerState extends State<SchedulePlanner> {
+  Patient? patient;
+
   DateTime _selectedDate = DateTime.now();
   // Duration _duration = const Duration(hours: 1);
   CalendarView _calendarView = CalendarView.month;
@@ -202,7 +204,7 @@ class SchedulePlannerState extends State<SchedulePlanner> {
         return AlertDialog(content:
             StatefulBuilder(// You need this, notice the parameters below:
                 builder: (BuildContext context, StateSetter setState) {
-          return treatmentForm(
+          return TreatmentForm(
             selectedDate: _selectedDate,
             patientID: widget.patient_id,
           );
@@ -448,18 +450,18 @@ void _deleteMeeting(Meeting meeting) {
   meeting.deleteMeeting();
 }
 
-class treatmentForm extends StatefulWidget {
+class TreatmentForm extends StatefulWidget {
   final DateTime? selectedDate;
   final String? patientID;
 
-  const treatmentForm(
+  const TreatmentForm(
       {super.key, required this.selectedDate, required this.patientID});
 
   @override
-  State<treatmentForm> createState() => _treatmentFormState();
+  State<TreatmentForm> createState() => _TreatmentFormState();
 }
 
-class _treatmentFormState extends State<treatmentForm> {
+class _TreatmentFormState extends State<TreatmentForm> {
   String tooth = '1';
   late final List<String> tooths;
   String? type;

@@ -102,6 +102,21 @@ class Meeting {
       errorToast('Error: $e');
     }
   }
+
+  static Stream<List<Meeting>> getPatientMeetings(String patientID) {
+    final DB db = Get.find();
+
+    return FirebaseFirestore.instance
+        .collection('Meetings')
+        .where('treatment.patientID', isEqualTo: patientID)
+        .where('treatment.isDone', isEqualTo: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              Map<String, dynamic> data = doc.data();
+              String id = doc.id;
+              return Meeting(id: id, treatment: data['treatment']);
+            }).toList());
+  }
 }
 
 Future<void> createMeeting(
@@ -131,6 +146,19 @@ Future<void> createMeeting(
     DocumentReference newMeetingRef = await collection.add(instance.toJson());
     await newMeetingRef.update({'id': newMeetingRef.id});
     successToast('Meeting was successfully set');
+  } catch (e) {
+    errorToast('Error: $e');
+  }
+}
+
+Future<void> changeMeetingStatus(
+    Map<String, dynamic> meeting, bool isDone) async {
+  try {
+    FirebaseFirestore.instance
+        .collection('Meetings')
+        .doc(meeting['id'])
+        .update({'treatment.isDone': isDone});
+    successToast(isDone ? 'Meeting is done' : 'Meeting back to progress');
   } catch (e) {
     errorToast('Error: $e');
   }

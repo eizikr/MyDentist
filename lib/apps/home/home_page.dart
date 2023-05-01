@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
@@ -114,10 +115,21 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
-              horizontal: screenWidth / 3, vertical: screenHeight / 6),
+              horizontal: screenWidth / 3, vertical: screenHeight / 9),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Icon(
+                Icons.medical_services,
+                size: 60,
+              ),
+              Text(
+                'My Dentist',
+                style: GoogleFonts.caveat(
+                  fontSize: 55,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 35),
               HomePageButton(
                 text: 'Patient Card',
