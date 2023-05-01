@@ -54,7 +54,6 @@ class _PatientReportPageState extends State<PatientReportPage> {
                               backgroundColor: ourSettings.appbarColor,
                               body: Center(
                                     child: Column (
-                                      
                                       children: [
                                       const Text('A recommendation for the cost of annual dental insurance is :',
                                             style: TextStyle(fontSize: 30, color: Colors.black)
@@ -62,7 +61,8 @@ class _PatientReportPageState extends State<PatientReportPage> {
                                         Text('${snapshot.data}\$',
                                             style: const TextStyle(fontSize: 45, color: Colors.black)
                                     )
-                                    ],                                ),
+                                    ],
+                                    ),
                               )
                       );
                     }

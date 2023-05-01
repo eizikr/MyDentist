@@ -33,13 +33,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: ourSettings.backgroundColor,
       ),
       darkTheme: ThemeData(
-        primarySwatch: ourSettings.backgroundColors,
-        scaffoldBackgroundColor: ourSettings.backgroundColor,
+        primarySwatch: ourSettings.darkbackgroundColors,
+        scaffoldBackgroundColor: ourSettings.darkbackgroundColor,
       ),
       // home: const LoadDataFromFireBase(),
       // home: const WidgetTree(),
-      // home: const HomePage(),
-    home: const ReportPage(),
+      home: const HomePage(),
     );
   }
 }
