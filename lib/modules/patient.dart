@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 
 class Patient {
   String id;
@@ -14,6 +16,11 @@ class Patient {
   final String profession;
   final String dateOfBirth;
   final String age;
+  final String gender;
+  final String height;
+  final String weight;
+  final String smoker;
+  final String children;
 
   final String homePhone;
   final String email1;
@@ -26,8 +33,9 @@ class Patient {
 
   final String status;
   final String remarks;
-
+  final EncryptData crypto = Get.find();
   Patient({
+
     this.id = '',
     this.creationDate = 'undefined',
     required this.firstName,
@@ -41,6 +49,11 @@ class Patient {
     this.profession = 'undefined',
     this.dateOfBirth = 'undefined',
     this.age = 'undefined',
+    this.gender = 'undefined',
+    this.height = 'undefined',
+    this.weight = 'undefined',
+    this.smoker = 'undefined',
+    this.children= 'undefined',
     this.homePhone = 'undefined',
     this.email1 = 'undefined',
     this.email2 = 'undefined',
@@ -67,6 +80,11 @@ class Patient {
         'profession': profession,
         'date_of_birth': dateOfBirth,
         'age': age,
+        'gender': gender,
+        'height': height,
+        'weight': weight,
+        'smoker': smoker,      
+        'children': children,      
         'home_phone': homePhone,
         'email1': email1,
         'email2': email2,
@@ -92,6 +110,11 @@ class Patient {
       profession: json['profession'],
       dateOfBirth: json['date_of_birth'],
       age: json['age'],
+      gender: json['gender'],
+      height: json['height'],
+      weight: json['weight'],
+      smoker: json['smoker'],    
+      children: json['children'],    
       homePhone: json['home_phone'],
       email1: json['email1'],
       email2: json['email2'],

@@ -41,6 +41,7 @@ class EncryptData {
   }
 
   String decryptAES(plainText) {
+    if (plainText == '') return '';
     String decrypted = encrypter.decrypt64(plainText, iv: _iv);
     return decrypted;
   }

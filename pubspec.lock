@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  chaquopy:
+    dependency: "direct main"
+    description:
+      name: chaquopy
+      sha256: b951b5a0d5c7b4a8627d3d136df7cde1ae71ade6c84cfb9b85cb6adcdb8e797e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.19"
   characters:
     dependency: transitive
     description:
@@ -281,7 +289,7 @@ packages:
     source: hosted
     version: "3.0.1"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
@@ -440,6 +448,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  sklite:
+    dependency: "direct main"
+    description:
+      name: sklite
+      sha256: "6301d4b6cc17c5603d07021cb9c4c4510e4385c371e859bce3663468a1a8ac01"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -461,6 +477,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  starflut:
+    dependency: "direct main"
+    description:
+      name: starflut
+      sha256: "43377329b7ad2b3c7c613d849086f68d6abf23967fe6df33026887af4986155b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.5"
   stream_channel:
     dependency: transitive
     description:
@@ -489,10 +513,10 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: f23067e46b781d488abf8e22e5608ca9972b49562e95f9e46cb6134e968f721b
+      sha256: "05b079cb1be26a8d5c1afe714172d2eed9178049f4a7dc773b2cbb8b053eff8d"
       url: "https://pub.dev"
     source: hosted
-    version: "21.1.37"
+    version: "21.1.41"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
@@ -501,6 +525,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "21.1.37"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      sha256: "7370875d8873e727d436b0f17b14905be5a268f640602eb674521855c54607b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.1.41"
   term_glyph:
     dependency: transitive
     description:
@@ -517,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  tflite:
+    dependency: "direct main"
+    description:
+      name: tflite
+      sha256: "661f8942a0e8ca05fedf554cc6f9cc95f526d0e4588d1665e0eb4d29e25e69b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   timezone:
     dependency: transitive
     description:

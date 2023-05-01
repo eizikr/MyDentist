@@ -48,10 +48,16 @@ Widget privateInfoScreen(Map<String, dynamic> data) {
                 ])
               : null),
       const SizedBox(height: 15),
-      Text(
-        'Email1: ${crypto.decryptAES(data['email1'])}',
-        style: const TextStyle(fontSize: 20),
-      ),
+      Container(
+          child: data['email1'] != ''
+              ? Column(children: [
+                  const SizedBox(height: 15),
+                  Text(
+                    'Email1: ${crypto.decryptAES(data['email1'])}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ])
+              : null),
       const SizedBox(height: 15),
       Container(
           child: data['email2'] != ''
