@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
+enum PasswordStrengh {
+  low,
+  fair,
+  good,
+  excellent,
+}
+
 class ourSettings {
   static const Color backgroundColor = Color(0xFFB3E5FC);
   static const Color appbarColor = Color(0xFF81D4FA);
+  static const PasswordStrengh passwordStrengh = PasswordStrengh.low;
 
   static const MaterialColor backgroundColors = MaterialColor(
     0xFF29B6F6,

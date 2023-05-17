@@ -18,16 +18,16 @@ class Auth {
     );
   }
 
-  // Future<void> signUp({
-  //   // Create a user with email and password
-  //   required String email,
-  //   required String password,
-  // }) async {
-  //   await _firebaseAuth.createUserWithEmailAndPassword(
-  //     email: email.trim(),
-  //     password: password.trim(),
-  //   );
-  // }
+  Future<UserCredential> signUp({
+    // Create a user with email and password
+    required String email,
+    required String password,
+  }) async {
+    return await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email.trim(),
+      password: password.trim(),
+    );
+  }
 
   Future<void> signOut() async {
     // Sign out from your user

@@ -138,3 +138,59 @@ class BasicButton extends StatelessWidget {
         ),
       );
 }
+
+String capitalizeFirstCharacter(String input) {
+  if (input.isEmpty) {
+    return input;
+  }
+  return input[0].toUpperCase() + input.substring(1);
+}
+
+String isPasswordValid(String password) {
+  late bool isValid;
+
+  bool hasCharacter(String input) {
+    return input.isNotEmpty && input.contains(RegExp(r'[a-zA-Z]'));
+  }
+
+  bool hasLowerAndUpperCase(String input, {bool hasSpacial = true}) {
+    bool hasLower = false;
+    bool hasUpper = false;
+
+    for (int i = 0; i < input.length; i++) {
+      if (input[i].toUpperCase() == input[i]) {
+        hasUpper = true;
+      }
+      if (input[i].toLowerCase() == input[i]) {
+        hasLower = true;
+      }
+      if (hasSpacial == false &&
+          input[i].contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+        hasLower = true;
+      }
+    }
+    return hasLower && hasUpper && hasSpacial;
+  }
+
+  switch (ourSettings.passwordStrengh) {
+    case PasswordStrengh.low:
+      isValid = password.length >= 6;
+      return !isValid ? "Minimum 6 characters long" : "valid";
+    case PasswordStrengh.fair:
+      isValid = password.length >= 8 && hasCharacter(password);
+      return !isValid ? "Minimum 8 characters long and 1 letter" : "valid";
+    case PasswordStrengh.good:
+      isValid = password.length >= 8 && hasLowerAndUpperCase(password);
+
+      return !isValid
+          ? "Minimum 8 characters long ,1 lowercase, 1 upercase"
+          : "valid";
+    case PasswordStrengh.excellent:
+      isValid = password.length >= 8 && hasCharacter(password);
+      return !isValid
+          ? "Minimum 8 characters long ,1 lowercase, 1 upercase, 1 spacial"
+          : "valid";
+    default:
+      return "valid";
+  }
+}
