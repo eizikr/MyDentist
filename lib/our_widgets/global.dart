@@ -7,6 +7,7 @@ class DB {
   late final CollectionReference treatments;
   late final CollectionReference treatmentTypes;
   late final CollectionReference meetings;
+  late final CollectionReference doctors;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
@@ -14,6 +15,7 @@ class DB {
     treatments = FirebaseFirestore.instance.collection('Treatments');
     treatmentTypes = FirebaseFirestore.instance.collection('Treatment Types');
     meetings = FirebaseFirestore.instance.collection('Meetings');
+    doctors = FirebaseFirestore.instance.collection('Doctors');
   }
 
   static Stream<List<String>> treatmentNames() => FirebaseFirestore.instance

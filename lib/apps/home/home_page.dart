@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:my_dentist/apps/settings_pages/add_doctor.dart';
 import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ enum MenuItem {
   settings,
   editTreatmentType,
   editAssistents,
+  addDoctorUser,
   logout,
 }
 
@@ -74,6 +76,13 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) => const EditAssistentPage(),
                   ),
                 );
+              } else if (value == MenuItem.addDoctorUser) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateUserPage(),
+                  ),
+                );
               } else if (value == MenuItem.logout) {
                 signOut();
               }
@@ -98,6 +107,13 @@ class _HomePageState extends State<HomePage> {
                 child: ListTile(
                   leading: Icon(Icons.add_box_outlined),
                   title: Text('Edit Assistants'),
+                ),
+              ),
+              const PopupMenuItem(
+                value: MenuItem.addDoctorUser,
+                child: ListTile(
+                  leading: Icon(Icons.add_box_outlined),
+                  title: Text('Create Doctor User'),
                 ),
               ),
               const PopupMenuItem(
