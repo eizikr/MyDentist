@@ -150,3 +150,16 @@ Future<void> createMeeting(
     errorToast('Error: $e');
   }
 }
+
+Future<void> changeMeetingStatus(
+    Map<String, dynamic> meeting, bool isDone) async {
+  try {
+    FirebaseFirestore.instance
+        .collection('Meetings')
+        .doc(meeting['id'])
+        .update({'treatment.isDone': isDone});
+    successToast(isDone ? 'Meeting is done' : 'Meeting back to progress');
+  } catch (e) {
+    errorToast('Error: $e');
+  }
+}

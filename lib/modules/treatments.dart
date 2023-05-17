@@ -21,6 +21,7 @@ class Treatment {
   late final bool isDone;
   late final String remarks;
   late final String assistent;
+  late final double cost;
 
   Treatment({
     required this.toothNumber,
@@ -30,6 +31,7 @@ class Treatment {
     required this.assistent,
     this.isDone = false,
     this.remarks = 'No remarks',
+    this.cost = 0.0,
   });
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +42,7 @@ class Treatment {
         'assistent': assistent,
         'isDone': isDone,
         'remarks': remarks,
+        'cost' : cost,
       };
 
   static Treatment fromJson(Map<String, dynamic> json) => Treatment(
@@ -50,6 +53,7 @@ class Treatment {
         assistent: json['assistent'],
         isDone: json['isDone'],
         remarks: json['remarks'],
+        cost: json['cost'],
       );
 
   static Future<List<Treatment>> getPatientTreatments(String id) async {
@@ -72,6 +76,7 @@ class Treatment {
             assistent: data['assistent'],
             isDone: data['isDone'],
             remarks: data['remarks'],
+            cost: data['cost'],
           ));
         }
       },
