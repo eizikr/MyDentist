@@ -49,7 +49,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
           'Edit Treatment Types',
         ),
         centerTitle: true,
-        backgroundColor: ourSettings.backgroundColor,
+        backgroundColor: OurSettings.backgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

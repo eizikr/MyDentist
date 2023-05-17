@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 class EditAssistentPage extends StatefulWidget {
   const EditAssistentPage({super.key});
@@ -12,39 +13,18 @@ class EditAssistentPage extends StatefulWidget {
 }
 
 class _EditAssistentPageState extends State<EditAssistentPage> {
-  final nameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final idController = TextEditingController();
   final salaryController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Stream<List<Assistant>> readAssistants() => FirebaseFirestore.instance
-        .collection('Assistants')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Assistant.fromJson(doc.data()))
-            .toList());
-
-    Widget buildAssistent(Assistant assistentInstance) => ListTile(
-          leading: IconButton(
-            onPressed: () async {
-              nameController.text = assistentInstance.name;
-              await addAssistantDialog(context,
-                  title: "Edit '${assistentInstance.name}' Salary",
-                  isEdit: true);
-              nameController.clear();
-            },
-            icon: const Icon(Icons.edit),
-          ),
-          title: Text(
-            "${assistentInstance.name}  -  ${assistentInstance.salary} ₪ \n",
-            style: const TextStyle(color: Colors.black),
-          ),
-        );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Edit Assistant',
+          'Assistants settings',
         ),
         centerTitle: true,
         backgroundColor: Colors.lightBlue[100],
@@ -62,29 +42,80 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(25),
-        child: StreamBuilder<List<Assistant>>(
-          stream: readAssistants(),
+        child: StreamBuilder<QuerySnapshot>(
+          stream:
+              FirebaseFirestore.instance.collection('Assistants').snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('somthing went wrong ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final assistents = snapshot.data!;
-              return ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  return buildAssistent(assistents[index]);
-                },
-                itemCount: assistents.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                addAutomaticKeepAlives: true,
+            if (!snapshot.hasData) {
+              return const LoadingPage(
+                loadingText: "Loading assistants list...",
               );
-            } else {
-              return const LoadingPage(loadingText: "Loading assistants...");
+            } else if (snapshot.hasError) {
+              return Text('somthing went wrong ${snapshot.error}');
             }
+            final assistants = snapshot.data!.docs;
+
+            return ListView.builder(
+              itemCount: assistants.length,
+              itemBuilder: (context, index) {
+                final assistant =
+                    assistants[index].data() as Map<String, dynamic>;
+
+                return assistentCard(Assistant.fromJson(assistant));
+              },
+            );
           },
         ),
       ),
     );
+  }
+
+  Widget assistentCard(Assistant assistant) {
+    return Center(
+      child: Card(
+        color: OurSettings.backgroundColors[50],
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.manage_accounts_sharp),
+              title: Text('${assistant.firstName} ${assistant.lastName}'),
+              subtitle: Text('ID:${assistant.id}\nSalary:${assistant.salary}'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('EDIT'),
+                  onPressed: () async {
+                    idController.text = assistant.id;
+                    await addAssistantDialog(context,
+                        isEdit: true, title: 'Edit Details');
+                  },
+                ),
+                TextButton(
+                  child: const Text('DELETE'),
+                  onPressed: () {
+                    confirmationDialog(
+                      context,
+                      () {
+                        deleteAssistant(assistant.id);
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool isIdValid() {
+    return idController.value.text.length == 9;
   }
 
   Future<void> addAssistantDialog(context,
@@ -93,22 +124,64 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text(title),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  readOnly: isEdit ? true : false,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  controller: nameController,
-                ),
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Salary'),
-                  controller: salaryController,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                ),
-              ],
+          content: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'First name'),
+                    controller: firstNameController,
+                    validator: (value) {
+                      return value!.isNotEmpty ? null : "Enter first name";
+                    },
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    keyboardType: TextInputType.name,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Last name'),
+                    controller: lastNameController,
+                    validator: (value) {
+                      return value!.isNotEmpty ? null : "Enter Last name";
+                    },
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    keyboardType: TextInputType.name,
+                  ),
+                  TextFormField(
+                    readOnly: isEdit ? true : false,
+                    decoration: const InputDecoration(labelText: 'ID'),
+                    controller: idController,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                          9), // Limit the input length programmatically
+                    ],
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isNotEmpty) {
+                        return isIdValid() ? null : "ID must be 9 character";
+                      } else {
+                        return "Enter id";
+                      }
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Salary'),
+                    controller: salaryController,
+                    validator: (value) {
+                      return value!.isNotEmpty ? null : "Enter salary";
+                    },
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                          6), // Limit the input length programmatically
+                    ],
+                    keyboardType: TextInputType.number,
+                  ),
+                ],
+              ),
             ),
           ),
           actions: [
@@ -121,10 +194,15 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
                 ),
                 isEdit
                     ? TextButton(
-                        child: const Text('delete'),
+                        child: const Text('Delete'),
                         onPressed: () => {
-                          deleteAssistant(nameController.text),
-                          Navigator.of(context).pop()
+                          confirmationDialog(
+                            context,
+                            () {
+                              deleteAssistant(idController.text);
+                              Navigator.of(context).pop();
+                            },
+                          )
                         },
                       )
                     : Container(),
@@ -140,19 +218,27 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
 
   void submitNewAssistant(BuildContext context) {
     bool isEntyFields = false;
-    if (nameController.text.isEmpty) {
-      errorToast('Please enter name');
+    if (firstNameController.text.isEmpty) {
+      errorToast('Please enter first name');
+    } else if (lastNameController.text.isEmpty) {
+      errorToast('Please enter last name');
+    } else if (idController.text.isEmpty) {
+      errorToast('Please enter id');
     } else if (salaryController.text.isEmpty) {
       errorToast('Please enter salary');
     } else {
       createAssistant(
-        nameController.text,
+        firstNameController.text,
+        lastNameController.text,
+        idController.text,
         double.parse(salaryController.text),
       );
       isEntyFields = true;
     }
     if (isEntyFields) {
-      nameController.clear();
+      firstNameController.clear();
+      lastNameController.clear();
+      idController.clear();
       salaryController.clear();
       Navigator.of(context).pop();
     }

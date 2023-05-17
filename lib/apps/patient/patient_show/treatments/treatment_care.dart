@@ -55,7 +55,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
             child: const Text('Treatment'),
           ),
           centerTitle: true,
-          backgroundColor: ourSettings.appbarColor,
+          backgroundColor: OurSettings.appbarColor,
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.exit_to_app),

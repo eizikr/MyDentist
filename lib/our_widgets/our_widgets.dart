@@ -172,7 +172,7 @@ String isPasswordValid(String password) {
     return hasLower && hasUpper && hasSpacial;
   }
 
-  switch (ourSettings.passwordStrengh) {
+  switch (OurSettings.passwordStrengh) {
     case PasswordStrengh.low:
       isValid = password.length >= 6;
       return !isValid ? "Minimum 6 characters long" : "valid";
@@ -193,4 +193,40 @@ String isPasswordValid(String password) {
     default:
       return "valid";
   }
+}
+
+void confirmationDialog(BuildContext context, Function func) async {
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Are you sure?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    'No',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => func(),
+                  child: const Text(
+                    'Yes',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

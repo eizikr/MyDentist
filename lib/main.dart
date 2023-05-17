@@ -21,7 +21,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +28,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       theme: ThemeData(
-        primarySwatch: ourSettings.backgroundColors,
-        scaffoldBackgroundColor: ourSettings.backgroundColor,
+        primarySwatch: OurSettings.backgroundColors,
+        scaffoldBackgroundColor: OurSettings.backgroundColor,
       ),
       darkTheme: ThemeData(
-        primarySwatch: ourSettings.backgroundColors,
-        scaffoldBackgroundColor: ourSettings.backgroundColor,
+        primarySwatch: OurSettings.backgroundColors,
+        scaffoldBackgroundColor: OurSettings.backgroundColor,
       ),
       // home: const LoadDataFromFireBase(),
-      // home: const WidgetTree(),
+      home: const WidgetTree(),
       // home: const HomePage(),
-    home: const ReportPage(),
+      // home: const ReportPage(),
     );
   }
 }

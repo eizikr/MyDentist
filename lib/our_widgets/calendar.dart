@@ -58,7 +58,7 @@ class SchedulePlannerState extends State<SchedulePlanner> {
           child: const Text('Scheduler'),
         ),
         centerTitle: true,
-        backgroundColor: ourSettings.appbarColor,
+        backgroundColor: OurSettings.appbarColor,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.exit_to_app),
@@ -173,8 +173,13 @@ class SchedulePlannerState extends State<SchedulePlanner> {
                               icon: const Icon(Icons.delete),
                               color: Colors.white,
                               onPressed: () {
-                                _showAppointmentDetails(
-                                    context, _meetingDetails[index]);
+                                confirmationDialog(
+                                  context,
+                                  () {
+                                    _deleteMeeting(_meetingDetails[index]);
+                                    Navigator.of(context).pop();
+                                  },
+                                );
                               },
                               tooltip: 'Delete meeting',
                             ),
@@ -227,45 +232,6 @@ class SchedulePlannerState extends State<SchedulePlanner> {
                 );
               },
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showAppointmentDetails(BuildContext context, Meeting meeting) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Are you sure?"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text(
-                      'No',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _deleteMeeting(meeting);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Yes',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
         );
       },

@@ -154,7 +154,7 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
         title:
             Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
         centerTitle: true,
-        backgroundColor: ourSettings.backgroundColors[200],
+        backgroundColor: OurSettings.backgroundColors[200],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
