@@ -95,6 +95,7 @@ class Patient {
         'status': status,
         'remarks': remarks
       };
+
   static Patient fromJson(Map<String, dynamic> json) => Patient(
       id: json['id'],
       creationDate: json['creationDate'],
@@ -124,6 +125,20 @@ class Patient {
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);
+
+  // static List<String> getDetailsList(Patient patient) {
+  //   List<String> list = [];
+  //   list.add('First name: ${patient.firstName}');
+  //   list.add('Last name: ${patient.lastName}');
+  //   list.add('ID: ${patient.id}');
+  //   list.add('First name: ${patient.firstName}');
+  //   list.add('First name: ${patient.firstName}');
+  //   list.add('First name: ${patient.firstName}');
+  //   list.add('First name: ${patient.firstName}');
+  //   list.add('First name: ${patient.firstName}');
+
+  //   return list;
+  // }
 }
 
 Future<Patient> getPatientFromFirebase(String patientID) async {
