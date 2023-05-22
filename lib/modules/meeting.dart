@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/modules/docrots.dart';
+import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -55,6 +56,7 @@ class FirebaseMeetingDataSource extends CalendarDataSource {
 }
 
 class Meeting {
+  String? summary;
   String? id;
   String? eventName;
   String? eventType;
@@ -66,6 +68,7 @@ class Meeting {
   Map<String, dynamic>? doctor;
 
   Meeting({
+    this.summary,
     this.eventName,
     this.eventType,
     this.from,
@@ -78,6 +81,7 @@ class Meeting {
   });
 
   Map<String, dynamic> toJson() => {
+        'summary': summary,
         'eventName': eventName,
         'eventType': eventType,
         'from': from,
@@ -89,6 +93,7 @@ class Meeting {
       };
 
   static Meeting fromJson(Map<String, dynamic> json) => Meeting(
+        summary: json['summary'],
         eventName: json['eventName'],
         eventType: json['eventType'],
         from: (json['from'] as Timestamp).toDate(),
@@ -103,6 +108,10 @@ class Meeting {
   Future<void> deleteMeeting() async {
     try {
       await FirebaseFirestore.instance.collection('Meetings').doc(id).delete();
+      if (treatment != null) {
+        updatePatientPayment(
+            treatment!['patientID'], -(treatment!['treatmentType']['price']));
+      }
       successToast('Meeting deleted successfully');
     } catch (e) {
       errorToast('Error: $e');
@@ -134,6 +143,7 @@ Future<void> createMeeting(
   Doctor? doctor,
 }) async {
   Meeting instance = Meeting(
+    summary: '',
     eventName: eventName,
     eventType: treatment == null ? 'Meeting' : 'Treatment',
     from: from,
@@ -148,12 +158,30 @@ Future<void> createMeeting(
     doctor: await getCurrentDoctor(),
   );
 
+  if (treatment != null) {
+    updatePatientPayment(treatment.patientID, treatment.treatmentType['price']);
+  }
+
   try {
     CollectionReference collection =
         FirebaseFirestore.instance.collection('Meetings');
     DocumentReference newMeetingRef = await collection.add(instance.toJson());
     await newMeetingRef.update({'id': newMeetingRef.id});
     successToast('Meeting was successfully set');
+  } catch (e) {
+    errorToast('Error: $e');
+  }
+}
+
+Future<void> updateSummary(String meetingID, String summary) async {
+  try {
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection('Meetings');
+
+    DocumentReference newMeetingRef = collection.doc(meetingID);
+
+    await newMeetingRef.update({'summary': summary});
+    successToast('Meeting summary successfully set');
   } catch (e) {
     errorToast('Error: $e');
   }

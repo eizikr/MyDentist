@@ -4,6 +4,7 @@ import 'package:my_dentist/our_widgets/global.dart';
 
 class Patient {
   String id;
+  final double paymentRequired;
   final String creationDate;
   final String firstName;
   final String lastName;
@@ -35,6 +36,7 @@ class Patient {
   final String remarks;
   final EncryptData crypto = Get.find();
   Patient({
+    this.paymentRequired = 0,
     this.id = '',
     this.creationDate = 'undefined',
     required this.firstName,
@@ -66,6 +68,7 @@ class Patient {
   });
 
   Map<String, dynamic> toJson() => {
+        'paymentRequired': paymentRequired,
         'id': id,
         'creationDate': creationDate,
         'first_name': firstName,
@@ -97,6 +100,7 @@ class Patient {
       };
 
   static Patient fromJson(Map<String, dynamic> json) => Patient(
+      paymentRequired: json['paymentRequired'],
       id: json['id'],
       creationDate: json['creationDate'],
       firstName: json['first_name'],
@@ -125,20 +129,6 @@ class Patient {
       treatingDoctor: json['treating_docrot'],
       status: json['status'],
       remarks: json['remarks']);
-
-  // static List<String> getDetailsList(Patient patient) {
-  //   List<String> list = [];
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('Last name: ${patient.lastName}');
-  //   list.add('ID: ${patient.id}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-
-  //   return list;
-  // }
 }
 
 Future<Patient> getPatientFromFirebase(String patientID) async {
@@ -166,4 +156,20 @@ Future<bool> checkPatientExists(patientID) async {
       });
 
   return patientExists;
+}
+
+Future<void> updatePatientPayment(patientID, double amount) async {
+  try {
+    CollectionReference ref = FirebaseFirestore.instance.collection('Patients');
+    DocumentReference patientRef = ref.doc(patientID);
+    DocumentSnapshot snapshot = await patientRef.get();
+    if (snapshot.exists) {
+      double currentAmount = snapshot.get('paymentRequired');
+      double updatedAmount =
+          currentAmount + amount < 0 ? 0 : currentAmount + amount;
+      await patientRef.update({'paymentRequired': (updatedAmount)});
+    }
+  } catch (e) {
+    print('Document does not exist.');
+  }
 }

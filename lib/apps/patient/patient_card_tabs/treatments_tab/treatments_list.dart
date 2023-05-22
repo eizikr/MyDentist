@@ -24,7 +24,6 @@ class ShowTreatmentScreen extends StatefulWidget {
 
 class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
   final DB db = Get.find();
-  late final Patient patient;
 
   @override
   void initState() {
@@ -121,7 +120,7 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
               MaterialPageRoute(
                 builder: (context) => TreatmentCare(
                   meeting: meeting,
-                  patient_id: widget.patientID,
+                  patientId: widget.patientID,
                 ),
               ),
             );
@@ -141,34 +140,41 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title:
-            Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
-        centerTitle: true,
-        backgroundColor: OurSettings.backgroundColors[200],
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Meetings')
-            .where('treatment.patientID', isEqualTo: widget.patientID)
-            .where('treatment.isDone', isEqualTo: widget.isHistory)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final meetings = snapshot.data!.docs;
-          return ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: meetings.length,
-            itemBuilder: (context, index) {
-              final meeting = meetings[index].data() as Map<String, dynamic>;
-              return buildTreatment(meeting);
-            },
-          );
-        },
-      ),
-    );
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+              widget.isHistory ? 'Treatments History' : 'Future Treatments'),
+          centerTitle: true,
+          backgroundColor: OurSettings.backgroundColors[200],
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('Meetings')
+              .where('treatment.patientID', isEqualTo: widget.patientID)
+              .where('treatment.isDone', isEqualTo: widget.isHistory)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final meetings = snapshot.data!.docs;
+            return ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: meetings.length,
+              itemBuilder: (context, index) {
+                final meeting = meetings[index].data() as Map<String, dynamic>;
+                return buildTreatment(meeting);
+              },
+            );
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Text(
+            "Footer!",
+            textAlign: TextAlign.center,
+          ),
+          color: OurSettings.backgroundColors[200],
+          height: 50,
+        ));
   }
 }

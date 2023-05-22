@@ -12,6 +12,7 @@ class DB {
   late final CollectionReference doctors;
   late final List<String> treatmentTypeNames;
   late final List<String> assistentNames;
+  late final Map<String, Map<String, dynamic>> treatmentTypesDictionary;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
@@ -20,6 +21,23 @@ class DB {
     treatmentTypes = FirebaseFirestore.instance.collection('Treatment Types');
     meetings = FirebaseFirestore.instance.collection('Meetings');
     doctors = FirebaseFirestore.instance.collection('Doctors');
+    treatmentTypesDictionary = {};
+  }
+
+  Future<void> createTreatmentDictionary() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('Treatment Types').get();
+
+      for (DocumentSnapshot doc in snapshot.docs) {
+        String name = doc.get('name');
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        treatmentTypesDictionary[name] = data;
+      }
+    } catch (e) {
+      print('Global error! $e');
+    }
   }
 
   Future<void> setAssistantNames() async {

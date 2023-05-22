@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/auth.dart';
-import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
@@ -191,17 +190,19 @@ class _TreatmentFormState extends State<TreatmentForm> {
 
   void submit() {
     if (_formKey.currentState!.validate()) {
+      Map<String, dynamic> treatmentType = db.treatmentTypesDictionary[type]!;
       Treatment instance = Treatment(
-          toothNumber: tooth,
-          type: type!,
-          patientID: widget.patientID!,
-          treatingDoctor: getCurrentUserDisplayName(),
-          assistent: assistent!,
-          remarks: remarksContrtoller.text);
-      // createTreatment(instance);
+        toothNumber: tooth,
+        treatmentType: treatmentType,
+        patientID: widget.patientID!,
+        treatingDoctor: getCurrentUserDisplayName(),
+        assistent: assistent!,
+        remarks: remarksContrtoller.text,
+        cost: treatmentType['price'],
+        originalCost: treatmentType['price'],
+      );
       addTreatmentMeeting(_from, _to, type!, instance);
       Navigator.of(context).pop();
-      successToast('Treatment booked');
     }
   }
 
