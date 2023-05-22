@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_dentist/apps/home/home_page.dart';
-import 'package:my_dentist/apps/patient/patient_show/treatments/treatments_list.dart';
-import 'package:my_dentist/modules/assistant.dart';
-import 'package:my_dentist/modules/treatments.dart';
-import 'package:my_dentist/our_widgets/calendar.dart';
-import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatments_list.dart';
+import 'package:my_dentist/apps/planner/schedule_planner.dart';
+import 'package:my_dentist/our_widgets/buttons.dart';
+
 import 'package:my_dentist/our_widgets/our_widgets.dart';
-import 'package:get/get.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
@@ -57,7 +53,7 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => SchedulePlanner(
-                        patient_id: widget.patientID,
+                        patientId: widget.patientID,
                       ),
                     ),
                   ),

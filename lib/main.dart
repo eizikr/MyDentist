@@ -8,14 +8,20 @@ import 'widget_tree.dart';
 import 'our_widgets/global.dart';
 import 'package:get/get.dart';
 
+void setGlobalData() {
+  Get.put(DB());
+  Get.put(EncryptData());
+  final DB db = Get.find();
+  db.setTreatmentTypeNames();
+  db.setAssistantNames();
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(DB());
-  Get.put(EncryptData());
-
+  setGlobalData();
   runApp(const MyApp());
 }
 

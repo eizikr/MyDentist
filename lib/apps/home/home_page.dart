@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
-import 'package:my_dentist/apps/settings_pages/add_doctor.dart';
+import 'package:my_dentist/apps/settings/add_doctor.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_dentist/apps/planner/schedule_planner.dart';
 
-import 'package:my_dentist/apps/settings_pages/edit_assistants.dart';
+import 'package:my_dentist/apps/settings/edit_assistants.dart';
 import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_dentist/our_widgets/calendar.dart';
+import 'package:my_dentist/our_widgets/buttons.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
-import 'package:my_dentist/apps/settings_pages/edit_treatment_types.dart';
+import 'package:my_dentist/apps/settings/edit_treatment_types.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 import 'package:my_dentist/apps/reports/report.dart';
 

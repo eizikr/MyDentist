@@ -93,3 +93,17 @@ Future deleteDoctor(String email) async {
     },
   );
 }
+
+Future<Map<String, dynamic>?> getCurrentDoctor() async {
+  DocumentSnapshot snapshot = await FirebaseFirestore.instance
+      .collection('Doctors')
+      .doc(getCurrentUserId())
+      .get();
+
+  if (snapshot.exists) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    print(data['firstName']);
+    return data;
+  }
+  return null;
+}

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_dentist/modules/assistant.dart';
+import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
@@ -19,6 +20,13 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
   final salaryController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  void clearControllers() {
+    firstNameController.clear();
+    lastNameController.clear();
+    idController.clear();
+    salaryController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +40,8 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: (() async {
+              clearControllers();
+
               await addAssistantDialog(context,
                   title: 'Enter New Assistant Details');
             }),
@@ -88,6 +98,7 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
                 TextButton(
                   child: const Text('EDIT'),
                   onPressed: () async {
+                    clearControllers();
                     idController.text = assistant.id;
                     await addAssistantDialog(context,
                         isEdit: true, title: 'Edit Details');
@@ -123,6 +134,7 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
       showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
+          scrollable: true,
           title: Text(title),
           content: Form(
             key: _formKey,
@@ -207,7 +219,7 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
                       )
                     : Container(),
                 TextButton(
-                  onPressed: () async => submitNewAssistant(context),
+                  onPressed: () async => submit(),
                   child: const Text('Save'),
                 ),
               ],
@@ -216,31 +228,16 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
         ),
       );
 
-  void submitNewAssistant(BuildContext context) {
-    bool isEntyFields = false;
-    if (firstNameController.text.isEmpty) {
-      errorToast('Please enter first name');
-    } else if (lastNameController.text.isEmpty) {
-      errorToast('Please enter last name');
-    } else if (idController.text.isEmpty) {
-      errorToast('Please enter id');
-    } else if (salaryController.text.isEmpty) {
-      errorToast('Please enter salary');
-    } else {
+  void submit() {
+    if (_formKey.currentState!.validate()) {
       createAssistant(
         firstNameController.text,
         lastNameController.text,
         idController.text,
         double.parse(salaryController.text),
       );
-      isEntyFields = true;
-    }
-    if (isEntyFields) {
-      firstNameController.clear();
-      lastNameController.clear();
-      idController.clear();
-      salaryController.clear();
       Navigator.of(context).pop();
+      successToast('Treatment booked');
     }
   }
 }

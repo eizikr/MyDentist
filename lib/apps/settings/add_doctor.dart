@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/modules/docrots.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
@@ -79,8 +80,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         decoration:
                             const InputDecoration(hintText: "First name"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              20), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(20),
                         ],
                         keyboardType: TextInputType.name,
                       ),
@@ -92,8 +92,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         decoration:
                             const InputDecoration(hintText: "Last name"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              20), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(20),
                         ],
                         keyboardType: TextInputType.name,
                       ),
@@ -105,8 +104,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         },
                         decoration: const InputDecoration(hintText: "Email"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              20), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(20),
                         ],
                         keyboardType: TextInputType.emailAddress,
                       ),
@@ -125,8 +123,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         },
                         decoration: const InputDecoration(hintText: "Password"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              20), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(20),
                         ],
                       ),
                       TextFormField(
@@ -143,8 +140,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         decoration:
                             const InputDecoration(hintText: "Verify password"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              20), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(20),
                         ],
                       ),
                       TextFormField(
@@ -154,8 +150,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         },
                         decoration: const InputDecoration(hintText: "Salary"),
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              6), // Limit the input length programmatically
+                          LengthLimitingTextInputFormatter(6),
                         ],
                         keyboardType: TextInputType.number,
                       ),
@@ -229,7 +224,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           'Doctor users settings',
         ),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue[100],
+        backgroundColor: OurSettings.backgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -301,7 +296,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   child: const Text('DELETE'),
                   onPressed: () {
                     confirmationDialog(context, () {
-                      deleteDoctor(email!);
+                      deleteDoctor(email);
                       Navigator.of(context).pop();
                     });
                   },
