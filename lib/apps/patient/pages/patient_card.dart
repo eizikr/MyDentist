@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_dentist/apps/patient/patient_show/comunication_info.dart';
-import 'package:my_dentist/apps/patient/patient_show/patient_treatments.dart';
-import 'package:my_dentist/apps/patient/patient_show/private_info.dart';
-import 'package:my_dentist/apps/patient/patient_show/status_info.dart';
-import 'package:my_dentist/apps/patient/patient_show/edit_patient.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/comunication_info.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/manage_treatments.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/private_info.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/status_info.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/edit_patient.dart';
 import 'package:side_navigation/side_navigation.dart';
 
 class PatientCard extends StatefulWidget {

@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:my_dentist/apps/patient/patient_show/treatments/treatment_care.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatment_care.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
-import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
-import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class ShowTreatmentScreen extends StatefulWidget {
@@ -27,17 +25,11 @@ class ShowTreatmentScreen extends StatefulWidget {
 class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
   final DB db = Get.find();
   late final Patient patient;
-  void initState() {
-    CollectionReference patients = db.patients;
 
+  @override
+  void initState() {
     super.initState();
   }
-
-  Stream<List<Meeting>> readMeetings() => FirebaseFirestore.instance
-      .collection('Meetings')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => Meeting.fromJson(doc.data())).toList());
 
   Future<void> treatmentDialog(Map<String, dynamic> meetingInstance) =>
       showDialog<void>(
@@ -154,7 +146,7 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
         title:
             Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
         centerTitle: true,
-        backgroundColor: ourSettings.backgroundColors[200],
+        backgroundColor: OurSettings.backgroundColors[200],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

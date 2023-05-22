@@ -7,7 +7,7 @@ enum PasswordStrengh {
   excellent,
 }
 
-class ourSettings {
+class OurSettings {
   static const Color backgroundColor = Color(0xFFB3E5FC);
   static const Color appbarColor = Color(0xFF81D4FA);
   static const PasswordStrengh passwordStrengh = PasswordStrengh.low;

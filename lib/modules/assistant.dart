@@ -5,11 +5,15 @@ import 'package:my_dentist/our_widgets/our_widgets.dart';
 import '../our_widgets/global.dart';
 
 class Assistant {
-  late final String name;
+  late final String firstName;
+  late final String lastName;
+  late final String id;
   late final double salary;
 
   Assistant({
-    required this.name,
+    required this.firstName,
+    required this.lastName,
+    required this.id,
     required this.salary,
   });
 
@@ -22,20 +26,26 @@ class Assistant {
     QuerySnapshot snapshot = await collectionRef.get();
 
     for (var doc in snapshot.docs) {
-      String name = doc.get('name');
-      list.add(name);
+      String firstName = doc.get('firstName');
+      String lastName = doc.get('lastName');
+
+      list.add('$firstName $lastName');
     }
 
     return list;
   }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
+        'firstName': firstName,
+        'lastName': lastName,
+        'id': id,
         'salary': salary,
       };
 
   static Assistant fromJson(Map<String, dynamic> json) => Assistant(
-        name: json['name'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        id: json['id'],
         salary: json['salary'],
       );
 
@@ -49,7 +59,14 @@ class Assistant {
         for (var docSnapshot in snapshot.docs) {
           Map<String, dynamic> data =
               docSnapshot.data() as Map<String, dynamic>;
-          list.add(Assistant(name: data["name"], salary: data["salary"]));
+          list.add(
+            Assistant(
+              firstName: data["firstName"],
+              lastName: data["lastName"],
+              id: data["id"],
+              salary: data["salary"],
+            ),
+          );
         }
       },
     );
@@ -57,12 +74,22 @@ class Assistant {
   }
 }
 
-Future createAssistant(String name, double salary) async {
-  Assistant instance = Assistant(name: name, salary: salary);
+Future createAssistant(
+  String firstName,
+  String lastName,
+  String id,
+  double salary,
+) async {
+  Assistant instance = Assistant(
+    firstName: capitalizeFirstCharacter(firstName),
+    lastName: capitalizeFirstCharacter(lastName),
+    id: id,
+    salary: salary,
+  );
   final DB db = Get.find();
   final assistentDocuments = db.assistants;
 
-  var query = assistentDocuments.where('name', isEqualTo: name);
+  var query = assistentDocuments.where('id', isEqualTo: id);
 
   query.get().then(
     (snapshot) {
@@ -75,11 +102,11 @@ Future createAssistant(String name, double salary) async {
   );
 }
 
-Future deleteAssistant(String name) async {
+Future deleteAssistant(String id) async {
   final DB db = Get.find();
   final assistentDocuments = db.assistants;
 
-  var query = assistentDocuments.where('name', isEqualTo: name);
+  var query = assistentDocuments.where('id', isEqualTo: id);
 
   query.get().then(
     (snapshot) {

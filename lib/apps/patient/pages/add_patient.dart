@@ -1,4 +1,5 @@
 import 'package:age_calculator/age_calculator.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
@@ -49,8 +50,8 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
   final _genderController = TextEditingController();
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
-  final _smokerController = TextEditingController();  
-  final _childrenController = TextEditingController();  
+  final _smokerController = TextEditingController();
+  final _childrenController = TextEditingController();
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _postalCodeController = TextEditingController();
@@ -73,8 +74,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
 
   final List<String> genderoptions = ['male', 'female'];
   final List<String> smokeroptions = ['yes', 'no'];
-  
-  
+
   Widget _entryField({
     required String title,
     required TextEditingController controller,
@@ -109,30 +109,26 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     required String title,
     required TextEditingController controller,
     required List<String> options,
-    }) {
-    return Column(
-            children:[
-              Text(title),
-              Row(
-                children: options
-                    .map(
-                      (option) => Expanded(
-                                    child: RadioListTile(
-                                      title: Text(option),
-                                      value: option,
-                                      groupValue: controller.text,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          controller.text = value!;
-                                        });
-                                      },
-                                    ),
-                                )
-                    )
-                  .toList(),
-              ),
-            ]
-    );
+  }) {
+    return Column(children: [
+      Text(title),
+      Row(
+        children: options
+            .map((option) => Expanded(
+                  child: RadioListTile(
+                    title: Text(option),
+                    value: option,
+                    groupValue: controller.text,
+                    onChanged: (value) {
+                      setState(() {
+                        controller.text = value!;
+                      });
+                    },
+                  ),
+                ))
+            .toList(),
+      ),
+    ]);
   }
 
   Widget _sliderField({
@@ -141,27 +137,25 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
     required double val,
     required double min,
     required double max,
-    }) {
+  }) {
     controller.text = val.round().toString();
     double _value = val;
-    return Column(
-            children:[
-              Text(title),
-              SfSlider(
-                value: _value,
-                interval: 5,
-                max: max,
-                min: min,
-                showLabels: true,
-                onChanged: (newvalue) {
-                  setState(() { 
-                    _value = newvalue;
-                    controller.text = newvalue.round().toString();
-                    });
-                },
-              ),
-            ]
-    );
+    return Column(children: [
+      Text(title),
+      SfSlider(
+        value: _value,
+        interval: 5,
+        max: max,
+        min: min,
+        showLabels: true,
+        onChanged: (newvalue) {
+          setState(() {
+            _value = newvalue;
+            controller.text = newvalue.round().toString();
+          });
+        },
+      ),
+    ]);
   }
 
   @override
@@ -256,41 +250,42 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                                 numerical: true),
                             const SizedBox(height: 10),
                             _checkBoxField(
-                                title: "Gender",
-                                controller: _genderController,
-                                options: genderoptions,
-                                ),
-                            const SizedBox(height: 10),                             
+                              title: "Gender",
+                              controller: _genderController,
+                              options: genderoptions,
+                            ),
+                            const SizedBox(height: 10),
                             _sliderField(
-                                title: "Height: ${_heightController.text}",
-                                controller: _heightController,
-                                val: (220-130)/2+130,
-                                min:130,
-                                max:220, 
-                                ),
-                            const SizedBox(height: 10),                             
+                              title: "Height: ${_heightController.text}",
+                              controller: _heightController,
+                              val: (220 - 130) / 2 + 130,
+                              min: 130,
+                              max: 220,
+                            ),
+                            const SizedBox(height: 10),
                             _sliderField(
-                                title: "Weight: ${_weightController.text}",
-                                controller: _weightController,
-                                val: (160-35)/2+35,
-                                min:35,
-                                max:160,
-                                ),
-                            const SizedBox(height: 10),                             
+                              title: "Weight: ${_weightController.text}",
+                              controller: _weightController,
+                              val: (160 - 35) / 2 + 35,
+                              min: 35,
+                              max: 160,
+                            ),
+                            const SizedBox(height: 10),
                             _checkBoxField(
-                                title: "Smoker",
-                                controller: _smokerController,
-                                options: smokeroptions,
-                                ),                            
-                            const SizedBox(height: 10),                             
+                              title: "Smoker",
+                              controller: _smokerController,
+                              options: smokeroptions,
+                            ),
+                            const SizedBox(height: 10),
                             _sliderField(
-                                title: "Children amount: ${_childrenController.text}\n(if more than 5 choose 5)",
-                                controller: _childrenController,
-                                val: 0,
-                                min:0,
-                                max:5,
-                                ),                            
-                            const SizedBox(height: 10),                         
+                              title:
+                                  "Children amount: ${_childrenController.text}\n(if more than 5 choose 5)",
+                              controller: _childrenController,
+                              val: 0,
+                              min: 0,
+                              max: 5,
+                            ),
+                            const SizedBox(height: 10),
                             DateTimeFormField(
                               onSaved: (val) =>
                                   setState(() => _dateOfBirth = val.toString()),
@@ -477,8 +472,10 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
       id: crypto.encryptAES(patientDoc.id),
       creationDate:
           crypto.encryptAES('${today.day}.${today.month}.${today.year}'),
-      firstName: crypto.encryptAES(_firstNameController.text),
-      lastName: crypto.encryptAES(_lastNameController.text),
+      firstName: crypto
+          .encryptAES(capitalizeFirstCharacter(_firstNameController.text)),
+      lastName:
+          crypto.encryptAES(capitalizeFirstCharacter(_lastNameController.text)),
       fathersName: crypto.encryptAES(_fathersNameController.text),
       gender: crypto.encryptAES(_genderController.text),
       height: crypto.encryptAES(_heightController.text),

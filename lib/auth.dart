@@ -33,11 +33,16 @@ class Auth {
     // Sign out from your user
     await _firebaseAuth.signOut();
   }
+}
 
-  // Future<void> sendPasswordResetEmail({
-  //   // Send a password reset to your email
-  //   required String email,
-  // }) async {
-  //   await _firebaseAuth.sendPasswordResetEmail(email: email);
-  // }
+String getCurrentUserId() {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  return user!.uid;
+}
+
+String getCurrentUserDisplayName() {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final User user = auth.currentUser!;
+  return user.displayName!;
 }

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:my_dentist/modules/assistant.dart';
+import 'package:my_dentist/modules/treatments.dart';
 
 class DB {
   late final CollectionReference assistants;
@@ -8,6 +10,8 @@ class DB {
   late final CollectionReference treatmentTypes;
   late final CollectionReference meetings;
   late final CollectionReference doctors;
+  late final List<String> treatmentTypeNames;
+  late final List<String> assistentNames;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
@@ -18,11 +22,21 @@ class DB {
     doctors = FirebaseFirestore.instance.collection('Doctors');
   }
 
-  static Stream<List<String>> treatmentNames() => FirebaseFirestore.instance
-      .collection('Treatment Types')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => doc['name'] as String).toList());
+  Future<void> setAssistantNames() async {
+    assistentNames = await Assistant.getNames();
+  }
+
+  List<String> getAssistantNames() {
+    return assistentNames;
+  }
+
+  Future<void> setTreatmentTypeNames() async {
+    treatmentTypeNames = await TreatmentType.getNames();
+  }
+
+  List<String> getTreatmentTypeNames() {
+    return treatmentTypeNames;
+  }
 }
 
 class EncryptData {

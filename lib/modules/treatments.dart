@@ -42,7 +42,7 @@ class Treatment {
         'assistent': assistent,
         'isDone': isDone,
         'remarks': remarks,
-        'cost' : cost,
+        'cost': cost,
       };
 
   static Treatment fromJson(Map<String, dynamic> json) => Treatment(
@@ -96,24 +96,28 @@ class TreatmentType {
   late final String name;
   late final double price;
   late final String details;
+  late final String code;
 
-  TreatmentType(
-      {required this.name, required this.price, required this.details});
+  TreatmentType({
+    required this.name,
+    required this.price,
+    required this.details,
+    required this.code,
+  });
 
-  Map<String, dynamic> toJson() =>
-      {'name': name, 'price': price, 'details': details};
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'price': price,
+        'details': details,
+        'code': code,
+      };
 
   static TreatmentType fromJson(Map<String, dynamic> json) => TreatmentType(
         name: json['name'],
         price: json['price'],
         details: json['details'],
+        code: json['code'],
       );
-
-  // static Stream<List<String>> getNames() => FirebaseFirestore.instance
-  //     .collection('Treatment Types')
-  //     .snapshots()
-  //     .map((snapshot) =>
-  //         snapshot.docs.map((doc) => doc['name'] as String).toList());
 
   static Future<List<String>> getNames() async {
     List<String> list = <String>[];
@@ -143,9 +147,11 @@ class TreatmentType {
           Map<String, dynamic> data =
               docSnapshot.data() as Map<String, dynamic>;
           list.add(TreatmentType(
-              name: data["name"],
-              price: data["price"],
-              details: data['details']));
+            name: data["name"],
+            price: data["price"],
+            details: data['details'],
+            code: data['code'],
+          ));
         }
       },
     );
@@ -153,13 +159,18 @@ class TreatmentType {
   }
 }
 
-Future createTreatmentType(String name, double price, String details) async {
-  TreatmentType instance =
-      TreatmentType(name: name, price: price, details: details);
+Future createTreatmentType({
+  required String name,
+  required double price,
+  String? details,
+  required String code,
+}) async {
+  TreatmentType instance = TreatmentType(
+      name: name, price: price, code: code, details: details ?? '');
   final DB db = Get.find();
   final treatmentsTypeDocuments = db.treatmentTypes;
 
-  var query = treatmentsTypeDocuments.where('name', isEqualTo: name);
+  var query = treatmentsTypeDocuments.where('code', isEqualTo: code);
 
   query.get().then(
     (snapshot) {
@@ -172,10 +183,10 @@ Future createTreatmentType(String name, double price, String details) async {
   );
 }
 
-Future deleteTreatmentType(String name) async {
+Future deleteTreatmentType(String code) async {
   final DB db = Get.find();
   final treatmentsTypeDocuments = db.treatmentTypes;
-  var query = treatmentsTypeDocuments.where('name', isEqualTo: name);
+  var query = treatmentsTypeDocuments.where('code', isEqualTo: code);
 
   query.get().then(
     (snapshot) {

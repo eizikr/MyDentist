@@ -8,20 +8,25 @@ import 'widget_tree.dart';
 import 'our_widgets/global.dart';
 import 'package:get/get.dart';
 
+void setGlobalData() {
+  Get.put(DB());
+  Get.put(EncryptData());
+  final DB db = Get.find();
+  db.setTreatmentTypeNames();
+  db.setAssistantNames();
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(DB());
-  Get.put(EncryptData());
-
+  setGlobalData();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +34,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       theme: ThemeData(
-        primarySwatch: ourSettings.backgroundColors,
-        scaffoldBackgroundColor: ourSettings.backgroundColor,
+        primarySwatch: OurSettings.backgroundColors,
+        scaffoldBackgroundColor: OurSettings.backgroundColor,
       ),
       darkTheme: ThemeData(
-        primarySwatch: ourSettings.backgroundColors,
-        scaffoldBackgroundColor: ourSettings.backgroundColor,
+        primarySwatch: OurSettings.backgroundColors,
+        scaffoldBackgroundColor: OurSettings.backgroundColor,
       ),
       // home: const LoadDataFromFireBase(),
-      // home: const WidgetTree(),
+      home: const WidgetTree(),
       // home: const HomePage(),
-    home: const ReportPage(),
+      // home: const ReportPage(),
     );
   }
 }

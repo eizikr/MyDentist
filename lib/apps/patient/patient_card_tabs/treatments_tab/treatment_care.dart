@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:my_dentist/modules/meeting.dart';
+import 'package:my_dentist/our_widgets/buttons.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
@@ -55,7 +57,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
             child: const Text('Treatment'),
           ),
           centerTitle: true,
-          backgroundColor: ourSettings.appbarColor,
+          backgroundColor: OurSettings.appbarColor,
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.exit_to_app),
