@@ -109,8 +109,7 @@ class Meeting {
     try {
       await FirebaseFirestore.instance.collection('Meetings').doc(id).delete();
       if (treatment != null) {
-        updatePatientPayment(
-            treatment!['patientID'], -(treatment!['treatmentType']['price']));
+        addPatientPayment(treatment!['patientID'], -(treatment!['cost']));
       }
       successToast('Meeting deleted successfully');
     } catch (e) {
@@ -131,6 +130,20 @@ class Meeting {
               String id = doc.id;
               return Meeting(id: id, treatment: data['treatment']);
             }).toList());
+  }
+
+  static Future<void> updateSummary(String meetingID, String summary) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('Meetings');
+
+      DocumentReference newMeetingRef = collection.doc(meetingID);
+
+      await newMeetingRef.update({'summary': summary});
+      successToast('Meeting summary successfully set');
+    } catch (e) {
+      errorToast('Error: $e');
+    }
   }
 }
 
@@ -159,7 +172,7 @@ Future<void> createMeeting(
   );
 
   if (treatment != null) {
-    updatePatientPayment(treatment.patientID, treatment.treatmentType['price']);
+    addPatientPayment(treatment.patientID, treatment.cost);
   }
 
   try {
@@ -168,20 +181,6 @@ Future<void> createMeeting(
     DocumentReference newMeetingRef = await collection.add(instance.toJson());
     await newMeetingRef.update({'id': newMeetingRef.id});
     successToast('Meeting was successfully set');
-  } catch (e) {
-    errorToast('Error: $e');
-  }
-}
-
-Future<void> updateSummary(String meetingID, String summary) async {
-  try {
-    CollectionReference collection =
-        FirebaseFirestore.instance.collection('Meetings');
-
-    DocumentReference newMeetingRef = collection.doc(meetingID);
-
-    await newMeetingRef.update({'summary': summary});
-    successToast('Meeting summary successfully set');
   } catch (e) {
     errorToast('Error: $e');
   }

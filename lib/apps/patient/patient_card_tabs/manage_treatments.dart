@@ -3,8 +3,6 @@ import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatme
 import 'package:my_dentist/apps/planner/schedule_planner.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
 
-import 'package:my_dentist/our_widgets/our_widgets.dart';
-
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
   const PatientTreatmentsPage({super.key, required this.patientID});

@@ -12,8 +12,7 @@ void setGlobalData() {
   Get.put(DB());
   Get.put(EncryptData());
   final DB db = Get.find();
-  db.setTreatmentTypeNames();
-  db.setAssistantNames();
+
   db.createTreatmentDictionary();
 }
 

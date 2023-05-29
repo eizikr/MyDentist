@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/modules/assistant.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
@@ -19,6 +21,13 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
   final idController = TextEditingController();
   final salaryController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final DB db;
+
+  @override
+  void initState() {
+    db = Get.find();
+    super.initState();
+  }
 
   void clearControllers() {
     firstNameController.clear();
@@ -111,6 +120,7 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
                       context,
                       () {
                         deleteAssistant(assistant.id);
+
                         Navigator.of(context).pop();
                       },
                     );

@@ -307,7 +307,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
                           child: Center(
                             child: BasicButton(
                               onClicked: () async {
-                                await updateSummary(
+                                await Meeting.updateSummary(
                                   meeting['id'],
                                   summaryController.text,
                                 );
@@ -377,7 +377,9 @@ class _TreatmentCareState extends State<TreatmentCare> {
   }
 
   Future<int?> openDiscountDialog() => showDialog(
-      context: context, builder: (context) => const NumberSelectionDialog());
+        context: context,
+        builder: (context) => const NumberSelectionDialog(),
+      );
 }
 
 Widget patientInfoItem(String str) {

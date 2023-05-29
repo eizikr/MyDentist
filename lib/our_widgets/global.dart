@@ -10,9 +10,10 @@ class DB {
   late final CollectionReference treatmentTypes;
   late final CollectionReference meetings;
   late final CollectionReference doctors;
-  late final List<String> treatmentTypeNames;
-  late final List<String> assistentNames;
-  late final Map<String, Map<String, dynamic>> treatmentTypesDictionary;
+  late List<String> treatmentTypeNames;
+  late List<String> treatmentTypeCodes;
+  late List<String> assistentNames;
+  late Map<String, Map<String, dynamic>> treatmentTypesDictionary;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
@@ -25,15 +26,16 @@ class DB {
   }
 
   Future<void> createTreatmentDictionary() async {
+    // Create treatment dictionary { 'code' : treatment_instance }
     try {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('Treatment Types').get();
 
       for (DocumentSnapshot doc in snapshot.docs) {
-        String name = doc.get('name');
+        String treatmentCode = doc.get('code');
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        treatmentTypesDictionary[name] = data;
+        treatmentTypesDictionary[treatmentCode] = data;
       }
     } catch (e) {
       print('Global error! $e');
@@ -46,6 +48,14 @@ class DB {
 
   List<String> getAssistantNames() {
     return assistentNames;
+  }
+
+  Future<void> setTreatmentTypeCodes() async {
+    treatmentTypeCodes = await TreatmentType.getCodes();
+  }
+
+  List<String> getTreatmentTypeCodes() {
+    return treatmentTypeCodes;
   }
 
   Future<void> setTreatmentTypeNames() async {
@@ -75,8 +85,12 @@ class EncryptData {
   }
 
   String decryptAES(plainText) {
-    if (plainText == '') return '';
-    String decrypted = encrypter.decrypt64(plainText, iv: _iv);
+    String decrypted;
+    try {
+      decrypted = encrypter.decrypt64(plainText, iv: _iv);
+    } catch (e) {
+      decrypted = plainText;
+    }
     return decrypted;
   }
 }

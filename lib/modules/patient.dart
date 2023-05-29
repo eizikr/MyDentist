@@ -158,7 +158,7 @@ Future<bool> checkPatientExists(patientID) async {
   return patientExists;
 }
 
-Future<void> updatePatientPayment(patientID, double amount) async {
+Future<void> addPatientPayment(patientID, double amount) async {
   try {
     CollectionReference ref = FirebaseFirestore.instance.collection('Patients');
     DocumentReference patientRef = ref.doc(patientID);
@@ -170,6 +170,10 @@ Future<void> updatePatientPayment(patientID, double amount) async {
       await patientRef.update({'paymentRequired': (updatedAmount)});
     }
   } catch (e) {
-    print('Document does not exist.');
+    e.printError(info: 'Document does not exist.');
   }
+}
+
+Future<void> updatePayment(String patientID) async {
+  double newAmount = 0;
 }

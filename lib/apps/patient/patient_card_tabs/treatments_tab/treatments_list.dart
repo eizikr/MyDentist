@@ -6,6 +6,7 @@ import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatme
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class ShowTreatmentScreen extends StatefulWidget {
@@ -139,24 +140,24 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final EncryptData db = Get.find();
+
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-              widget.isHistory ? 'Treatments History' : 'Future Treatments'),
-          centerTitle: true,
-          backgroundColor: OurSettings.backgroundColors[200],
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Meetings')
-              .where('treatment.patientID', isEqualTo: widget.patientID)
-              .where('treatment.isDone', isEqualTo: widget.isHistory)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title:
+            Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
+        centerTitle: true,
+        backgroundColor: OurSettings.backgroundColors[200],
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Meetings')
+            .where('treatment.patientID', isEqualTo: widget.patientID)
+            .where('treatment.isDone', isEqualTo: widget.isHistory)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             final meetings = snapshot.data!.docs;
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
@@ -166,15 +167,29 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
                 return buildTreatment(meeting);
               },
             );
-          },
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Text(
-            "Footer!",
-            textAlign: TextAlign.center,
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: OurSettings.backgroundColors[200],
+        height: 50,
+        child: Center(
+          child: RichText(
+            text: TextSpan(
+              text: 'Patient id: ',
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(
+                  text: widget.patientID,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-          color: OurSettings.backgroundColors[200],
-          height: 50,
-        ));
+        ),
+      ),
+    );
   }
 }
