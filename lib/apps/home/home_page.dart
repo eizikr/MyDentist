@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:my_dentist/apps/settings/add_doctor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/apps/planner/schedule_planner.dart';
 
 import 'package:my_dentist/apps/settings/edit_assistants.dart';
-import 'package:my_dentist/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dentist/auth.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/apps/patient/pages/add_patient.dart';
 import 'package:my_dentist/apps/patient/pages/patient_card.dart';
@@ -24,10 +26,6 @@ enum MenuItem {
   logout,
 }
 
-Future<void> signOut() async {
-  await Auth().signOut();
-}
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -41,6 +39,13 @@ class _HomePageState extends State<HomePage> {
 
   final _patientController = TextEditingController();
   final firestore = FirebaseFirestore.instance;
+  late DB db;
+
+  @override
+  void initState() {
+    db = Get.find();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else if (value == MenuItem.logout) {
-                signOut();
+                Auth().signOut();
               }
             },
             itemBuilder: (context) => [
@@ -236,24 +241,27 @@ class _HomePageState extends State<HomePage> {
       );
 
   void dialogSubmit(BuildContext context) {
+    final DB db = Get.find();
     String patientID = _patientController.text;
     if (patientID.isNotEmpty) {
       DocumentReference patientRef =
           firestore.collection('Patients').doc(patientID);
-      patientRef.get().then((value) => {
-            if (value.exists)
-              {
-                Navigator.of(context).pop(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PatientCard(patientID: patientID),
-                  ),
-                ),
-              }
-            else
-              {errorToast('ID not found')}
-          });
+
+      patientRef.get().then(
+        (DocumentSnapshot doc) {
+          db.setAssistantNames();
+          db.setTreatmentTypeCodes();
+          final data = doc.data() as Map<String, dynamic>;
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PatientCard(patientData: data),
+            ),
+          );
+        },
+        onError: (e) => errorToast('ID not found'),
+      );
     } else {
       errorToast('Please fill the ID field');
     }

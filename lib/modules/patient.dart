@@ -4,6 +4,7 @@ import 'package:my_dentist/our_widgets/global.dart';
 
 class Patient {
   String id;
+  final double paymentRequired;
   final String creationDate;
   final String firstName;
   final String lastName;
@@ -35,6 +36,7 @@ class Patient {
   final String remarks;
   final EncryptData crypto = Get.find();
   Patient({
+    this.paymentRequired = 0,
     this.id = '',
     this.creationDate = 'undefined',
     required this.firstName,
@@ -66,6 +68,7 @@ class Patient {
   });
 
   Map<String, dynamic> toJson() => {
+        'paymentRequired': paymentRequired,
         'id': id,
         'creationDate': creationDate,
         'first_name': firstName,
@@ -97,73 +100,79 @@ class Patient {
       };
 
   static Patient fromJson(Map<String, dynamic> json) => Patient(
-      id: json['id'],
-      creationDate: json['creationDate'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      fathersName: json['fathers_name'],
-      city: json['city'],
-      address: json['address'],
-      postalCode: json['postalCode'],
-      houseNumber: json['houseNumber'],
-      countryBirth: json['countryBirth'],
-      profession: json['profession'],
-      dateOfBirth: json['date_of_birth'],
-      age: json['age'],
-      gender: json['gender'],
-      height: json['height'],
-      weight: json['weight'],
-      smoker: json['smoker'],
-      children: json['children'],
-      homePhone: json['home_phone'],
-      email1: json['email1'],
-      email2: json['email2'],
-      insuranceCompany: json['inisurance_company'],
-      phone: json['phone'],
-      fax: json['fax'],
-      hmo: json['HMO'],
-      treatingDoctor: json['treating_docrot'],
-      status: json['status'],
-      remarks: json['remarks']);
+        paymentRequired: json['paymentRequired'],
+        id: json['id'],
+        creationDate: json['creationDate'],
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        fathersName: json['fathers_name'],
+        city: json['city'],
+        address: json['address'],
+        postalCode: json['postalCode'],
+        houseNumber: json['houseNumber'],
+        countryBirth: json['countryBirth'],
+        profession: json['profession'],
+        dateOfBirth: json['date_of_birth'],
+        age: json['age'],
+        gender: json['gender'],
+        height: json['height'],
+        weight: json['weight'],
+        smoker: json['smoker'],
+        children: json['children'],
+        homePhone: json['home_phone'],
+        email1: json['email1'],
+        email2: json['email2'],
+        insuranceCompany: json['inisurance_company'],
+        phone: json['phone'],
+        fax: json['fax'],
+        hmo: json['HMO'],
+        treatingDoctor: json['treating_docrot'],
+        status: json['status'],
+        remarks: json['remarks'],
+      );
 
-  // static List<String> getDetailsList(Patient patient) {
-  //   List<String> list = [];
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('Last name: ${patient.lastName}');
-  //   list.add('ID: ${patient.id}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
-  //   list.add('First name: ${patient.firstName}');
+  static Future<void> updatePatientPayment(
+      String patientID, double amount) async {
+    try {
+      CollectionReference ref =
+          FirebaseFirestore.instance.collection('Patients');
+      DocumentReference patientRef = ref.doc(patientID);
+      DocumentSnapshot snapshot = await patientRef.get();
+      if (snapshot.exists) {
+        double currentAmount = snapshot.get('paymentRequired');
+        double updatedAmount =
+            currentAmount + amount < 0 ? 0 : currentAmount + amount;
+        await patientRef.update({'paymentRequired': (updatedAmount)});
+      }
+    } catch (e) {
+      e.printError(info: 'Document does not exist.');
+    }
+  }
 
-  //   return list;
-  // }
-}
+  Future<Patient> getPatientFromFirebase(String patientID) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('patients')
+        .doc(patientID)
+        .get();
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+    return Patient.fromJson(data!);
+  }
 
-Future<Patient> getPatientFromFirebase(String patientID) async {
-  DocumentSnapshot snapshot = await FirebaseFirestore.instance
-      .collection('patients')
-      .doc(patientID)
-      .get();
-  Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-  return Patient.fromJson(data!);
-}
+  Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
+      .collection('Patients')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
-Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
-    .collection('Patients')
-    .snapshots()
-    .map((snapshot) =>
-        snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
+  Future<bool> checkPatientExists(patientID) async {
+    final firestore = FirebaseFirestore.instance;
+    bool patientExists = false;
+    DocumentReference patientRef =
+        firestore.collection('Patients').doc(patientID);
+    patientRef.get().then((value) => {
+          if (value.exists) {patientExists = true} else {patientExists = false}
+        });
 
-Future<bool> checkPatientExists(patientID) async {
-  final firestore = FirebaseFirestore.instance;
-  bool patientExists = false;
-  DocumentReference patientRef =
-      firestore.collection('Patients').doc(patientID);
-  patientRef.get().then((value) => {
-        if (value.exists) {patientExists = true} else {patientExists = false}
-      });
-
-  return patientExists;
+    return patientExists;
+  }
 }

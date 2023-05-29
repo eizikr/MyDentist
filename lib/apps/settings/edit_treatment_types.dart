@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/modules/treatments.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
@@ -18,7 +20,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
   late TextEditingController priceController;
   late TextEditingController detailsController;
   late TextEditingController codeController;
-
+  late final DB db;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,6 +31,8 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
     priceController = TextEditingController();
     detailsController = TextEditingController();
     codeController = TextEditingController();
+
+    db = Get.find();
   }
 
   @override
@@ -122,17 +126,23 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
                   onPressed: () async {
                     clearControllers();
                     codeController.text = treatmentType.code;
-                    await createTreatmentTypeDialog(context,
-                        isEdit: true, title: 'Edit Treatment Type');
+                    await createTreatmentTypeDialog(
+                      context,
+                      isEdit: true,
+                      title: 'Edit Treatment Type',
+                    );
                   },
                 ),
                 TextButton(
                   child: const Text('DELETE'),
                   onPressed: () {
-                    confirmationDialog(context, () {
-                      deleteTreatmentType(treatmentType.name);
-                      Navigator.of(context).pop();
-                    });
+                    confirmationDialog(
+                      context,
+                      () {
+                        TreatmentType.deleteTreatmentType(treatmentType.code);
+                        Navigator.of(context).pop();
+                      },
+                    );
                   },
                 ),
                 const SizedBox(width: 8),
@@ -217,7 +227,10 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
                           confirmationDialog(
                             context,
                             () {
-                              deleteTreatmentType(codeController.text);
+                              TreatmentType.deleteTreatmentType(
+                                codeController.text,
+                              );
+
                               Navigator.of(context).pop();
                             },
                           )
@@ -241,12 +254,12 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
 
   void submit() {
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pop();
       createTreatmentType(
           name: nameController.text,
           price: double.parse(priceController.text),
           details: detailsController.text,
           code: codeController.text);
+      Navigator.of(context).pop();
 
       successToast('Docter registered');
     }

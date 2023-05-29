@@ -67,9 +67,8 @@ Future createDoctor({
           String userId = userCredential.user!.uid;
           userCredential.user!.updateDisplayName('Dr $lastName');
           doctorDocuments.doc(userId).set(instance.toJson());
-          // print('Registration success');
         } catch (error) {
-          //  print('Registration failed. Error: $error');
+          print('Registration failed. Error: $error');
         }
       }
     },
@@ -102,7 +101,6 @@ Future<Map<String, dynamic>?> getCurrentDoctor() async {
 
   if (snapshot.exists) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    print(data['firstName']);
     return data;
   }
   return null;

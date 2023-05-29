@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatments_list.dart';
+import 'package:my_dentist/apps/payment/payment_dialog.dart';
 import 'package:my_dentist/apps/planner/schedule_planner.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
-
-import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
@@ -63,8 +62,11 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
                   height: 10,
                 ),
                 BasicButton(
-                  onClicked: () {},
-                  text: 'Treatments plan',
+                  onClicked: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          PaymentDialog(widget.patientID)),
+                  text: 'Payment',
                 ),
               ],
             ),

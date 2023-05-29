@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/auth.dart';
-import 'package:my_dentist/modules/assistant.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class TreatmentForm extends StatefulWidget {
@@ -22,7 +22,7 @@ class TreatmentForm extends StatefulWidget {
 class _TreatmentFormState extends State<TreatmentForm> {
   String tooth = '1';
   late final List<String> tooths;
-  String? type;
+  String? treatmentCode;
   String? assistent;
   String? startTime;
   late List<DateTime> startTimes;
@@ -33,9 +33,13 @@ class _TreatmentFormState extends State<TreatmentForm> {
   TextEditingController remarksContrtoller = TextEditingController();
   final DB db = Get.find();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late List<String> data1;
+  late List<String> data2;
 
   @override
   void initState() {
+    super.initState();
+
     tooths = [];
     for (int i = 1; i <= 32; i++) {
       tooths.add(i.toString());
@@ -51,14 +55,13 @@ class _TreatmentFormState extends State<TreatmentForm> {
             6, i * 15));
     _from = startTimes.first;
     _to = startTimes[1];
-    super.initState();
+
+    data1 = db.getTreatmentTypeCodes();
+    data2 = db.getAssistantNames();
   }
 
   @override
   Widget build(BuildContext context) {
-    var data1 = db.getTreatmentTypeNames();
-    var data2 = db.getAssistantNames();
-
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -118,8 +121,8 @@ class _TreatmentFormState extends State<TreatmentForm> {
             ),
 
             DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Treatment type'),
-              value: type,
+              decoration: const InputDecoration(labelText: 'Treatment code'),
+              value: treatmentCode,
               icon: const Icon(Icons.keyboard_arrow_down),
               items: data1.map((String items) {
                 return DropdownMenuItem(
@@ -129,7 +132,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
               }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
-                  type = newValue!;
+                  treatmentCode = newValue!;
                 });
               },
               validator: (value) {
@@ -176,7 +179,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
                   child: const Text('Cancle'),
                 ),
                 TextButton(
-                  onPressed: () async {
+                  onPressed: () {
                     submit();
                   },
                   child: const Text('Save'),
@@ -191,17 +194,20 @@ class _TreatmentFormState extends State<TreatmentForm> {
 
   void submit() {
     if (_formKey.currentState!.validate()) {
+      Map<String, dynamic> treatmentType =
+          db.treatmentTypesDictionary[treatmentCode]!;
       Treatment instance = Treatment(
-          toothNumber: tooth,
-          type: type!,
-          patientID: widget.patientID!,
-          treatingDoctor: getCurrentUserDisplayName(),
-          assistent: assistent!,
-          remarks: remarksContrtoller.text);
-      // createTreatment(instance);
-      addTreatmentMeeting(_from, _to, type!, instance);
+        toothNumber: tooth,
+        treatmentType: treatmentType,
+        patientID: widget.patientID!,
+        treatingDoctor: getCurrentUserDisplayName(),
+        assistent: assistent!,
+        remarks: remarksContrtoller.text,
+        cost: treatmentType['price'],
+        originalCost: treatmentType['price'],
+      );
+      addTreatmentMeeting(_from, _to, treatmentType['name']!, instance);
       Navigator.of(context).pop();
-      successToast('Treatment booked');
     }
   }
 

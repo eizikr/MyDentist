@@ -1,21 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
+import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 import '../our_widgets/global.dart';
-import 'assistant.dart';
-
-enum Code {
-  settings,
-  editTreatmentType,
-  editAssistents,
-  logout,
-}
 
 class Treatment {
+  late final int discount;
+  late final double originalCost;
+
   late final String toothNumber;
-  late final String type;
+  late final Map<String, dynamic> treatmentType;
   late final String patientID;
   late final String treatingDoctor;
   late final bool isDone;
@@ -24,19 +21,23 @@ class Treatment {
   late final double cost;
 
   Treatment({
+    this.discount = 0,
     required this.toothNumber,
-    required this.type,
+    required this.treatmentType,
     required this.patientID,
     required this.treatingDoctor,
     required this.assistent,
     this.isDone = false,
     this.remarks = 'No remarks',
     this.cost = 0.0,
+    this.originalCost = 0.0,
   });
 
   Map<String, dynamic> toJson() => {
+        'originalCost': originalCost,
+        'discount': discount,
         'toothNumber': toothNumber,
-        'type': type,
+        'treatmentType': treatmentType,
         'patientID': patientID,
         'treatingDoctor': treatingDoctor,
         'assistent': assistent,
@@ -46,8 +47,10 @@ class Treatment {
       };
 
   static Treatment fromJson(Map<String, dynamic> json) => Treatment(
+        originalCost: json['originalCost'],
+        discount: json['discount'],
         toothNumber: json['toothNumber'],
-        type: json['type'],
+        treatmentType: json['treatmentType'],
         patientID: json['patientID'],
         treatingDoctor: json['treatingDoctor'],
         assistent: json['assistent'],
@@ -69,8 +72,10 @@ class Treatment {
           Map<String, dynamic> data =
               docSnapshot.data() as Map<String, dynamic>;
           list.add(Treatment(
+            originalCost: data['originalCost'],
+            discount: data['discount'],
             toothNumber: data["toothNumber"],
-            type: data["type"],
+            treatmentType: data["treatmentType"],
             patientID: data['patientID'],
             treatingDoctor: data['treatingDoctor'],
             assistent: data['assistent'],
@@ -83,13 +88,34 @@ class Treatment {
     );
     return list;
   }
-}
 
-Future createTreatment(Treatment instance) async {
-  final DB db = Get.find();
-  final treatmentsDocuments = db.treatments;
+  static Future<void> updateDiscount(String meetingID, int discount) async {
+    try {
+      CollectionReference ref =
+          FirebaseFirestore.instance.collection('Meetings');
+      DocumentReference meetingRef = ref.doc(meetingID);
+      DocumentSnapshot snapshot = await meetingRef.get();
 
-  treatmentsDocuments.add(instance.toJson());
+      if (snapshot.exists) {
+        Map<String, dynamic> treatment = snapshot.get("treatment");
+        double discountSize = (treatment['originalCost'] * (discount * 0.01));
+        double newCost = treatment['originalCost'] -= discountSize;
+
+        // Update patient required payment
+        double oldCost = treatment['cost'];
+        await Patient.updatePatientPayment(
+            treatment['patientID'], (newCost - oldCost));
+
+        // Update treatment cost and discount fields
+        await meetingRef.update(
+            {'treatment.cost': (newCost), 'treatment.discount': (discount)});
+
+        successToast('$discount% discount successfully set');
+      }
+    } catch (e) {
+      errorToast('Error: $e');
+    }
+  }
 }
 
 class TreatmentType {
@@ -135,11 +161,26 @@ class TreatmentType {
     return list;
   }
 
+  static Future<List<String>> getCodes() async {
+    List<String> list = <String>[];
+
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('Treatment Types');
+
+    QuerySnapshot snapshot = await collectionRef.get();
+
+    for (var doc in snapshot.docs) {
+      String code = doc.get('code');
+      list.add(code);
+    }
+
+    return list;
+  }
+
   static Future<List<TreatmentType>> readTreatmentTypes() async {
     List<TreatmentType> list = [];
 
     final DB db = Get.find();
-    // CollectionReference colRef = db.treatmentTypes;
 
     db.treatmentTypes.get().then(
       (QuerySnapshot snapshot) {
@@ -156,6 +197,23 @@ class TreatmentType {
       },
     );
     return list;
+  }
+
+  static Future<void> deleteTreatmentType(String code) async {
+    final DB db = Get.find();
+    final treatmentsTypeDocuments = db.treatmentTypes;
+
+    var query = treatmentsTypeDocuments.where('code', isEqualTo: code);
+
+    query.get().then(
+      (snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          snapshot.docs[0].reference.delete();
+        } else {
+          errorToast('ID not found');
+        }
+      },
+    );
   }
 }
 
@@ -178,22 +236,6 @@ Future createTreatmentType({
         snapshot.docs[0].reference.update(instance.toJson());
       } else {
         treatmentsTypeDocuments.add(instance.toJson());
-      }
-    },
-  );
-}
-
-Future deleteTreatmentType(String code) async {
-  final DB db = Get.find();
-  final treatmentsTypeDocuments = db.treatmentTypes;
-  var query = treatmentsTypeDocuments.where('code', isEqualTo: code);
-
-  query.get().then(
-    (snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        snapshot.docs[0].reference.delete();
-      } else {
-        errorToast('ID not found');
       }
     },
   );

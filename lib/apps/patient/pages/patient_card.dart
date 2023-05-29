@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/comunication_info.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/manage_treatments.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/private_info.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/status_info.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/edit_patient.dart';
+import 'package:my_dentist/our_widgets/global.dart';
 import 'package:side_navigation/side_navigation.dart';
 
 class PatientCard extends StatefulWidget {
-  final String patientID;
-  const PatientCard({super.key, required this.patientID});
+  final Map<String, dynamic> patientData;
+  const PatientCard({super.key, required this.patientData});
 
   @override
   State<PatientCard> createState() => _PatientCardState();
@@ -20,21 +22,22 @@ class _PatientCardState extends State<PatientCard> {
   @override
   void initState() {
     super.initState();
-    _patientID = widget.patientID;
+    final EncryptData db = Get.find();
+    _patientID = db.decryptAES(widget.patientData['id']);
   }
 
   late List<Widget> views = [
     Center(
-      child: PatientPrivateInfo(patientID: _patientID),
+      child: PatientPrivateInfo(patientData: widget.patientData),
     ),
     Center(
-      child: PatientComunicationInfo(patientID: _patientID),
+      child: PatientComunicationInfo(patientData: widget.patientData),
     ),
     Center(
       child: PatientTreatmentsPage(patientID: _patientID),
     ),
     Center(
-      child: PatientStatusInfo(patientID: _patientID),
+      child: PatientStatusInfo(patientData: widget.patientData),
     ),
     Center(
       child: EditPatientInfo(patientID: _patientID),

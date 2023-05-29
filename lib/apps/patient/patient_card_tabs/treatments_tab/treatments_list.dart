@@ -6,6 +6,7 @@ import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatme
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class ShowTreatmentScreen extends StatefulWidget {
@@ -24,7 +25,6 @@ class ShowTreatmentScreen extends StatefulWidget {
 
 class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
   final DB db = Get.find();
-  late final Patient patient;
 
   @override
   void initState() {
@@ -121,7 +121,7 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
               MaterialPageRoute(
                 builder: (context) => TreatmentCare(
                   meeting: meeting,
-                  patient_id: widget.patientID,
+                  patientId: widget.patientID,
                 ),
               ),
             );
@@ -140,6 +140,8 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final EncryptData db = Get.find();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -155,19 +157,38 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
             .where('treatment.isDone', isEqualTo: widget.isHistory)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.hasData) {
+            final meetings = snapshot.data!.docs;
+            return ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: meetings.length,
+              itemBuilder: (context, index) {
+                final meeting = meetings[index].data() as Map<String, dynamic>;
+                return buildTreatment(meeting);
+              },
+            );
+          } else {
             return const Center(child: CircularProgressIndicator());
           }
-          final meetings = snapshot.data!.docs;
-          return ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: meetings.length,
-            itemBuilder: (context, index) {
-              final meeting = meetings[index].data() as Map<String, dynamic>;
-              return buildTreatment(meeting);
-            },
-          );
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: OurSettings.backgroundColors[200],
+        height: 50,
+        child: Center(
+          child: RichText(
+            text: TextSpan(
+              text: 'Patient id: ',
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(
+                  text: widget.patientID,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

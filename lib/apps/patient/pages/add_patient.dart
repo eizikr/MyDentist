@@ -293,7 +293,7 @@ class _CreatePatientStepperState extends State<CreatePatientStepper> {
                                 errorStyle: TextStyle(color: Colors.redAccent),
                                 border: OutlineInputBorder(),
                                 icon: Icon(Icons.info_outlined),
-                                labelText: 'Date if birth',
+                                labelText: 'Date of birth',
                                 suffixIcon: Icon(Icons.date_range),
                               ),
                               mode: DateTimeFieldPickerMode.date,

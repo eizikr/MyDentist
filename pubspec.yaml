@@ -53,10 +53,11 @@ dependencies:
   firebase_database: ^10.0.7
   intl: ^0.17.0
   http: ^0.13.5
-  starflut: ^0.9.5
-  tflite: ^1.1.2
+  # starflut: ^0.9.5
+  #tflite: ^1.1.2
   syncfusion_flutter_charts: ^21.1.41
-
+  tflite_flutter: ^0.10.0
+  
 
 
 dev_dependencies:
