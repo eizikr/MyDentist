@@ -103,7 +103,8 @@ class Treatment {
 
         // Update patient required payment
         double oldCost = treatment['cost'];
-        await addPatientPayment(treatment['patientID'], (newCost - oldCost));
+        await Patient.updatePatientPayment(
+            treatment['patientID'], (newCost - oldCost));
 
         // Update treatment cost and discount fields
         await meetingRef.update(

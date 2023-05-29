@@ -485,14 +485,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  starflut:
-    dependency: "direct main"
-    description:
-      name: starflut
-      sha256: "43377329b7ad2b3c7c613d849086f68d6abf23967fe6df33026887af4986155b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.5"
   stream_channel:
     dependency: transitive
     description:

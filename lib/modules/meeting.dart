@@ -109,7 +109,8 @@ class Meeting {
     try {
       await FirebaseFirestore.instance.collection('Meetings').doc(id).delete();
       if (treatment != null) {
-        addPatientPayment(treatment!['patientID'], -(treatment!['cost']));
+        Patient.updatePatientPayment(
+            treatment!['patientID'], -(treatment!['cost']));
       }
       successToast('Meeting deleted successfully');
     } catch (e) {
@@ -172,7 +173,7 @@ Future<void> createMeeting(
   );
 
   if (treatment != null) {
-    addPatientPayment(treatment.patientID, treatment.cost);
+    Patient.updatePatientPayment(treatment.patientID, treatment.cost);
   }
 
   try {
