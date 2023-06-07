@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -30,12 +29,18 @@ Widget loadingCircule(String circuleText) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircularProgressIndicator(
-          color: Colors.blue[300],
+          color: OurSettings.mainColors[300],
         ),
         const SizedBox(
           height: 20,
-        ), // add some space between the progress indicator and the title
-        Text(circuleText)
+        ),
+        Text(
+          circuleText,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        )
       ],
     ),
   );

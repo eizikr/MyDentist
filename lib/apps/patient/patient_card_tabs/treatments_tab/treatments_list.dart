@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatment_care.dart';
-import 'package:my_dentist/modules/meeting.dart';
-import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/global.dart';
-import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class ShowTreatmentScreen extends StatefulWidget {
@@ -140,15 +137,13 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final EncryptData db = Get.find();
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title:
             Text(widget.isHistory ? 'Treatments History' : 'Future Treatments'),
         centerTitle: true,
-        backgroundColor: OurSettings.backgroundColors[200],
+        backgroundColor: OurSettings.appbarColor,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -173,7 +168,7 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
         },
       ),
       bottomNavigationBar: BottomAppBar(
-        color: OurSettings.backgroundColors[200],
+        color: OurSettings.mainColors[200],
         height: 50,
         child: Center(
           child: RichText(

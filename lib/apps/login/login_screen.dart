@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 import '../../auth.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,11 +15,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isLoginState = true;
   late String pass;
   late String email;
   final formKey = GlobalKey<FormState>();
+  bool isLoginState = true;
   bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   String signInError(String errorCode) {
     switch (errorCode) {
@@ -59,26 +64,14 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading = false;
       });
-      print(e.code.toString());
-      Fluttertoast.showToast(
-        msg: signInError(e.code.toString()),
-        gravity: ToastGravity.TOP,
-        fontSize: 16.0,
-        webShowClose: true,
-        backgroundColor: Colors.red,
-        toastLength: Toast.LENGTH_LONG,
-        webPosition: "center",
-        webBgColor: "red",
-        timeInSecForIosWeb: 2,
-      );
+      errorToast(e.code.toString());
     }
   }
 
-  Widget _submitButton(double width) {
+  Widget _submitButton() {
     return SizedBox(
-      width: width,
       child: RawMaterialButton(
-        fillColor: Colors.lightBlue[100],
+        fillColor: OurSettings.buttonColor,
         elevation: 0.0,
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         shape: RoundedRectangleBorder(
@@ -87,9 +80,8 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: signIn,
         child: Text(
           'Login',
-          style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
+          style: OurSettings.buttonsTextFont,
         ),
-        // child: Text(isLoginState ? 'Login' : 'Register'),
       ),
     );
   }
@@ -124,12 +116,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData queryData;
-    queryData = MediaQuery.of(context);
-
-    var screenWidth = queryData.size.width;
-    var screenHeight = queryData.size.height;
-
     return loading == true
         ? const LoadingPage(loadingText: "Loading home page")
         : Scaffold(
@@ -138,72 +124,60 @@ class _LoginPageState extends State<LoginPage> {
                 child: SingleChildScrollView(
                   child: Form(
                     key: formKey,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth / 6,
-                          vertical: screenHeight / 5),
+                    child: SizedBox(
+                      height: 500,
+                      width: 400,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.medical_services,
                             size: 60,
+                            color: Colors.blueGrey.shade900,
                           ),
-                          Text(
-                            'My Dentist',
-                            style: GoogleFonts.caveat(
-                              fontSize: 55,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Text('My Dentist', style: OurSettings.titleFont),
                           const SizedBox(height: 10),
                           const Text(
-                            'Hey Doctor!',
+                            'Hey Doctor, Please Sign In!',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                           ),
-                          const SizedBox(height: 50),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 25.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.lightBlue[50],
-                                border: Border.all(color: Colors.white10),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: _entryField(
-                                  'email',
-                                  Icons.email_outlined,
-                                ),
+                          const SizedBox(height: 40),
+                          // Email field
+                          Container(
+                            decoration: BoxDecoration(
+                              color: OurSettings.mainColors[100],
+                              border: Border.all(color: Colors.white10),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: _entryField(
+                                'email',
+                                Icons.email_outlined,
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 25.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.lightBlue[50],
-                                border: Border.all(color: Colors.white10),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: _entryField(
-                                  'password',
-                                  Icons.lock_outline,
-                                ),
+                          // Password field
+                          Container(
+                            decoration: BoxDecoration(
+                              color: OurSettings.mainColors[100],
+                              border: Border.all(color: Colors.white10),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: _entryField(
+                                'password',
+                                Icons.lock_outline,
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
-                          _submitButton(screenWidth * 0.2),
+                          _submitButton(),
                         ],
                       ),
                     ),

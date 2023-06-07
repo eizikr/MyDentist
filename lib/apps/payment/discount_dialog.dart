@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 class NumberSelectionDialog extends StatefulWidget {
   const NumberSelectionDialog({super.key});
@@ -37,6 +38,7 @@ class _NumberSelectionDialogState extends State<NumberSelectionDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Center(child: Text('Select Discount')),
+      backgroundColor: OurSettings.mainColors[100],
       content: SingleChildScrollView(
         child: Column(
           children: <Widget>[

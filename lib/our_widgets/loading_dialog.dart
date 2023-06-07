@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 class LoadingDialog {
   LoadingDialog();
 
-  static Future<void> showLoadingDialog(BuildContext context,
-      {String msg = 'Loading...'}) async {
+  static Future<void> showLoadingDialog(
+    BuildContext context, {
+    String msg = 'Loading...',
+  }) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // Prevent user from dismissing the dialog
       builder: (BuildContext context) {
         return WillPopScope(
-          // Prevent the user from closing the dialog by pressing the back button
           onWillPop: () async => false,
           child: Center(
             child: Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: OurSettings.mainColors[100],
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
-import 'package:my_dentist/our_widgets/discount_dialog.dart';
+import 'package:my_dentist/apps/payment/discount_dialog.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -115,26 +115,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  top: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  right: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
+              decoration: ourBoxDecoration(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,22 +138,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
               ),
             ),
             Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  right: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
+              decoration: ourBoxDecoration(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

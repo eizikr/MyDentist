@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/apps/home/home_page.dart';
 import 'package:my_dentist/apps/reports/report.dart';
 import 'firebase_options.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   setGlobalData();
+
   runApp(const MyApp());
 }
 
@@ -33,16 +35,29 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      theme: ThemeData(
-        primarySwatch: OurSettings.backgroundColors,
-        scaffoldBackgroundColor: OurSettings.backgroundColor,
-      ),
+      // theme: ThemeData(
+      //   primarySwatch: OurSettings.mainColors,
+      //   scaffoldBackgroundColor: OurSettings.backgroundColor,
+      // ),
       darkTheme: ThemeData(
-        primarySwatch: OurSettings.backgroundColors,
+        primarySwatch: OurSettings.mainColors,
         scaffoldBackgroundColor: OurSettings.backgroundColor,
+        appBarTheme: AppBarTheme(
+          toolbarTextStyle: TextTheme(
+            titleLarge: GoogleFonts.poppins(
+              fontSize: 30,
+            ),
+          ).bodyMedium,
+          titleTextStyle: TextTheme(
+            titleLarge: GoogleFonts.poppins(
+              fontSize: 30,
+            ),
+          ).titleLarge,
+        ),
       ),
       // home: const LoadDataFromFireBase(),
       home: const WidgetTree(),
+
       // home: const HomePage(),
       // home: const ReportPage(),
     );

@@ -153,6 +153,7 @@ class SchedulePlannerState extends State<SchedulePlanner> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           content: StatefulBuilder(
             // You need this, notice the parameters below:
             builder: (BuildContext context, StateSetter setState) {
@@ -172,6 +173,7 @@ class SchedulePlannerState extends State<SchedulePlanner> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           content: SizedBox(
             width: double.infinity,
             child: StatefulBuilder(

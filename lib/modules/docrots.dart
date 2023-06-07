@@ -59,7 +59,6 @@ Future createDoctor({
     (snapshot) async {
       if (snapshot.docs.isNotEmpty) {
         errorToast('This email is already in use');
-        // snapshot.docs[0].reference.update(instance.toJson());
       } else {
         try {
           UserCredential userCredential =
@@ -68,7 +67,7 @@ Future createDoctor({
           userCredential.user!.updateDisplayName('Dr $lastName');
           doctorDocuments.doc(userId).set(instance.toJson());
         } catch (error) {
-          print('Registration failed. Error: $error');
+          error.printError();
         }
       }
     },
@@ -83,8 +82,6 @@ Future deleteDoctor(String email) async {
   query.get().then(
     (snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        // snapshot.docs[0].id
-
         snapshot.docs[0].reference.delete();
       } else {
         errorToast('ID not found');

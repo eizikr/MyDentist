@@ -108,7 +108,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
   Widget treatmentTypeCard(TreatmentType treatmentType) {
     return Center(
       child: Card(
-        color: OurSettings.backgroundColors[50],
+        color: OurSettings.mainColors[50],
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
