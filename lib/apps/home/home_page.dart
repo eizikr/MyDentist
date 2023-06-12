@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 35),
                         HomePageButton(
-                          text: 'Schedule planner',
+                          text: 'Schedule Planner',
                           onClicked: () {
                             Navigator.push(
                               context,
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 35),
                         HomePageButton(
-                          text: 'documents',
+                          text: 'Documents',
                           onClicked: () => {},
                           icon: Icons.file_copy_rounded,
                         ),

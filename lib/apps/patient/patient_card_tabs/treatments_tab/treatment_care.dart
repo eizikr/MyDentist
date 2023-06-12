@@ -22,7 +22,7 @@ class TreatmentCare extends StatefulWidget {
 
 class _TreatmentCareState extends State<TreatmentCare> {
   TextEditingController summaryController = TextEditingController();
-  TextEditingController medicineController = TextEditingController();
+  TextEditingController perscriptionController = TextEditingController();
 
   late Map<String, dynamic> meeting;
   List<Icon> icons = [const Icon(Icons.done), const Icon(Icons.cancel)];
@@ -53,6 +53,8 @@ class _TreatmentCareState extends State<TreatmentCare> {
     icon = icons[iconIndex];
     patient = db.patients;
     summaryController.text = meeting['summary'];
+    perscriptionController.text = meeting['treatment']['perscription'];
+
     _discount = meeting['treatment']['discount'];
     _cost = meeting['treatment']['cost'];
     super.initState();
@@ -230,7 +232,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(16.0),
                             ),
-                            controller: medicineController,
+                            controller: perscriptionController,
                           ),
                         ),
                       ],
@@ -277,11 +279,19 @@ class _TreatmentCareState extends State<TreatmentCare> {
                                   meeting['id'],
                                   summaryController.text,
                                 );
+                                await Meeting.updatePerscription(
+                                  meeting['id'],
+                                  perscriptionController.text,
+                                );
                                 await Treatment.updateDiscount(
                                   meeting['id'],
                                   _discount,
                                 );
-                                Navigator.pop(context);
+                                void contextCare() {
+                                  Navigator.pop(context);
+                                }
+
+                                contextCare();
                               },
                               text: 'Save Summary',
                             ),

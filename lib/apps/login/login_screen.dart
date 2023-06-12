@@ -146,33 +146,41 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 40),
                           // Email field
-                          Container(
-                            decoration: BoxDecoration(
-                              color: OurSettings.mainColors[100],
-                              border: Border.all(color: Colors.white10),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: _entryField(
-                                'email',
-                                Icons.email_outlined,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: OurSettings.mainColors[100],
+                                border: Border.all(color: Colors.white10),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: _entryField(
+                                  'email',
+                                  Icons.email_outlined,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           // Password field
-                          Container(
-                            decoration: BoxDecoration(
-                              color: OurSettings.mainColors[100],
-                              border: Border.all(color: Colors.white10),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: _entryField(
-                                'password',
-                                Icons.lock_outline,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: OurSettings.mainColors[100],
+                                border: Border.all(color: Colors.white10),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: _entryField(
+                                  'password',
+                                  Icons.lock_outline,
+                                ),
                               ),
                             ),
                           ),

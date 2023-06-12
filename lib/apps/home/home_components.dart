@@ -151,7 +151,7 @@ class _SearchPatientDialogState extends State<SearchPatientDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Please enter patient ID'),
-      backgroundColor: OurSettings.mainColors[50],
+      backgroundColor: OurSettings.mainColors[100],
       content: Form(
         key: _formKey,
         child: TextFormField(

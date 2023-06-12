@@ -162,10 +162,13 @@ class _PaymentPageState extends State<PaymentDialog> {
       LoadingDialog.showLoadingDialog(context);
 
       await Future.delayed(const Duration(seconds: 3));
+      void dismissDialogAndNavigate() {
+        LoadingDialog.hideLoadingDialog(context);
+        Navigator.of(context).pop();
+        showSuccessDialog(context, msg: 'Payment completed.');
+      }
 
-      LoadingDialog.hideLoadingDialog(context);
-      Navigator.of(context).pop();
-      showSuccessDialog(context, msg: 'Payment completed.');
+      dismissDialogAndNavigate();
       await Patient.updatePatientPayment(
           _patientID, -double.parse(_amountController.text));
     }

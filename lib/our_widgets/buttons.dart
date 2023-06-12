@@ -56,17 +56,19 @@ class BasicButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          backgroundColor: const Color.fromARGB(255, 156, 224, 255),
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        backgroundColor: OurSettings.buttonColor,
+      ),
+      onPressed: onClicked,
+      child: FittedBox(
+        child: Text(
+          text,
+          style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
         ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
-          ),
-        ),
-      );
+      ),
+    );
+  }
 }

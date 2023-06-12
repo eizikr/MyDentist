@@ -10,8 +10,8 @@ import '../our_widgets/global.dart';
 class Treatment {
   late final int discount;
   late final double originalCost;
-
   late final String toothNumber;
+
   late final Map<String, dynamic> treatmentType;
   late final String patientID;
   late final String treatingDoctor;
@@ -19,6 +19,7 @@ class Treatment {
   late final String remarks;
   late final String assistent;
   late final double cost;
+  late final String perscription;
 
   Treatment({
     this.discount = 0,
@@ -31,6 +32,7 @@ class Treatment {
     this.remarks = 'No remarks',
     this.cost = 0.0,
     this.originalCost = 0.0,
+    this.perscription = '',
   });
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +46,7 @@ class Treatment {
         'isDone': isDone,
         'remarks': remarks,
         'cost': cost,
+        'perscription': perscription,
       };
 
   static Treatment fromJson(Map<String, dynamic> json) => Treatment(
@@ -57,6 +60,7 @@ class Treatment {
         isDone: json['isDone'],
         remarks: json['remarks'],
         cost: json['cost'],
+        perscription: json['perscription'],
       );
 
   static Future<List<Treatment>> getPatientTreatments(String id) async {
@@ -82,6 +86,7 @@ class Treatment {
             isDone: data['isDone'],
             remarks: data['remarks'],
             cost: data['cost'],
+            perscription: data['perscription'],
           ));
         }
       },

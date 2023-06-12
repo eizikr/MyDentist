@@ -24,50 +24,66 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                BasicButton(
-                  onClicked: () => showHistory
-                      ? setState(() {
-                          showHistory = !showHistory;
-                          title = "Future Treatments";
-                        })
-                      : null,
-                  text: 'Future Treatments',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showHistory
+                        ? setState(() {
+                            showHistory = !showHistory;
+                            title = "Future Treatments";
+                          })
+                        : null,
+                    text: 'Future Treatments',
+                  ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => showHistory
-                      ? null
-                      : setState(() {
-                          showHistory = !showHistory;
-                          title = "Treatments History";
-                        }),
-                  text: 'History',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showHistory
+                        ? null
+                        : setState(() {
+                            showHistory = !showHistory;
+                            title = "Treatments History";
+                          }),
+                    text: 'History',
+                  ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SchedulePlanner(
-                        patientId: widget.patientID,
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SchedulePlanner(
+                          patientId: widget.patientID,
+                        ),
                       ),
                     ),
+                    text: 'Create Treatment',
                   ),
-                  text: 'Create Treatment',
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          PaymentDialog(widget.patientID)),
-                  text: 'Payment',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            PaymentDialog(widget.patientID)),
+                    text: 'Payment',
+                  ),
                 ),
               ],
             ),
