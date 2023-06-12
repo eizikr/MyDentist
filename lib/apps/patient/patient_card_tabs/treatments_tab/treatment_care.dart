@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
-import 'package:my_dentist/our_widgets/discount_dialog.dart';
+import 'package:my_dentist/apps/payment/discount_dialog.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -22,7 +22,7 @@ class TreatmentCare extends StatefulWidget {
 
 class _TreatmentCareState extends State<TreatmentCare> {
   TextEditingController summaryController = TextEditingController();
-  TextEditingController medicineController = TextEditingController();
+  TextEditingController perscriptionController = TextEditingController();
 
   late Map<String, dynamic> meeting;
   List<Icon> icons = [const Icon(Icons.done), const Icon(Icons.cancel)];
@@ -53,6 +53,8 @@ class _TreatmentCareState extends State<TreatmentCare> {
     icon = icons[iconIndex];
     patient = db.patients;
     summaryController.text = meeting['summary'];
+    perscriptionController.text = meeting['treatment']['perscription'];
+
     _discount = meeting['treatment']['discount'];
     _cost = meeting['treatment']['cost'];
     super.initState();
@@ -115,26 +117,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  top: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  right: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
+              decoration: ourBoxDecoration(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,22 +140,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
               ),
             ),
             Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                  right: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
+              decoration: ourBoxDecoration(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,7 +232,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(16.0),
                             ),
-                            controller: medicineController,
+                            controller: perscriptionController,
                           ),
                         ),
                       ],
@@ -311,11 +279,19 @@ class _TreatmentCareState extends State<TreatmentCare> {
                                   meeting['id'],
                                   summaryController.text,
                                 );
+                                await Meeting.updatePerscription(
+                                  meeting['id'],
+                                  perscriptionController.text,
+                                );
                                 await Treatment.updateDiscount(
                                   meeting['id'],
                                   _discount,
                                 );
-                                Navigator.pop(context);
+                                void contextCare() {
+                                  Navigator.pop(context);
+                                }
+
+                                contextCare();
                               },
                               text: 'Save Summary',
                             ),

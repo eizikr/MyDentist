@@ -206,6 +206,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
         cost: treatmentType['price'],
         originalCost: treatmentType['price'],
       );
+      print('1');
       addTreatmentMeeting(_from, _to, treatmentType['name']!, instance);
       Navigator.of(context).pop();
     }

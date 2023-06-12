@@ -3,6 +3,7 @@ import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatme
 import 'package:my_dentist/apps/payment/payment_dialog.dart';
 import 'package:my_dentist/apps/planner/schedule_planner.dart';
 import 'package:my_dentist/our_widgets/buttons.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class PatientTreatmentsPage extends StatefulWidget {
   final String patientID;
@@ -23,50 +24,66 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                BasicButton(
-                  onClicked: () => showHistory
-                      ? setState(() {
-                          showHistory = !showHistory;
-                          title = "Future Treatments";
-                        })
-                      : null,
-                  text: 'Future Treatments',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showHistory
+                        ? setState(() {
+                            showHistory = !showHistory;
+                            title = "Future Treatments";
+                          })
+                        : null,
+                    text: 'Future Treatments',
+                  ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => showHistory
-                      ? null
-                      : setState(() {
-                          showHistory = !showHistory;
-                          title = "Treatments History";
-                        }),
-                  text: 'History',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showHistory
+                        ? null
+                        : setState(() {
+                            showHistory = !showHistory;
+                            title = "Treatments History";
+                          }),
+                    text: 'History',
+                  ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SchedulePlanner(
-                        patientId: widget.patientID,
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SchedulePlanner(
+                          patientId: widget.patientID,
+                        ),
                       ),
                     ),
+                    text: 'Create Treatment',
                   ),
-                  text: 'Create Treatment',
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-                BasicButton(
-                  onClicked: () => showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          PaymentDialog(widget.patientID)),
-                  text: 'Payment',
+                SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: BasicButton(
+                    onClicked: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            PaymentDialog(widget.patientID)),
+                    text: 'Payment',
+                  ),
                 ),
               ],
             ),
@@ -85,26 +102,7 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
 
 Widget historyTreatmentsScreen(String patientID) {
   return Container(
-    decoration: const BoxDecoration(
-      border: Border(
-        left: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        bottom: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        top: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        right: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-      ),
-    ),
+    decoration: ourBoxDecoration(),
     child: ShowTreatmentScreen(
       patientID: patientID,
       isHistory: true,
@@ -115,26 +113,7 @@ Widget historyTreatmentsScreen(String patientID) {
 
 Widget futureTreatmentsScreen(String patientID) {
   return Container(
-    decoration: const BoxDecoration(
-      border: Border(
-        left: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        bottom: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        top: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-        right: BorderSide(
-          width: 1.0,
-          color: Colors.grey,
-        ),
-      ),
-    ),
+    decoration: ourBoxDecoration(),
     child: ShowTreatmentScreen(
       patientID: patientID,
       isHistory: false,

@@ -141,7 +141,20 @@ class Meeting {
       DocumentReference newMeetingRef = collection.doc(meetingID);
 
       await newMeetingRef.update({'summary': summary});
-      successToast('Meeting summary successfully set');
+    } catch (e) {
+      errorToast('Error: $e');
+    }
+  }
+
+  static Future<void> updatePerscription(
+      String meetingID, String perscription) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('Meetings');
+
+      DocumentReference newMeetingRef = collection.doc(meetingID);
+
+      await newMeetingRef.update({'treatment.perscription': perscription});
     } catch (e) {
       errorToast('Error: $e');
     }

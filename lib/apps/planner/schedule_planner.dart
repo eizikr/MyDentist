@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dentist/apps/patient/patient_card_tabs/treatments_tab/treatments_list.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -52,6 +53,12 @@ class SchedulePlannerState extends State<SchedulePlanner> {
     return true;
   }
 
+  void refreshDate() {
+    setState(() {
+      _selectedDate = _selectedDate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,12 +77,12 @@ class SchedulePlannerState extends State<SchedulePlanner> {
         ),
         actions: <Widget>[
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (isLegalDay()) {
                   if (widget.patientId == null) {
-                    meetingDialog();
+                    await meetingDialog();
                   } else {
-                    createTreatmentDialog();
+                    await createTreatmentDialog();
                   }
                 }
               },
@@ -148,11 +155,12 @@ class SchedulePlannerState extends State<SchedulePlanner> {
     );
   }
 
-  void createTreatmentDialog() async {
+  Future<void> createTreatmentDialog() async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           content: StatefulBuilder(
             // You need this, notice the parameters below:
             builder: (BuildContext context, StateSetter setState) {
@@ -167,11 +175,12 @@ class SchedulePlannerState extends State<SchedulePlanner> {
     );
   }
 
-  void meetingDialog() async {
+  Future<void> meetingDialog() async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           content: SizedBox(
             width: double.infinity,
             child: StatefulBuilder(
@@ -219,51 +228,78 @@ class _MeetingDataState extends State<MeetingData> {
             height: 60,
             color: widget.meetingDetails[index].background,
             child: ListTile(
-              leading: Column(
-                children: <Widget>[
-                  Text(
-                    widget.meetingDetails[index].isAllDay!
-                        ? ''
-                        : DateFormat('hh:mm a')
-                            .format(widget.meetingDetails[index].from!),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      widget.meetingDetails[index].isAllDay!
+                          ? ''
+                          : DateFormat('hh:mm a')
+                              .format(widget.meetingDetails[index].from!),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Text(
-                    widget.meetingDetails[index].isAllDay! ? 'All day' : '',
-                    style: const TextStyle(height: 0.5, color: Colors.white),
-                  ),
-                  Text(
-                    widget.meetingDetails[index].isAllDay!
-                        ? ''
-                        : DateFormat('hh:mm a')
-                            .format(widget.meetingDetails[index].to!),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                color: Colors.white,
-                onPressed: () {
-                  confirmationDialog(
-                    context,
-                    () {
-                      _deleteMeeting(widget.meetingDetails[index]);
-                      Navigator.of(context).pop();
-                    },
-                  );
-                },
-                tooltip: 'Delete meeting',
-              ),
-              title: Text(
-                  '${widget.meetingDetails[index].eventName}\nDr ${widget.meetingDetails[index].doctor!['lastName']}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white)),
-            ),
+                    Text(
+                      widget.meetingDetails[index].isAllDay! ? 'All day' : '',
+                      style: const TextStyle(height: 0.5, color: Colors.white),
+                    ),
+                    Text(
+                      widget.meetingDetails[index].isAllDay!
+                          ? ''
+                          : DateFormat('hh:mm a')
+                              .format(widget.meetingDetails[index].to!),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.white,
+                  onPressed: () {
+                    confirmationDialog(
+                      context,
+                      () {
+                        _deleteMeeting(widget.meetingDetails[index]);
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                  tooltip: 'Delete meeting',
+                ),
+                title: Column(
+                  children: [
+                    (widget.meetingDetails[index].treatment == null)
+                        ? Text(
+                            '${widget.meetingDetails[index].eventName}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              showDialog<void>(
+                                context: context,
+                                builder: (context) => TreatmentDetailsDialog(
+                                  meetingInstance:
+                                      widget.meetingDetails[index].toJson(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '${widget.meetingDetails[index].eventName}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white),
+                            )),
+                    Text(
+                      'Dr ${widget.meetingDetails[index].doctor!['lastName']}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                )),
           );
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -273,3 +309,8 @@ class _MeetingDataState extends State<MeetingData> {
     );
   }
 }
+
+
+                  // '${widget.meetingDetails[index].eventName}\nDr ${widget.meetingDetails[index].doctor!['lastName']}',
+                  // textAlign: TextAlign.center,
+                  // style: const TextStyle(color: Colors.white)),

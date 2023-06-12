@@ -1,15 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
-
-bool isPatientExists(String id) {
-  DocumentSnapshot<Map<String, dynamic>> document = (FirebaseFirestore.instance
-      .collection('Patients')
-      .get()) as DocumentSnapshot<Map<String, dynamic>>;
-  if (document.exists) return true;
-  return false;
-}
 
 Future<bool?> errorToast(String myMsg) {
   return Fluttertoast.showToast(
@@ -101,6 +92,7 @@ void confirmationDialog(BuildContext context, Function func) async {
     builder: (context) {
       return AlertDialog(
         title: const Text("Are you sure?"),
+        backgroundColor: OurSettings.mainColors[100],
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,6 +137,7 @@ void showSuccessDialog(BuildContext context, {String msg = ''}) => showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           title: const Text('Success!'),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -164,4 +157,25 @@ void showSuccessDialog(BuildContext context, {String msg = ''}) => showDialog(
           ],
         );
       },
+    );
+
+BoxDecoration ourBoxDecoration() => BoxDecoration(
+      border: Border(
+        left: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        bottom: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        top: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        right: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+      ),
     );

@@ -40,6 +40,7 @@ class _PaymentPageState extends State<PaymentDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: OurSettings.mainColors[100],
       child: Container(
         padding: const EdgeInsets.all(16.0),
         width: MediaQuery.of(context).size.width * 0.3,
@@ -54,7 +55,7 @@ class _PaymentPageState extends State<PaymentDialog> {
                 children: [
                   Icon(
                     Icons.credit_card,
-                    color: OurSettings.backgroundColors[400],
+                    color: OurSettings.mainColors[400],
                   ),
                   const SizedBox(width: 10.0),
                   const Text(
@@ -95,7 +96,7 @@ class _PaymentPageState extends State<PaymentDialog> {
                   if (value!.isEmpty) {
                     return "Enter Card Number";
                   } else if (value.length != 16) {
-                    return "Must Be 16 Numbers";
+                    return "Must Be 16 Digits";
                   }
                   return null;
                 },
@@ -161,10 +162,13 @@ class _PaymentPageState extends State<PaymentDialog> {
       LoadingDialog.showLoadingDialog(context);
 
       await Future.delayed(const Duration(seconds: 3));
+      void dismissDialogAndNavigate() {
+        LoadingDialog.hideLoadingDialog(context);
+        Navigator.of(context).pop();
+        showSuccessDialog(context, msg: 'Payment completed.');
+      }
 
-      LoadingDialog.hideLoadingDialog(context);
-      Navigator.of(context).pop();
-      showSuccessDialog(context, msg: 'Payment completed.');
+      dismissDialogAndNavigate();
       await Patient.updatePatientPayment(
           _patientID, -double.parse(_amountController.text));
     }
@@ -174,10 +178,20 @@ class _PaymentPageState extends State<PaymentDialog> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        const Duration(days: 36000),
-      ),
+      firstDate: DateTime(DateTime.now().year - 1),
+      lastDate: DateTime(DateTime.now().year + 20),
+      initialDatePickerMode: DatePickerMode.year,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.blue,
+            ),
+          ),
+          child: child!,
+        );
+      },
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
 
     if (picked != null) {
