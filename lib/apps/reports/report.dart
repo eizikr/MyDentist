@@ -8,6 +8,7 @@ import '/modules/patient.dart';
 import '/our_widgets/global.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 
 
 class ReportPage extends StatefulWidget {
@@ -106,7 +107,13 @@ class _ReportPageState extends State<ReportPage> {
   }
 
     return Scaffold(
-              body: 
+              appBar: AppBar(
+                title: const Text('Reports'),
+                centerTitle: true,
+                backgroundColor: ourSettings.backgroundColors[200],
+              ),
+              body: SingleChildScrollView(
+                child:
                 StreamBuilder<List<Patient>>(
                   stream: readPatients(),
                   builder: (context, snapshot) {
@@ -151,7 +158,8 @@ class _ReportPageState extends State<ReportPage> {
                     }
                   },
                 )
-            ,);
+            ,)
+          );
   }
 
   Widget newW (){
