@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async' show Future;
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:my_dentist/apps/home/login_screen.dart';
+import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 import '/modules/patient.dart';
 import '/our_widgets/global.dart';
@@ -68,10 +70,7 @@ class _PatientReportPageState extends State<PatientReportPage> {
                     }
                   } 
                   else {
-                      return const CircularProgressIndicator(
-                          strokeWidth: 8.0,
-                          color: Colors.blue,
-                      );                  
+                      return LoadingPage(loadingText: "Loading recommendation");
                   }                          
             },
     );
