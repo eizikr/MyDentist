@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class ourSettings {
-  static const Color backgroundColor = Color(0xFFB3E5FC);
-  static const Color darkbackgroundColor = Color.fromARGB(73, 179, 229, 252);
-  static const Color appbarColor = Color(0xFF81D4FA);
-  static const MaterialColor backgroundColors = MaterialColor(
+enum PasswordStrengh {
+  low,
+  fair,
+  good,
+  excellent,
+}
+
+class OurSettings {
+  static const Color backgroundColor = Color(0xFF81D4FA);
+  static const Color appbarColor = Color.fromARGB(255, 99, 204, 253);
+  static const Color textFieldColor = Color.fromARGB(47, 28, 72, 129);
+  static const Color buttonColor = Color.fromARGB(255, 156, 224, 255);
+  static const PasswordStrengh passwordStrengh = PasswordStrengh.low;
+  static const MaterialColor mainColors = MaterialColor(
     0xFF29B6F6,
     <int, Color>{
       50: Color(0xFFE1F5FE),
@@ -16,22 +26,26 @@ class ourSettings {
       600: Color(0xFF039BE5),
       700: Color(0xFF0288D1),
       800: Color(0xFF0277BD),
-      900: Color(0xFF01579B),
+      900: Color(0xFF4FC3F7),
     },
   );
-  static const MaterialColor darkbackgroundColors = MaterialColor(
-    0xFF78909C,
-    <int, Color>{
-      50: Color(0xFFECEFF1),
-      100: Color(0xFFCFD8DC),
-      200: Color(0xFFB0BEC5),
-      300: Color(0xFF90A4AE),
-      400: Color(0xFF78909C),
-      500: Color(0xFF78909C),
-      600: Color(0xFF546E7A),
-      700: Color(0xFF455A64),
-      800: Color(0xFF37474F),
-      900: Color(0xFF263238),
-    },
+
+  // fonts: roboto, montserrat, lato, Open Sans, poppins
+  static TextStyle titleFont = GoogleFonts.caveat(
+    fontSize: 55,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 2.0,
+    color: Colors.blueGrey.shade900,
+    shadows: [
+      Shadow(
+        color: Colors.black.withOpacity(0.2),
+        blurRadius: 4,
+        offset: const Offset(2, 2),
+      ),
+    ],
+  );
+  static TextStyle buttonsTextFont = GoogleFonts.poppins(
+    fontSize: 17,
+    color: Colors.black,
   );
 }

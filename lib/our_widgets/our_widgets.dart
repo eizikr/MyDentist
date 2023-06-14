@@ -1,41 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
-
-Widget loadingCircule(String circuleText) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircularProgressIndicator(
-          color: Colors.blue[300],
-        ),
-        const SizedBox(
-          height: 20,
-        ), // add some space between the progress indicator and the title
-        Text(circuleText)
-      ],
-    ),
-  );
-}
-
-Widget loadingDialog() {
-  return AlertDialog(
-    content: CircularProgressIndicator(
-      color: Colors.blue[300],
-    ),
-  );
-}
-
-bool isPatientExists(String id) {
-  DocumentSnapshot<Map<String, dynamic>> document = (FirebaseFirestore.instance
-      .collection('Patients')
-      .get()) as DocumentSnapshot<Map<String, dynamic>>;
-  if (document.exists) return true;
-  return false;
-}
 
 Future<bool?> errorToast(String myMsg) {
   return Fluttertoast.showToast(
@@ -65,76 +30,152 @@ Future<bool?> successToast(String myMsg) {
   );
 }
 
-class LoadingPage extends StatefulWidget {
-  final String loadingText;
-  const LoadingPage({required this.loadingText, super.key});
-  @override
-  State<LoadingPage> createState() => _LoadingPageState();
+String capitalizeFirstCharacter(String input) {
+  if (input.isEmpty) {
+    return input;
+  }
+  return input[0].toUpperCase() + input.substring(1);
 }
 
-class _LoadingPageState extends State<LoadingPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(25),
-        child: Container(
-          child: loadingCircule(widget.loadingText),
-        ),
-      ),
-    );
+String isPasswordValid(String password) {
+  late bool isValid;
+
+  bool hasCharacter(String input) {
+    return input.isNotEmpty && input.contains(RegExp(r'[a-zA-Z]'));
+  }
+
+  bool hasLowerAndUpperCase(String input, {bool hasSpacial = true}) {
+    bool hasLower = false;
+    bool hasUpper = false;
+
+    for (int i = 0; i < input.length; i++) {
+      if (input[i].toUpperCase() == input[i]) {
+        hasUpper = true;
+      }
+      if (input[i].toLowerCase() == input[i]) {
+        hasLower = true;
+      }
+      if (hasSpacial == false &&
+          input[i].contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+        hasLower = true;
+      }
+    }
+    return hasLower && hasUpper && hasSpacial;
+  }
+
+  switch (OurSettings.passwordStrengh) {
+    case PasswordStrengh.low:
+      isValid = password.length >= 6;
+      return !isValid ? "Minimum 6 characters long" : "valid";
+    case PasswordStrengh.fair:
+      isValid = password.length >= 8 && hasCharacter(password);
+      return !isValid ? "Minimum 8 characters long and 1 letter" : "valid";
+    case PasswordStrengh.good:
+      isValid = password.length >= 8 && hasLowerAndUpperCase(password);
+
+      return !isValid
+          ? "Minimum 8 characters long ,1 lowercase, 1 upercase"
+          : "valid";
+    case PasswordStrengh.excellent:
+      isValid = password.length >= 8 && hasCharacter(password);
+      return !isValid
+          ? "Minimum 8 characters long ,1 lowercase, 1 upercase, 1 spacial"
+          : "valid";
+    default:
+      return "valid";
   }
 }
 
-class HomePageButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onClicked;
-
-  const HomePageButton({
-    required this.text,
-    required this.onClicked,
-  });
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(50),
-          shape: const StadiumBorder(),
-          backgroundColor: const Color.fromARGB(255, 156, 224, 255),
-        ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
-          ),
-        ),
-      );
-}
-
-class BasicButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onClicked;
-
-  const BasicButton({
-    super.key,
-    required this.text,
-    required this.onClicked,
-  });
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          backgroundColor: const Color.fromARGB(255, 156, 224, 255),
-        ),
-        onPressed: onClicked,
-        child: FittedBox(
-          child: Text(
-            text,
-            style: GoogleFonts.roboto(fontSize: 17, color: Colors.black),
-          ),
+void confirmationDialog(BuildContext context, Function func) async {
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Are you sure?"),
+        backgroundColor: OurSettings.mainColors[100],
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    'No',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => func(),
+                  child: const Text(
+                    'Yes',
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       );
+    },
+  );
 }
+
+List<DropdownMenuItem<DateTime>> buildHoureItems(List<DateTime> items) {
+  return items.map((time) {
+    final hours = time.hour.toString().padLeft(2, '0');
+    final minutes = time.minute.toString().padLeft(2, '0');
+    final label = '$hours:$minutes';
+    return DropdownMenuItem<DateTime>(
+      value: time,
+      child: Text(label),
+    );
+  }).toList();
+}
+
+void showSuccessDialog(BuildContext context, {String msg = ''}) => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
+          title: const Text('Success!'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.check_circle, color: Colors.green),
+              const SizedBox(width: 10.0),
+              Text(msg),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+BoxDecoration ourBoxDecoration() => BoxDecoration(
+      border: Border(
+        left: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        bottom: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        top: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+        right: BorderSide(
+          width: 1.0,
+          color: Colors.grey[600]!,
+        ),
+      ),
+    );

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:my_dentist/modules/assistant.dart';
+import 'package:my_dentist/modules/treatments.dart';
 
 class DB {
   late final CollectionReference assistants;
@@ -7,6 +9,11 @@ class DB {
   late final CollectionReference treatments;
   late final CollectionReference treatmentTypes;
   late final CollectionReference meetings;
+  late final CollectionReference doctors;
+  late List<String> treatmentTypeNames;
+  late List<String> treatmentTypeCodes;
+  late List<String> assistentNames;
+  late Map<String, Map<String, dynamic>> treatmentTypesDictionary;
 
   DB() {
     assistants = FirebaseFirestore.instance.collection('Assistants');
@@ -14,13 +21,50 @@ class DB {
     treatments = FirebaseFirestore.instance.collection('Treatments');
     treatmentTypes = FirebaseFirestore.instance.collection('Treatment Types');
     meetings = FirebaseFirestore.instance.collection('Meetings');
+    doctors = FirebaseFirestore.instance.collection('Doctors');
+    treatmentTypesDictionary = {};
   }
 
-  static Stream<List<String>> treatmentNames() => FirebaseFirestore.instance
-      .collection('Treatment Types')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => doc['name'] as String).toList());
+  Future<void> createTreatmentDictionary() async {
+    // Create treatment dictionary { 'code' : treatment_instance }
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('Treatment Types').get();
+
+      for (DocumentSnapshot doc in snapshot.docs) {
+        String treatmentCode = doc.get('code');
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        treatmentTypesDictionary[treatmentCode] = data;
+      }
+    } catch (e) {
+      print('Global error! $e');
+    }
+  }
+
+  Future<void> setAssistantNames() async {
+    assistentNames = await Assistant.getNames();
+  }
+
+  List<String> getAssistantNames() {
+    return assistentNames;
+  }
+
+  Future<void> setTreatmentTypeCodes() async {
+    treatmentTypeCodes = await TreatmentType.getCodes();
+  }
+
+  List<String> getTreatmentTypeCodes() {
+    return treatmentTypeCodes;
+  }
+
+  Future<void> setTreatmentTypeNames() async {
+    treatmentTypeNames = await TreatmentType.getNames();
+  }
+
+  List<String> getTreatmentTypeNames() {
+    return treatmentTypeNames;
+  }
 }
 
 class EncryptData {
@@ -41,8 +85,12 @@ class EncryptData {
   }
 
   String decryptAES(plainText) {
-    if (plainText == '') return '';
-    String decrypted = encrypter.decrypt64(plainText, iv: _iv);
+    String decrypted;
+    try {
+      decrypted = encrypter.decrypt64(plainText, iv: _iv);
+    } catch (e) {
+      decrypted = plainText;
+    }
     return decrypted;
   }
 }

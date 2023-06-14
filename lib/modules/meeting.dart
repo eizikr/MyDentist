@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_dentist/modules/docrots.dart';
+import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
@@ -54,6 +56,7 @@ class FirebaseMeetingDataSource extends CalendarDataSource {
 }
 
 class Meeting {
+  String? summary;
   String? id;
   String? eventName;
   String? eventType;
@@ -62,28 +65,35 @@ class Meeting {
   Color? background;
   bool? isAllDay;
   Map<String, dynamic>? treatment;
+  Map<String, dynamic>? doctor;
 
-  Meeting(
-      {this.eventName,
-      this.eventType,
-      this.from,
-      this.to,
-      this.background,
-      this.isAllDay,
-      this.treatment,
-      this.id});
+  Meeting({
+    this.summary,
+    this.eventName,
+    this.eventType,
+    this.from,
+    this.to,
+    this.background,
+    this.isAllDay,
+    this.treatment,
+    this.id,
+    this.doctor,
+  });
 
   Map<String, dynamic> toJson() => {
+        'summary': summary,
         'eventName': eventName,
         'eventType': eventType,
         'from': from,
         'to': to,
         'background': background!.value.toString(),
         'isAllDay': isAllDay,
-        'treatment': treatment //remember to send here as a json
+        'treatment': treatment, //remember to send here as a json
+        'doctor': doctor,
       };
 
   static Meeting fromJson(Map<String, dynamic> json) => Meeting(
+        summary: json['summary'],
         eventName: json['eventName'],
         eventType: json['eventType'],
         from: (json['from'] as Timestamp).toDate(),
@@ -92,11 +102,16 @@ class Meeting {
         isAllDay: json['isAllDay'],
         treatment: json['treatment'],
         id: json['id'],
+        doctor: json['doctor'],
       );
 
   Future<void> deleteMeeting() async {
     try {
       await FirebaseFirestore.instance.collection('Meetings').doc(id).delete();
+      if (treatment != null) {
+        Patient.updatePatientPayment(
+            treatment!['patientID'], -(treatment!['cost']));
+      }
       successToast('Meeting deleted successfully');
     } catch (e) {
       errorToast('Error: $e');
@@ -117,6 +132,33 @@ class Meeting {
               return Meeting(id: id, treatment: data['treatment']);
             }).toList());
   }
+
+  static Future<void> updateSummary(String meetingID, String summary) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('Meetings');
+
+      DocumentReference newMeetingRef = collection.doc(meetingID);
+
+      await newMeetingRef.update({'summary': summary});
+    } catch (e) {
+      errorToast('Error: $e');
+    }
+  }
+
+  static Future<void> updatePerscription(
+      String meetingID, String perscription) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('Meetings');
+
+      DocumentReference newMeetingRef = collection.doc(meetingID);
+
+      await newMeetingRef.update({'treatment.perscription': perscription});
+    } catch (e) {
+      errorToast('Error: $e');
+    }
+  }
 }
 
 Future<void> createMeeting(
@@ -125,8 +167,10 @@ Future<void> createMeeting(
   DateTime to, {
   Treatment? treatment,
   bool isAllDay = false,
+  Doctor? doctor,
 }) async {
   Meeting instance = Meeting(
+    summary: '',
     eventName: eventName,
     eventType: treatment == null ? 'Meeting' : 'Treatment',
     from: from,
@@ -138,7 +182,12 @@ Future<void> createMeeting(
             : treatmentColor,
     isAllDay: isAllDay,
     treatment: treatment?.toJson(),
+    doctor: await getCurrentDoctor(),
   );
+
+  if (treatment != null) {
+    Patient.updatePatientPayment(treatment.patientID, treatment.cost);
+  }
 
   try {
     CollectionReference collection =
@@ -163,3 +212,9 @@ Future<void> changeMeetingStatus(
     errorToast('Error: $e');
   }
 }
+
+Stream<List<Meeting>> readMeetings() => FirebaseFirestore.instance
+    .collection('Meetings')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Meeting.fromJson(doc.data())).toList());
