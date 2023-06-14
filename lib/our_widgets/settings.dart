@@ -29,6 +29,7 @@ class OurSettings {
       900: Color(0xFF4FC3F7),
     },
   );
+
   // fonts: roboto, montserrat, lato, Open Sans, poppins
   static TextStyle titleFont = GoogleFonts.caveat(
     fontSize: 55,
