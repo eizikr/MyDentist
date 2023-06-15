@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/apps/reports/patient_report.dart';
-import 'package:my_dentist/modules/treatments.dart';
 import '/modules/patient.dart';
 import '/our_widgets/global.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
+
 
 
 class ReportPage extends StatefulWidget {
@@ -58,110 +58,6 @@ class _ReportPageState extends State<ReportPage> {
             .toList());
 
 
-
-  Widget _checkBoxField({
-    required String title,
-    required TextEditingController controller,
-    required List<String> options,
-    }) {
-      return Row(
-      children: [
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: ListTile(
-            title: Text(options[0]),
-            leading: Radio<String>(
-              value: options[0],
-              groupValue: controller.text,
-              onChanged: (String? value) {
-                setState(() {
-                  controller.text = value!;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            title: Text(options[1]),
-            leading: Radio<String>(
-              value: options[1],
-              groupValue: controller.text,
-              onChanged: (String? value) {
-                setState(() {
-                  controller.text = value!;
-
-                });
-              },
-            ),
-          ),
-        ),
-      ]
-    );
-  }
-
-    return Scaffold(
-              appBar: AppBar(
-                title: const Text('Reports'),
-                centerTitle: true,
-                backgroundColor: ourSettings.backgroundColors[200],
-              ),
-              body: SingleChildScrollView(
-                child:
-                StreamBuilder<List<Patient>>(
-                  stream: readPatients(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('something went wrong ${snapshot.error}');
-                    } else if (snapshot.hasData) {
-                      final patients = snapshot.data!;
-                      return Column(
-                        children: [
-                          _checkBoxField(
-                            title: "Choose the data you want to display:",
-                            controller: _str,
-                            options: dataoptions,
-                          ),
-                          newW(),
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Column(
-                              children: [
-                                const Center(
-                                  child: Text(
-                                    "Calculate the recommendation for the cost of annual dental insurance for patient ",
-                                    style: TextStyle(fontSize: 30, color: Colors.black)
-                                    ),
-                                ),
-                                const SizedBox(height: 10),
-                                Center(child: Wrap(
-                                      spacing: 8.0,
-                                      children: patients.map(buildPatient).toList(),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const CircularProgressIndicator(
-                          strokeWidth: 8.0,
-                          color: Colors.blue,
-                      );
-                    }
-                  },
-                )
-            ,)
-          );
-  }
-
   Widget newW (){
     return StreamBuilder<List<Patient>>(
       stream: readPatients(),
@@ -170,7 +66,6 @@ class _ReportPageState extends State<ReportPage> {
           return Text('something went wrong ${snapshot.error}');
         } else if (snapshot.hasData) {
           final patients = snapshot.data!;
-          // ignore: avoid_init_to_null
           var x = null;
           if (_str.text == "gender") {
             final groupedPatients = groupBy(patients, (patient) => crypto.decryptAES(patient.gender));
@@ -218,6 +113,109 @@ class _ReportPageState extends State<ReportPage> {
   }
 
 
+
+  Widget _checkBoxField({
+    required String title,
+    required TextEditingController controller,
+    required List<String> options,
+    }) {
+      return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: ListTile(
+            title: Text(options[0]),
+            leading: Radio<String>(
+              value: options[0],
+              groupValue: controller.text,
+              onChanged: (String? value) {
+                setState(() {
+                  controller.text = value!;
+                });
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListTile(
+            title: Text(options[1]),
+            leading: Radio<String>(
+              value: options[1],
+              groupValue: controller.text,
+              onChanged: (String? value) {
+                setState(() {
+                  controller.text = value!;
+
+                });
+              },
+            ),
+          ),
+        ),
+      ]
+    );
+  }
+    return Scaffold(
+              appBar: AppBar(
+                title: const Text('Reports'),
+                centerTitle: true,
+                backgroundColor: OurSettings.backgroundColor,
+              ),
+              body: SingleChildScrollView(
+              child:
+                StreamBuilder<List<Patient>>(
+                  stream: readPatients(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('something went wrong ${snapshot.error}');
+                    } else if (snapshot.hasData) {
+                      final patients = snapshot.data!;
+                      return Column(
+                        children: [
+                          _checkBoxField(
+                            title: "Choose the data you want to display:",
+                            controller: _str,
+                            options: dataoptions,
+                          ),
+                          newW(),
+                          Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              children: [
+                                const Center(
+                                  child: Text(
+                                    "Calculate the recommendation for the cost of annual dental insurance for patient ",
+                                    style: TextStyle(fontSize: 30, color: Colors.black)
+                                    ),
+                                ),
+                                const SizedBox(height: 10),
+                                Center(child: Wrap(
+                                      spacing: 8.0,
+                                      children: patients.map(buildPatient).toList(),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const CircularProgressIndicator(
+                          strokeWidth: 8.0,
+                          color: Colors.blue,
+                      );
+                    }
+                  },
+                )
+            )
+          );
+  }
+
 }
 
 
@@ -226,4 +224,3 @@ class _SalesData {
   final String x;
   final double y;
 }
-
