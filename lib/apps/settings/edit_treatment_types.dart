@@ -95,6 +95,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
               itemBuilder: (context, index) {
                 final treatmentType =
                     treatmentTypes[index].data() as Map<String, dynamic>;
+                treatmentType['price'] += (0.0);
 
                 return treatmentTypeCard(TreatmentType.fromJson(treatmentType));
               },

@@ -18,26 +18,27 @@ class PatientCard extends StatefulWidget {
 
 class _PatientCardState extends State<PatientCard> {
   late String _patientID;
-
+  late Map<String, dynamic> _patientData;
   @override
   void initState() {
     super.initState();
+    _patientData = widget.patientData;
     final EncryptData db = Get.find();
-    _patientID = db.decryptAES(widget.patientData['id']);
+    _patientID = db.decryptAES(_patientData['id']);
   }
 
   late List<Widget> views = [
     Center(
-      child: PatientPrivateInfo(patientData: widget.patientData),
+      child: PatientPrivateInfo(patientData: _patientData),
     ),
     Center(
-      child: PatientComunicationInfo(patientData: widget.patientData),
+      child: PatientComunicationInfo(patientData: _patientData),
     ),
     Center(
       child: PatientTreatmentsPage(patientID: _patientID),
     ),
     Center(
-      child: PatientStatusInfo(patientData: widget.patientData),
+      child: PatientStatusInfo(patientData: _patientData),
     ),
     Center(
       child: EditPatientInfo(patientID: _patientID),

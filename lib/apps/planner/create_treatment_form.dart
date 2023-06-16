@@ -5,7 +5,6 @@ import 'package:my_dentist/auth.dart';
 import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/treatments.dart';
 import 'package:my_dentist/our_widgets/global.dart';
-import 'package:my_dentist/our_widgets/loading_page.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 
 class TreatmentForm extends StatefulWidget {
@@ -206,7 +205,6 @@ class _TreatmentFormState extends State<TreatmentForm> {
         cost: treatmentType['price'],
         originalCost: treatmentType['price'],
       );
-      print('1');
       addTreatmentMeeting(_from, _to, treatmentType['name']!, instance);
       Navigator.of(context).pop();
     }

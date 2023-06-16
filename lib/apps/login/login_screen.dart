@@ -5,8 +5,6 @@ import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 import '../../auth.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -24,29 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  String signInError(String errorCode) {
-    switch (errorCode) {
-      case "user-not-found":
-        {
-          return "Wrong email!";
-        }
-      case "wrong-password":
-        {
-          return "Wrong password!";
-        }
-      case "invalid-email":
-        {
-          return "Invalid email!";
-        }
-      case "too-many-requests":
-        return "Try again in a second";
-      default:
-        {
-          return "General error!";
-        }
-    }
   }
 
   Future<void> signIn() async {

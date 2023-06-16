@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/global.dart';
 
 class Patient {
+  String? imageUrl;
   String id;
   final double paymentRequired;
   final String creationDate;
@@ -65,6 +66,7 @@ class Patient {
     this.treatingDoctor = 'undefined',
     this.status = 'undefined',
     this.remarks = 'undefined',
+    this.imageUrl,
   });
 
   Map<String, dynamic> toJson() => {
@@ -96,7 +98,8 @@ class Patient {
         'HMO': hmo,
         'treating_docrot': treatingDoctor,
         'status': status,
-        'remarks': remarks
+        'remarks': remarks,
+        'imageUrl': imageUrl,
       };
 
   static Patient fromJson(Map<String, dynamic> json) => Patient(
@@ -129,6 +132,7 @@ class Patient {
         treatingDoctor: json['treating_docrot'],
         status: json['status'],
         remarks: json['remarks'],
+        imageUrl: json['imageUrl'],
       );
 
   static Future<void> updatePatientPayment(

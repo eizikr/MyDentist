@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:my_dentist/modules/meeting.dart';
 import 'package:my_dentist/modules/patient.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 

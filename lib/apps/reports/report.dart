@@ -8,7 +8,6 @@ import '/our_widgets/global.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
 
-
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
 
@@ -18,7 +17,6 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   EncryptData crypto = Get.find();
-  
 
   Widget buildPatient(Patient patient) => RawChip(
         labelPadding: const EdgeInsets.all(2.0),
@@ -44,117 +42,111 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-
     Stream<List<Patient>> readPatients() => FirebaseFirestore.instance
         .collection('Patients')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Patient.fromJson(doc.data()))
-            .toList());
-
-
-
-
-
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
     return Scaffold(
-              body: 
-                StreamBuilder<List<Patient>>(
-                  stream: readPatients(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('something went wrong ${snapshot.error}');
-                    } else if (snapshot.hasData) {
-                      final patients = snapshot.data!;
-                      return Column(
-                        children: [
-                          NewWidget(),
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Column(
-                              children: [
-                                const Center(
-                                  child: Text(
-                                    "Calculate the recommendation for the cost of annual dental insurance for patient ",
-                                    style: TextStyle(fontSize: 30, color: Colors.black)
-                                    
-                                    ),
-                                ),
-                                const SizedBox(height: 10),
-                                Center(child: Wrap(
-                                      spacing: 8.0,
-                                      children: patients.map(buildPatient).toList(),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const CircularProgressIndicator(
-                          strokeWidth: 8.0,
-                          color: Colors.blue,
-                      );
-                    }
-                  },
-                )
-            ,);
+      body: StreamBuilder<List<Patient>>(
+        stream: readPatients(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('something went wrong ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            final patients = snapshot.data!;
+            return Column(
+              children: [
+                const NewWidget(),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    children: [
+                      const Center(
+                        child: Text(
+                            "Calculate the recommendation for the cost of annual dental insurance for patient ",
+                            style:
+                                TextStyle(fontSize: 30, color: Colors.black)),
+                      ),
+                      const SizedBox(height: 10),
+                      Center(
+                        child: Wrap(
+                          spacing: 8.0,
+                          children: patients.map(buildPatient).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const CircularProgressIndicator(
+              strokeWidth: 8.0,
+              color: Colors.blue,
+            );
+          }
+        },
+      ),
+    );
   }
 }
 
 class NewWidget extends StatelessWidget {
-  NewWidget({super.key});
-
-
+  const NewWidget({super.key});
 
   Stream<List<Treatment>> readTreatments() => FirebaseFirestore.instance
       .collection('Treatments')
       .snapshots()
-      .map((snapshot) => snapshot.docs
-          .map((doc) => Treatment.fromJson(doc.data()))
-          .toList());
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Treatment.fromJson(doc.data())).toList());
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Treatment>>(
-      stream: readTreatments(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('something went wrong ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          final treatments = snapshot.data!;
-          final groupedTreatments = groupBy(treatments, (treatment) => treatment.treatingDoctor);
-          final data = groupedTreatments.entries.map((entry) => _SalesData(entry.key, entry.value.fold(0, (sum, treatment) => sum + treatment.cost))).toList();
-          return Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              // Chart title
-              title: ChartTitle(text: 'Sales by doctor analysis'),
-              // Enable legend
-              legend: Legend(isVisible: true),
-              // Enable tooltip
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <ChartSeries<_SalesData, String>>[
-
-                LineSeries<_SalesData, String>(
-                    dataSource: data,
-                    xValueMapper: (_SalesData sales, _) => sales.doctor,
-                    yValueMapper: (_SalesData sales, _) => sales.sales,
-                    name: 'Sales',
-                    // Enable data label
-                    dataLabelSettings: DataLabelSettings(isVisible: true))
-              ]),
-          );
-        } else {
-          return const CircularProgressIndicator(
+        stream: readTreatments(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('something went wrong ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            final treatments = snapshot.data!;
+            final groupedTreatments =
+                groupBy(treatments, (treatment) => treatment.treatingDoctor);
+            final data = groupedTreatments.entries
+                .map((entry) => _SalesData(
+                    entry.key,
+                    entry.value
+                        .fold(0, (sum, treatment) => sum + treatment.cost)))
+                .toList();
+            return Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  // Chart title
+                  title: ChartTitle(text: 'Sales by doctor analysis'),
+                  // Enable legend
+                  legend: Legend(isVisible: true),
+                  // Enable tooltip
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  series: <ChartSeries<_SalesData, String>>[
+                    LineSeries<_SalesData, String>(
+                        dataSource: data,
+                        xValueMapper: (_SalesData sales, _) => sales.doctor,
+                        yValueMapper: (_SalesData sales, _) => sales.sales,
+                        name: 'Sales',
+                        // Enable data label
+                        dataLabelSettings:
+                            const DataLabelSettings(isVisible: true))
+                  ]),
+            );
+          } else {
+            return const CircularProgressIndicator(
               strokeWidth: 8.0,
               color: Colors.blue,
-          );
-        }
-      }
-    );
+            );
+          }
+        });
   }
 }
 
@@ -164,4 +156,3 @@ class _SalesData {
   final String doctor;
   final double sales;
 }
-

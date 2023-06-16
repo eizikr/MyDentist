@@ -12,9 +12,10 @@ import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:my_dentist/our_widgets/settings.dart';
 
 class TreatmentCare extends StatefulWidget {
-  Map<String, dynamic> meeting;
-  String patientId;
-  TreatmentCare({super.key, required this.meeting, required this.patientId});
+  final Map<String, dynamic> meeting;
+  final String patientId;
+  const TreatmentCare(
+      {super.key, required this.meeting, required this.patientId});
 
   @override
   State<TreatmentCare> createState() => _TreatmentCareState();

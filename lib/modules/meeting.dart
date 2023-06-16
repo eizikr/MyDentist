@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/modules/docrots.dart';
@@ -9,9 +8,9 @@ import 'package:my_dentist/our_widgets/global.dart';
 import 'package:my_dentist/our_widgets/our_widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-Color treatmentColor = Color.fromARGB(255, 51, 150, 56);
-Color meetingColor = Color.fromARGB(255, 60, 61, 131);
-Color allDayColor = Color.fromARGB(255, 131, 60, 60);
+Color treatmentColor = const Color.fromARGB(255, 51, 150, 56);
+Color meetingColor = const Color.fromARGB(255, 60, 61, 131);
+Color allDayColor = const Color.fromARGB(255, 131, 60, 60);
 
 class FirebaseMeetingDataSource extends CalendarDataSource {
   FirebaseMeetingDataSource() {

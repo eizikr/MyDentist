@@ -32,7 +32,7 @@ class HomePageButton extends StatelessWidget {
           children: [
             Icon(icon),
             Text(
-              '  ' + text,
+              '  $text',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

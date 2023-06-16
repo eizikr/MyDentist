@@ -5,10 +5,10 @@ class NumberSelectionDialog extends StatefulWidget {
   const NumberSelectionDialog({super.key});
 
   @override
-  _NumberSelectionDialogState createState() => _NumberSelectionDialogState();
+  NumberSelectionDialogState createState() => NumberSelectionDialogState();
 }
 
-class _NumberSelectionDialogState extends State<NumberSelectionDialog> {
+class NumberSelectionDialogState extends State<NumberSelectionDialog> {
   late int _selectedNumber = 0;
 
   List<Widget> _buildNumberButtons() {

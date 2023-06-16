@@ -71,7 +71,6 @@ class _ShowTreatmentScreenState extends State<ShowTreatmentScreen> {
         ),
         trailing: IconButton(
           onPressed: () {
-            print((meeting));
             showDialog<void>(
                 context: context,
                 builder: (context) =>
