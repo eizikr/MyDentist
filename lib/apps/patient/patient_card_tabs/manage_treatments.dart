@@ -71,20 +71,6 @@ class _PatientTreatmentsPageState extends State<PatientTreatmentsPage> {
                     text: 'Create Treatment',
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  width: 180,
-                  height: 40,
-                  child: BasicButton(
-                    onClicked: () => showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            PaymentDialog(widget.patientID)),
-                    text: 'Payment',
-                  ),
-                ),
               ],
             ),
           ),

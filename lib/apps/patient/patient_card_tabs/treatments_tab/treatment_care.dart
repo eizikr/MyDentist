@@ -88,6 +88,7 @@ class _TreatmentCareState extends State<TreatmentCare> {
                     Navigator.of(context).pop();
                   },
                 );
+                Navigator.of(context).pop();
               },
               tooltip: toolTips[iconIndex],
               icon: icons[iconIndex]),

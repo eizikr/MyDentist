@@ -144,6 +144,7 @@ class _EditAssistentPageState extends State<EditAssistentPage> {
       showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           scrollable: true,
           title: Text(title),
           content: Form(

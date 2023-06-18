@@ -29,16 +29,16 @@ class _PatientCardState extends State<PatientCard> {
 
   late List<Widget> views = [
     Center(
-      child: PatientPrivateInfo(patientData: _patientData),
+      child: PatientPrivateInfo(patientID: _patientID),
     ),
     Center(
-      child: PatientComunicationInfo(patientData: _patientData),
+      child: PatientComunicationInfo(patientID: _patientID),
     ),
     Center(
       child: PatientTreatmentsPage(patientID: _patientID),
     ),
     Center(
-      child: PatientStatusInfo(patientData: _patientData),
+      child: PatientStatusInfo(patientID: _patientID),
     ),
     Center(
       child: EditPatientInfo(patientID: _patientID),

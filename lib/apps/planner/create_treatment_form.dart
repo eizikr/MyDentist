@@ -61,6 +61,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
 
   @override
   Widget build(BuildContext context) {
+    print(db.treatmentTypesDictionary);
     return Form(
       key: _formKey,
       child: SingleChildScrollView(

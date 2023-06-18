@@ -1,15 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/our_widgets/global.dart';
+import 'package:my_dentist/our_widgets/loading_page.dart';
 
 class PatientComunicationInfo extends StatelessWidget {
-  final Map<String, dynamic> patientData;
+  final String patientID;
   final DateTime today = DateTime.now();
+  final DB db = Get.find();
+  final EncryptData crypto = Get.find();
 
-  PatientComunicationInfo({super.key, required this.patientData});
+  PatientComunicationInfo({super.key, required this.patientID});
 
   @override
-  Widget build(BuildContext context) => comunicationInfoScreen(patientData);
+  Widget build(BuildContext context) {
+    CollectionReference patient = db.patients;
+
+    return FutureBuilder<DocumentSnapshot>(
+        future: patient.doc(patientID).get(),
+        builder: (((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return comunicationInfoScreen(data);
+          }
+
+          return const LoadingPage(loadingText: 'Loading Patient Info');
+        })));
+  }
 }
 
 Widget comunicationInfoScreen(Map<String, dynamic> data) {

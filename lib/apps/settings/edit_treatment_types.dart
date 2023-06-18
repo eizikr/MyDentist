@@ -161,6 +161,7 @@ class _EditTreatmentTypesPageState extends State<EditTreatmentTypesPage> {
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setState) {
         return AlertDialog(
+          backgroundColor: OurSettings.mainColors[100],
           scrollable: true,
           content: Form(
             key: _formKey,

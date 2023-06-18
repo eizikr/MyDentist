@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +63,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
+              backgroundColor: OurSettings.mainColors[100],
               scrollable: true,
               content: Form(
                   key: _formKey,

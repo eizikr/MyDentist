@@ -77,7 +77,7 @@ class _PaymentPageState extends State<PaymentDialog> {
                   labelText: 'Amount',
                   counterText: '',
                 ),
-                maxLength: 6,
+                maxLength: 15,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) =>

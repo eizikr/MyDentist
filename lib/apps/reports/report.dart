@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:my_dentist/apps/reports/patient_report.dart';
 import 'package:my_dentist/modules/treatments.dart';
+import 'package:my_dentist/our_widgets/settings.dart';
 import '/modules/patient.dart';
 import '/our_widgets/global.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -49,6 +50,20 @@ class _ReportPageState extends State<ReportPage> {
             snapshot.docs.map((doc) => Patient.fromJson(doc.data())).toList());
 
     return Scaffold(
+      appBar: AppBar(
+        title: Title(
+          color: Colors.white,
+          title: 'Reports',
+          child: const Text('Reports'),
+        ),
+        centerTitle: true,
+        backgroundColor: OurSettings.appbarColor,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.exit_to_app),
+          tooltip: 'Exit',
+        ),
+      ),
       body: StreamBuilder<List<Patient>>(
         stream: readPatients(),
         builder: (context, snapshot) {

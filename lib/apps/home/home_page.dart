@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_dentist/apps/documents/prescription_page.dart';
+import 'package:my_dentist/apps/documents/sick_leave_page.dart';
 
 import 'package:my_dentist/apps/home/home_components.dart';
 
@@ -94,7 +96,56 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 35),
                         HomePageButton(
                           text: 'Documents',
-                          onClicked: () => {},
+                          onClicked: () => {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: OurSettings.mainColors[100],
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 16.0),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          BasicButton(
+                                            onClicked: () {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PrescriptionFormPage(),
+                                                ),
+                                              );
+                                            },
+                                            text: 'Prescriptions',
+                                          ),
+                                          const SizedBox(height: 16.0),
+                                          BasicButton(
+                                            text: 'Sick Leave',
+                                            onClicked: () {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SickLeaveFormPage(),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16.0),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          },
                           icon: Icons.file_copy_rounded,
                         ),
                         const SizedBox(height: 35),

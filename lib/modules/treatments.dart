@@ -240,6 +240,7 @@ Future createTreatmentType({
       } else {
         treatmentsTypeDocuments.add(instance.toJson());
       }
+      db.treatmentTypesDictionary[code] = instance.toJson();
     },
   );
 }
