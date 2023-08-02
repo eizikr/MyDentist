@@ -48,3 +48,9 @@ Please follow these steps to set up and run the My Dentist app:
 
 I would like to express my gratitude to Dr.Boris Rosin and Ms.Svetlana Rosin for their guidance and support throughout this project. Additionally, thanks to the Flutter and Firebase communities for providing excellent resources and tools.
 
+## Demonstration
+
+https://github.com/eizikr/MyDentist/assets/73073210/86e2cbfd-b6e6-4d20-835c-d7ba103c055a
+
+
+
