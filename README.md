@@ -34,7 +34,7 @@ Feel free to explore the project repository on GitHub and get in touch via email
 
 Please follow these steps to set up and run the My Dentist app:
 
-1. Clone the repository from GitHub: `git clone https://github.com/eizikr/my-dentist-app.git`
+1. Clone the repository from GitHub: `git clone https://github.com/eizikr/MyDentist`
 
 2. Install Flutter on your system: [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
 
